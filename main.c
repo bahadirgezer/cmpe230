@@ -1,8 +1,30 @@
 #include "main.h"
 #include <stdio.h>
+#define MAX_SIZE 256;
+
+
+struct Stack {
+    int size;
+};
+
+void initialize_stack(struct Stack stack) {
+    stack.size = 0;
+}
+
+int isfull(struct Stack stack) {
+    if (stack.size == MAX_SIZE) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void push(struct Stack stack) {
+    if (stack.currentSize < MAX_SIZE)
+}
 
 void expression(char *expr[]) {
-    if (1) {}
+    
 
 }
 
