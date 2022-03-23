@@ -1,2 +1,2 @@
-# bounDers
-Boğaziçi dersleri
+# Cmpe230
+Cmpe230 dersi projeleri için
