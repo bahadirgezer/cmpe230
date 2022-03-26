@@ -33,8 +33,7 @@ if(fp == NULL) {
 }
 
 
-
-while( fgets(line,255,fp) != NULL ) {
+while( fgets(line,255,fp) != NULL ) { 
 
     char* tokens = strtok(line, " ");
     if (strcmp(tokens,"#") == 0){ 
