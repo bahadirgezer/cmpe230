@@ -5,3 +5,4 @@ int isLetterLiteral(char ch[]);
 int isNumber(char ch);
 int isNumberLiteral(char ch[]);
 int isParanthesis(char ch);
+int isSpecialCharacter(char ch);
