@@ -46,6 +46,7 @@ void morefactors() {
 
 
 /*
+    Checks if ch is an alphanumeric a character
     @returns 
     1 if ch is an alphanumeric character
     0 if ch is not an alphanumeric character
@@ -59,6 +60,7 @@ int isAlphaNumeric(char ch) {
 }
 
 /*
+    Checks if ch is a letter
     @returns 
     1 if ch is a letter
     0 if ch is not a letter
@@ -72,6 +74,7 @@ int isLetter(char ch) {
 }
 
 /*
+    Checks if ch is a number
     @returns 
     1 if ch is a number
     0 if ch is not a number
@@ -85,6 +88,22 @@ int isNumber(char ch) {
 }
 
 /*
+    Checks if a string is comprised of only numbers
+    @returns 
+    1 if the string ch[] has only numbers
+    0 if the string ch[] does not have only numbers
+*/
+int isNumberString(char ch[]) {
+    for (int i = 0; i < strlen(ch); i++) {
+        if (isNumber(ch[i]) == 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+/*
+    Checks if ch is a paranthesis
     @returns 
     1 if ch is a left paranthesis
     2 if ch is a right paranthesis
@@ -103,10 +122,15 @@ int isParanthesis(char ch) {
 }
 
 int main(int argc, char *argv[]) {
-    char expression[] = "9+10";
-    printf("%d", isParanthesis('('));
-    printf("%d", isParanthesis('a'));
-    printf("%d", isParanthesis(')'));
+    char str1[] = "123123";
+    char str2[] = "askdlasn";
+    char str3[] = "alksnd1231";
+
+    printf("%d", isNumber(')')); 
+    printf("%d", isNumber('1')); 
+    printf("%d", isNumber(str1));
+    printf("%d", isNumber(str2));
+    printf("%d", isNumber(str3));
 
     /*
     char line[256];

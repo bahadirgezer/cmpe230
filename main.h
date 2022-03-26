@@ -5,4 +5,6 @@ int isAlphaNumeric(char ch);
 int isLetter(char ch);
 int isNumber(char ch);
 int isParanthesis(char ch);
+int isNumberString(char ch[]);
+
 
