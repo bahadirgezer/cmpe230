@@ -13,23 +13,34 @@ struct Token {
 
 
 /*
-    Tokenizes expressions
-    @param line
+    Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
+    Does not modify the initial line, uses two pointers to denote a token. When found, copies
+    the token to the token struct. Uses token_type to keep track of which token is being parsed.
+    @param line a single line in the .mat file
 */
 void tokenizer(char line[]) {
     int *token_start = line;
     int *token_end = line;
+    int token_type;
     
     for (int i = 0; i < strlen(line); i++) {
         if (isSpecialCharacter(line[0]) == 1) {
-            
+            if (token_type != 0) {
+                
+                token_start = line + i;
+                token_end = line + i;
+            }
+
         }
 
         if (isAlphaNumeric(line[0])  == 1) {
             
         }
 
-    }    
+    }
+}
+
+void extract_token() {
 }
 
 
