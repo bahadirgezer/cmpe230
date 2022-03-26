@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef struct Token Token;
+
 struct Token {
     char type[60];
     char value[60];
     int val;
 };
-
-typedef struct Token Token;
 
 void NumericLiteral_init(Token *token, char *value, int val) {
     strcpy(token->type, "Numeric Literal");
@@ -60,6 +60,22 @@ int isAlphaNumeric(char ch) {
 }
 
 /*
+    Checks if a string is comprised of only alphanumeric characters
+    @returns 
+    1 if the string ch[] has only alphanumeric characters
+    0 if the string ch[] does not have only alphanumeric characters
+*/
+int isAlphaNumericLiteral(char ch[]) {
+    for (int i = 0; i < strlen(ch); i++) {
+        if (isLetter(ch[i] == 0 || isNumber == 0)) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
+/*
     Checks if ch is a letter
     @returns 
     1 if ch is a letter
@@ -71,6 +87,21 @@ int isLetter(char ch) {
     } else {
         return 0;
     }
+}
+
+/*
+    Checks if a string is comprised of only letters
+    @returns 
+    1 if the string ch[] has only letters
+    0 if the string ch[] does not have only letters
+*/
+int isLetterLiteral(char ch[]) {
+    for (int i = 0; i < strlen(ch); i)++) {
+        if (isLetter(ch[i] == 0)) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 /*
@@ -93,7 +124,7 @@ int isNumber(char ch) {
     1 if the string ch[] has only numbers
     0 if the string ch[] does not have only numbers
 */
-int isNumberString(char ch[]) {
+int isNumberLiteral(char ch[]) {
     for (int i = 0; i < strlen(ch); i++) {
         if (isNumber(ch[i]) == 0) {
             return 0;
