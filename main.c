@@ -1,51 +1,30 @@
 #include "main.h"
 #include <stdio.h>
-#define MAX_SIZE 256;
+#include <string.h>
 
-
-struct Stack {
-    int size;
+struct Token {
+    char type[60];
+    char value[60];
+    int val;
 };
 
-void initialize_stack(struct Stack stack) {
-    stack.size = 0;
-}
+typedef struct Token Token;
 
-int isfull(struct Stack stack) {
-    if (stack.size == MAX_SIZE) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-void push(struct Stack stack) {
-    if (stack.currentSize < MAX_SIZE)
-}
-
-void expression(char *expr[]) {
-    
-
-}
-
-void tr() {
+void NumericLiteral_init(Token *token, char *value, int val) {
+    strcpy(token->type, "Numeric Literal");
+    //strcpy(token->value, *value);
+    //token->value = value;
+    token->val = val;
 
 }
 
 int main(int argc, char *argv[]) {
-    FILE *input_file;
+    char line[256];
+    struct Token num1;
+    char value[60] = "19204381923";
+    int val = 109238102;
+    Token *num1_p = &num1;
 
-    /* Open file for reading Filename is given on the command line */
-    input_file = fopen(argv[1], "r");
-
-    if(input_file == NULL) {
-        printf("Cannot open %s\n",argv[1]);
-        return 1;
-    }
-    
-    while( fgets(line,80,fp) != NULL ) {
-        printf("%s",line) ;
-    }
-    fclose(input_file);
-    return 0;
+    NumericLiteral_init(num1_p, *value, val);
+    printf("%s %s %d\n", num1.type, num1.value, val);
 }
