@@ -26,7 +26,7 @@ int isAlphaNumeric(char ch) {
 */
 int isAlphaNumericLiteral(char ch[]) {
     for (int i = 0; i < strlen(ch); i++) {
-        if (isLetter(ch[i] == 0 || isNumber == 0)) {
+        if (isLetter(ch[i]) == 0 || isNumber(ch[i]) == 0) {
             return 0;
         }
     }
@@ -43,7 +43,7 @@ int isAlphaNumericLiteral(char ch[]) {
 
 */
 int isLetter(char ch) {
-    if (('A' <= ch && ch <= 'Z') || ('a' <= ch <= 'z')) {
+    if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z')) {
         return 1;
     } else {
         return 0;

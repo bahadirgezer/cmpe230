@@ -104,9 +104,7 @@ void extract_token(int *token_start, int token_len) {
 
 
 int main(int argc, char *argv[]) {
-    char line[256] = "vector   xy2[4] xy2 [4]";
+    char line[256] = "matrix   A[4,4]";
     tokenizer(line);
 
-    //NumericLiteral_init(num1_p, *value, val);
-    //printf("%s %s %d\n", num1.type, num1.value, val);
 }
