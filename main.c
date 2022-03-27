@@ -8,9 +8,9 @@
     Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
     Does not modify the initial line, uses two pointers to denote a token. When found, copies
     the token to the token struct. Uses token_type to keep track of which token is being parsed.
-    @param line a single line in the .mat file
+    @param char[] line
 */
-Vector* tokenizer(char line[]) {
+Vector* tokenizer(char line[], int line_number) {
     Vector tokens;
     CreateVector(&tokens);
 
@@ -25,6 +25,17 @@ Vector* tokenizer(char line[]) {
     int index = 0;
     while (index < line_len) {
         char current = line[index];
+
+        if (isDot(current) == 1) {
+            if (token_type == 2) {
+                token_len++;
+                index++;
+                continue;
+            } else {
+                error(line_number);
+                break;
+            }
+        }
 
         if (isWhitespace(current) == 1) {
             if (token_type == 0) {
@@ -84,37 +95,42 @@ Vector* tokenizer(char line[]) {
             continue;
         }
 
-        printf("This line has an error\n");
+        error(line_number);
         break;
     }
     return &tokens;
 }
 
+/*
+    Helper function for the tokenizer() function. extracts the token and puts it
+    inside a struct Token.
+    @param char* token_start
+    @param int token_len 
+    @param Vector* tokens
+*/
 void extract_token(char *token_start, int token_len, Vector *tokens) {
     Token token;
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
     tokens->pAdd(tokens, token);
-    //printf("_%s\n", token.value);
 }
 
+void error(int line_number) {
+    printf("Error on line %d\n", line_number);
+}
 
+void parser(Vector *tokens) {
+
+}
 
 int main(int argc, char *argv[]) {
-    char line[256] = "This is a line [3] asjda[21] aslkd [59]";
+    char line[256] = "A={0.5 0 0.5 0 0 0.5 0.5 1 0 }";
     Vector firstline;
     CreateVector(&firstline);
-    Vector v = *tokenizer(line);
+    Vector v = *tokenizer(line, 1);
     for (int i = 0; i < v.pSize(&v); i++)
     {
         Token first_token = v.pGet(&v, i);
         printf("%s\n", first_token.value);
     }
-    
-    
-    // printf("%s\n", firstline.pGet(&firstline, 0).value);
-    // printf("%s\n", firstline.pGet(&firstline, 1).value);
-    // printf("%s\n", firstline.pGet(&firstline, 2).value);
-    // printf("%s\n", firstline.pGet(&firstline, 3).value);
-    // printf("%s\n", firstline.pGet(&firstline, 4).value);
 }
