@@ -1,14 +1,16 @@
-#include "token.h"
 #include <stdlib.h>
+#include "token.h"
 #define DEFAULT_CAPACITY 10
 
-typedef struct VectorAttributes{
+typedef struct Vector Vector;
+typedef struct VectorAttributes VectorAttributes; 
+
+struct VectorAttributes{
     Token *array;       // an array of Tokens
     int capacity;       // the capacity of the array
     int currentSize;    //the current size of the array
-}VectorAttributes;
+};
 
-typedef struct Vector Vector;
 
 struct Vector{
     VectorAttributes attributes;        // the attributes of the vector
@@ -51,7 +53,7 @@ void Add(Vector *vector, Token token){
         vector->attributes.currentSize++;
     } else{
         IncrementSize(vector);
-        Add(vector,token);
+        Add(vector, token);
     }
 }
 

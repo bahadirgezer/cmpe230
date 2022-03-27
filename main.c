@@ -3,6 +3,8 @@
 #include "main.h"
 #include "string_functions.h"
 #include "vector.h"
+#include "stack.h"
+
 
 /*
     Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
@@ -10,7 +12,10 @@
     the token to the token struct. Uses token_type to keep track of which token is being parsed.
     @param line a single line in the .mat file
 */
-void tokenizer(char line[]) {
+Vector* tokenizer(char line[]) {
+    Vector tokens;
+    CreateVector(&tokens);
+
     char append = ' '; // needs an not important character at the end to read the last token.
     strncat(line, &append, 1);
     char *token_start = line;
@@ -29,12 +34,12 @@ void tokenizer(char line[]) {
                 index++;
                 token_start = line + index;
             } else if (token_type == 1) {
-                extract_token(token_start, token_len);
+                extract_token(token_start, token_len, &tokens);
                 token_len = 0;
                 index++;
                 token_start = line + index;
             } else if (token_type == 2) {
-                extract_token(token_start, token_len);
+                extract_token(token_start, token_len, &tokens);
                 token_len = 0;
                 index++;
                 token_start = line + index;
@@ -49,12 +54,12 @@ void tokenizer(char line[]) {
                 token_start = line + index;
                 index++;
             } else if (token_type == 1) {
-                extract_token(token_start, token_len);
+                extract_token(token_start, token_len, &tokens);
                 token_len = 1;
                 token_start = line + index;
                 index++;
             } else if (token_type == 2) {
-                extract_token(token_start, token_len);
+                extract_token(token_start, token_len, &tokens);
                 token_len = 1;
                 token_start = line + index;
                 index++;
@@ -69,7 +74,7 @@ void tokenizer(char line[]) {
                 token_start = line + index;
                 index++;
             } else if (token_type == 1) {
-                extract_token(token_start, token_len);
+                extract_token(token_start, token_len, &tokens);
                 token_len = 1;
                 token_start = line + index;
                 index++;
@@ -84,19 +89,27 @@ void tokenizer(char line[]) {
         printf("This line has an error\n");
         break;
     }
+    return &tokens;
 }
 
-void extract_token(char *token_start, int token_len) {
+void extract_token(char *token_start, int token_len, Vector *tokens) {
     Token token;
+    tokens->pAdd(&tokens, token);
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
-    printf("\"%s\"\n", token.value);
 }
 
 
 
 int main(int argc, char *argv[]) {
     char line[256] = "matrix   A[4,4]";
-    tokenizer(line);
+    Vector firstline;
+    CreateVector(&firstline);
 
+    firstline = tokenizer(line);
+    printf("%s\n", firstline.pGet(&firstline, 0).value);
+    printf("%s\n", firstline.pGet(&firstline, 1).value);
+    printf("%s\n", firstline.pGet(&firstline, 2).value);
+    printf("%s\n", firstline.pGet(&firstline, 3).value);
+    printf("%s\n", firstline.pGet(&firstline, 4).value);
 }
