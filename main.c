@@ -92,21 +92,26 @@ Vector* tokenizer(char line[]) {
 
 void extract_token(char *token_start, int token_len, Vector *tokens) {
     Token token;
-    tokens->pAdd(&tokens, token);
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
-    printf("%s", token.value);
+    tokens->pAdd(tokens, token);
+    //printf("_%s\n", token.value);
 }
 
 
 
 int main(int argc, char *argv[]) {
-    char line[256] = "matrix   A[4,4]";
+    char line[256] = "This is a line [3] asjda[21] aslkd [59]";
     Vector firstline;
     CreateVector(&firstline);
     Vector v = *tokenizer(line);
-
-    printf("%s", v.pGet(&v, 0).value);
+    for (int i = 0; i < v.pSize(&v); i++)
+    {
+        Token first_token = v.pGet(&v, i);
+        printf("%s\n", first_token.value);
+    }
+    
+    
     // printf("%s\n", firstline.pGet(&firstline, 0).value);
     // printf("%s\n", firstline.pGet(&firstline, 1).value);
     // printf("%s\n", firstline.pGet(&firstline, 2).value);
