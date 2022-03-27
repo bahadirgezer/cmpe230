@@ -131,3 +131,18 @@ int isSpecialCharacter(char ch) {
         return 0;
     }
 }
+
+/*
+    Checks if ch is a white-space
+    @returns
+    1 if ch is a white-space
+    0 if ch is not a white-space
+    @param ch character to check
+*/
+int isWhitespace(char ch) {
+    if (ch == ' ' || ch == '\t' || ch == '\v' || ch == '\n') {
+        return 1;
+    } else {
+        return 0;
+    }
+}

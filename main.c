@@ -22,11 +22,23 @@ void tokenizer(char line[]) {
     char *token_start = line;
     char *token_end = line;
     int token_type = 0; //0: loopbegin; 1: special character; 2: alphanumeric
-    
-    for (int i = 0; i < strlen(line); i++) {
-        printf("%c", line[i]);
+    char current;
 
-        if (isSpecialCharacter(line[0]) == 1) {
+    for (int i = 0; i < strlen(line); i++) {
+        char current = line[i];
+        printf("%c", line[i]);
+        printf("%d\n", token_type);
+
+        if (isWhitespace(current) == 1) {
+            if (token_type != 0) {
+                extract_token(token_start, token_end, line);
+            }
+            token_start = line + 1;
+            token_start = line + 1;
+            continue;
+        }
+
+        if (isSpecialCharacter(current) == 1) {
             if (token_type != 1 || token_type != 0) {
                 extract_token(token_start, token_end, line);
                 token_start = line + i;
@@ -39,14 +51,16 @@ void tokenizer(char line[]) {
             continue;
         }
 
-        if (isAlphaNumeric(line[0]) == 1) {
-            if (token_type != 2 || token_type != 0) {
+        if (isAlphaNumeric(current) == 1) {
+            if (token_type == 2 || token_type == 0) {    
+                token_end += i;
+                token_type = 2;
+            } else {
                 extract_token(token_start, token_end, line);
                 token_start = line + i;
                 token_end = line + i;
                 token_type = 0;
             }
-            token_type = 2;
 
             continue;
         }
@@ -58,7 +72,7 @@ void extract_token(int *token_start, int *token_end, char line[]) {
     Token token;
     int strlen = (*token_start - *token_end) / sizeof(*token_start);
     strncpy(token_start, token.value, strlen);
-    //printf("%s", token.value);
+    printf("%s\n", token.value);
 }
 
 
@@ -66,7 +80,6 @@ int main(int argc, char *argv[]) {
     char line[256] = "This is a2 line";
     tokenizer(line);
 
-    
     //NumericLiteral_init(num1_p, *value, val);
     //printf("%s %s %d\n", num1.type, num1.value, val);
 }
