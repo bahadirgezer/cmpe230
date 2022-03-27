@@ -6,6 +6,6 @@ int isLetter(char ch);
 int isNumber(char ch);
 int isParanthesis(char ch);
 int isNumberLiteral(char ch[]);
-void extract_token(int *token_start, int token_len);
+void extract_token(char *token_start, int token_len);
 void tokenizer(char line[]);
 

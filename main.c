@@ -94,7 +94,7 @@ void tokenizer(char line[]) {
     }
 }
 
-void extract_token(int *token_start, int token_len) {
+void extract_token(char *token_start, int token_len) {
     Token token;
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
