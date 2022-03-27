@@ -137,8 +137,25 @@ void error(int line_number) {
 }
 
 void parser(Vector *tokens) {
+    for (int i = 0; i < tokens->pSize; i++) {
+        Token token = tokens->pGet(&tokens, i);
 
+        if (token.type == 0) {
+            
+        }
+    }
 }
+
+/*
+    Gets the value of the variable for the given name.
+    @param char[] name - value (as in the value field inside the token) of the variable.
+    @returns Token token - struct Token of the variable
+*/
+Token get_variable(char name[]) {
+    Token token;
+    return token;
+}
+
 
 int main(int argc, char *argv[]) {
     char line[256] = "matrix A[2,2]     \t # variables and stuff and ]][][][{}[]])_0-=-&@@@@";

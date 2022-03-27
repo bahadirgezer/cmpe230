@@ -9,3 +9,6 @@ int isNumberLiteral(char ch[]);
 void extract_token(char *token_start, int token_len, Vector *tokens);
 Vector* tokenizer(char line[], int line_number);
 void error(int line_number);
+void parser(Vector *tokens);
+Token get_variable(char name[]);
+
