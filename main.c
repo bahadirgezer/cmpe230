@@ -2,8 +2,6 @@
 #include <string.h>
 #include "main.h"
 #include "string_functions.h"
-#include "vector.h"
-#include "stack.h"
 
 
 /*
@@ -97,6 +95,7 @@ void extract_token(char *token_start, int token_len, Vector *tokens) {
     tokens->pAdd(&tokens, token);
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
+    printf("%s", token.value);
 }
 
 
@@ -105,11 +104,12 @@ int main(int argc, char *argv[]) {
     char line[256] = "matrix   A[4,4]";
     Vector firstline;
     CreateVector(&firstline);
+    Vector v = *tokenizer(line);
 
-    firstline = tokenizer(line);
-    printf("%s\n", firstline.pGet(&firstline, 0).value);
-    printf("%s\n", firstline.pGet(&firstline, 1).value);
-    printf("%s\n", firstline.pGet(&firstline, 2).value);
-    printf("%s\n", firstline.pGet(&firstline, 3).value);
-    printf("%s\n", firstline.pGet(&firstline, 4).value);
+    printf("%s", v.pGet(&v, 0).value);
+    // printf("%s\n", firstline.pGet(&firstline, 0).value);
+    // printf("%s\n", firstline.pGet(&firstline, 1).value);
+    // printf("%s\n", firstline.pGet(&firstline, 2).value);
+    // printf("%s\n", firstline.pGet(&firstline, 3).value);
+    // printf("%s\n", firstline.pGet(&firstline, 4).value);
 }
