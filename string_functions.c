@@ -125,7 +125,7 @@ int isParanthesis(char ch) {
     @param ch character to check
 */
 int isSpecialCharacter(char ch) {
-    if (ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}' || ch == '=' || ch == '+' || ch == '*') {
+    if (ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}' || ch == '=' || ch == '+' || ch == '*' || ch == '-' || ch == ',' || ch == ':') {
         return 1;
     } else {
         return 0;

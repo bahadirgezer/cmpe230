@@ -20,63 +20,123 @@ struct Token {
 */
 void tokenizer(char line[]) {
     char *token_start = line;
-    int token_type = 0; //0: loopbegin; 1: special character; 2: alphanumeric
+    int line_len = strlen(line);
+    int token_type = 0; //0: loopbegin, whitespace; 1: specialcharacter 2: alphanumeric
     int token_len = 0;
     char current;
 
-    for (int i = 0; i < strlen(line); i++) {
-        char current = line[i];
-        printf("%c\t", line[i]);
+    int index = 0;
+    while (index < line_len) {
+        char current = line[index];
         printf("%d\t", token_type);
-        printf("%d\n", token_len);
-
+        //printf("%c\t", line[index]);
+        //printf("%d\t", token_type);
+        //printf("%d\n", token_len);
+        
         if (isWhitespace(current) == 1) {
-            if (token_type != 0) {
-                extract_token(token_start, token_len);
-                token_start = token_start + token_len + 1;
+            if (token_type == 0 || token_type == 1) {
+                index++;
+                token_start = line + index;
                 token_type = 0;
                 token_len = 0;
             } else {
-                token_start = token_start + 1;
+                printf("in1\n");
+                extract_token(token_start, token_len+1);
+                index++;
+                token_start = line + index;
+                token_type = 0;
+                token_len = 0;
+            }
+            continue;
+        }
+
+        // if (isWhitespace(current) == 1) {
+        //     if (token_type != 0) {
+        //         extract_token(token_start, token_len);
+        //         token_start = token_start + token_len + 1;
+        //         token_type = 0;
+        //         token_len = 0;
+        //     } else {
+        //         token_start = token_start + 1;
+        //         token_len = 0;
+        //     }
+        //     index++;
+        //     continue;
+        // }
+        
+        if (isSpecialCharacter(current) == 1) {
+            if (token_type != 1 || token_type != 0) {
+                printf("in2\n");
+
+                extract_token(token_start, token_len+1);
+                extract_token(line + index, 1);
+                index++;
+                token_start = line + index;
+                token_type = 1;
+                token_len = 0;
+            } else {
+                index++;
+                token_start = line + index;
+                printf("in3\n");
+
+                extract_token(token_start, 1);
+                token_type = 1;
                 token_len = 0;
             }
 
             continue;
         }
+
+        // if (isSpecialCharacter(current) == 1) {
+        //     if (token_type != 0) {
+        //         extract_token(token_start, token_len);
+        //         token_start = token_start + token_len;
+        //         token_len = 0;
+        //         token_type = 1;
+        //     } else {
+        //         token_len = 1;
+        //         extract_token(token_start, token_len);
+        //         token_len = 0;
+        //         token_type = 1;
+        //     }
+        //     index++;
+        //     continue;
+        // }
 
         if (isAlphaNumeric(current) == 1) {
-            if (token_type == 2 || token_type == 0) {    
+            if (token_type == 2) {
                 token_len++;
-                token_type = 2;
+                index++;
             } else {
-                extract_token(token_start, token_len);
-                token_start = token_start + token_len;
+                token_start = line + index;
+                token_type = 2;
                 token_len = 0;
-                token_type = 0;
+                index++;
             }
-
             continue;
         }
+  
 
+        printf("error on line _");
+        break;
     }
-    extract_token(token_start, token_len);
 }
 
 void extract_token(int *token_start, int token_len) {
     Token token;
-    printf("%p\t", token_start);
-    printf("%c\t", *token_start);
-    printf("%c\t", *(token_start + token_len));
-    printf("%d\n", token_len);
+    // printf("%p\t", token_start);
+    // printf("%c\t", *token_start);
+    // printf("%c\t", *(token_start + token_len));
+    // printf("%d\n", token_len);
 
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
-    printf("%s\n", token.value);
+    printf("\"%s\"\n", token.value);
 }
 
 
 int main(int argc, char *argv[]) {
-    char line[256] = "This is a2 line";
+    char line[256] = "vector   xy2[4] xy2 [4]";
     tokenizer(line);
 
     //NumericLiteral_init(num1_p, *value, val);
