@@ -24,7 +24,24 @@ Vector* tokenizer(char line[], int line_number) {
 
     int index = 0;
     while (index < line_len) {
-        char current = line[index];
+        char current = line[index]; 
+        
+        if (isComment(current) == 1) {
+            if (token_type == 0) {
+                if (token_start == line) {
+                    extract_token(token_start, line_len - index, &tokens);
+                } else {
+                    extract_token(token_start + 1, line_len - index, &tokens);
+                }
+            } else if (token_type == 1) {
+                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start + 1, line_len - index, &tokens);
+            } else if (token_type == 2) {
+                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start + 1, line_len - index, &tokens);
+            }
+            break;
+        }
 
         if (isDot(current) == 1) {
             if (token_type == 2) {
@@ -40,18 +57,18 @@ Vector* tokenizer(char line[], int line_number) {
         if (isWhitespace(current) == 1) {
             if (token_type == 0) {
                 token_len = 0;
-                index++;
                 token_start = line + index;
+                index++;
             } else if (token_type == 1) {
                 extract_token(token_start, token_len, &tokens);
                 token_len = 0;
-                index++;
                 token_start = line + index;
+                index++;
             } else if (token_type == 2) {
                 extract_token(token_start, token_len, &tokens);
                 token_len = 0;
-                index++;
                 token_start = line + index;
+                index++;
             }   
             token_type = 0;     
             continue;
@@ -124,13 +141,13 @@ void parser(Vector *tokens) {
 }
 
 int main(int argc, char *argv[]) {
-    char line[256] = "A={0.5 0 0.5 0 0 0.5 0.5 1 0 }";
+    char line[256] = "matrix A[2,2]     \t # variables and stuff and ]][][][{}[]])_0-=-&@@@@";
     Vector firstline;
     CreateVector(&firstline);
     Vector v = *tokenizer(line, 1);
     for (int i = 0; i < v.pSize(&v); i++)
     {
         Token first_token = v.pGet(&v, i);
-        printf("%s\n", first_token.value);
+        printf("\"%s\"\n", first_token.value);
     }
 }

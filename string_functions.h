@@ -8,3 +8,4 @@ int isParanthesis(char ch);
 int isSpecialCharacter(char ch);
 int isWhitespace(char ch);
 int isDot(char ch);
+int isComment(char ch);

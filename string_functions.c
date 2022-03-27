@@ -161,3 +161,18 @@ int isDot(char ch) {
         return 0;
     }
 }
+
+/*
+    Checks if ch is a charater for comments, in matlang this is #
+    @returns
+    1 if ch is a character for comments
+    0 if ch is not a character for comments
+    @param ch character to check
+*/
+int isComment(char ch) {
+    if (ch == '#') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
