@@ -1,4 +1,4 @@
 typedef struct Token{
-    char* value;
+    char value[256];
     int type;
 }Token;

@@ -9,6 +9,7 @@ typedef struct VectorAttributes{
 }VectorAttributes;
 
 typedef struct Vector Vector;
+
 struct Vector{
     VectorAttributes attributes;        // the attributes of the vector
     // pointers to the functions we need

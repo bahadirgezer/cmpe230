@@ -2,15 +2,7 @@
 #include <string.h>
 #include "main.h"
 #include "string_functions.h"
-
-typedef struct Token Token;
-
-struct Token {
-    char type[60];
-    char value[60];
-    int val;
-};
-
+#include "vector.h"
 
 /*
     Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
