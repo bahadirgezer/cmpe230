@@ -5,6 +5,7 @@ typedef struct StackAttributes{
     Token *array;
     int capacity;
     int currentSize;
+    Token nullToken;
 }StackAttributes;
 
 typedef struct Stack Stack;
@@ -78,6 +79,8 @@ Token Peek(Stack *stack){
     if (IsEmpty(stack) == 0){
         Token t = stack->attributes.array[stack->attributes.currentSize];
         return t;
+    } else {
+        return stack->attributes.nullToken;
     }
 }
 
@@ -86,6 +89,8 @@ Token Pop(Stack *stack){
         Token t = stack->attributes.array[stack->attributes.currentSize-1];
         stack->attributes.currentSize--;
         return t;
+    } else {
+        return stack->attributes.nullToken;
     }
 }
 
@@ -100,4 +105,5 @@ void CreateStack(Stack *stack){
     stack->attributes.currentSize = 0;
     stack->attributes.capacity = DEFAULT_CAPACITY;
     stack->attributes.array = malloc(sizeof(Token) * DEFAULT_CAPACITY);
+    stack->attributes.nullToken.isOk = 0;
 }

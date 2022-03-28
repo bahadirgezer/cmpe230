@@ -3,6 +3,24 @@
 #include "main.h"
 #include "string_functions.h"
 
+Vector tokens;
+/*
+process_line(char line[], File c_file) {
+	malloc(tokens)
+	tokens = tokenizer(line)
+	parser(tokens)
+	//no syntax error at this point
+	c_line = line_builder(tokens)
+	printf(C_file, c_line)
+	free(tokens)
+}
+
+print(C.out, neededfunctions)
+while(nextLine) {
+	line
+	process_line(line, C.out)
+}
+*/
 
 /*
     Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
@@ -10,8 +28,7 @@
     the token to the token struct. Uses token_type to keep track of which token is being parsed.
     @param char[] line
 */
-Vector* tokenizer(char line[], int line_number) {
-    Vector tokens;
+void tokenizer(char line[], int line_number) {
     CreateVector(&tokens);
 
     char append = ' '; // needs an not important character at the end to read the last token.
@@ -115,7 +132,6 @@ Vector* tokenizer(char line[], int line_number) {
         error(line_number);
         break;
     }
-    return &tokens;
 }
 
 /*
@@ -191,20 +207,12 @@ Token get_variable(char name[]) {
 
 
 int main(int argc, char *argv[]) {
-
-    char line[256] = "matrix A[2,2]     \t # variables and stuff and ]][][][{}[]])_0-=-&@@@@";
-    Vector firstline;
-    CreateVector(&firstline);
-    Vector v = *tokenizer(line, 1);
-    for (int i = 0; i < v.pSize(&v); i++)
+    char line[256] = "matrix A[2,2]     \t # variables and stuff and ]][][][{}[]])_0-=-&@@@@";    
+    tokenizer(line, 1);
+    
+    for (int i = 0; i < tokens.pSize(&tokens); i++)
     {
-        Token first_token = v.pGet(&v, i);
+        Token first_token = tokens.pGet(&tokens, i);
         printf("\"%s\"\n", first_token.value);
     }
-
-
-
-
-
-
 }
