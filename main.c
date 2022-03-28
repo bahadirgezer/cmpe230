@@ -53,7 +53,7 @@ void tokenizer(char line[], int line_number) {
     while (index < line_len) {
         char current = line[index]; 
         
-        if (isComment(current) == 1) {
+        if (is_comment(current) == 1) {
             if (token_type == 0) {
                 if (token_start == line) {
                     extract_token(token_start, line_len - index, &tokens, 18);
@@ -70,7 +70,7 @@ void tokenizer(char line[], int line_number) {
             break;
         }
 
-        if (isDot(current) == 1) {
+        if (is_dot(current) == 1) {
             if (token_type == 2) {
                 token_len++;
                 index++;
@@ -81,7 +81,7 @@ void tokenizer(char line[], int line_number) {
             }
         }
 
-        if (isWhitespace(current) == 1) {
+        if (is_whitespace(current) == 1) {
             if (token_type == 0) {
                 token_len = 0;
                 token_start = line + index;
@@ -101,7 +101,7 @@ void tokenizer(char line[], int line_number) {
             continue;
         }
 
-        if (isSpecialCharacter(current) == 1) {
+        if (is_special_character(current) == 1) {
             if (token_type == 0) {
                 token_len = 1;
                 token_start = line + index;
@@ -121,7 +121,7 @@ void tokenizer(char line[], int line_number) {
             continue;
         }
 
-        if (isAlphaNumeric(current) == 1) {
+        if (is_alphanumeric(current) == 1) {
             if (token_type == 0) {
                 token_len = 1;
                 token_start = line + index;
@@ -174,16 +174,48 @@ void parser(Vector *tokens, int line_number) {
         token.type = 0;
 
         Token variable = tokens->pGet(tokens, 1);
-        if (isAlphaNumericLiteral(variable.value) != 1 || variable.isOk != 1) {
+        if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
             error(line_number);
+            return;
         }
         variable.type = 19;
 
     } else if (strcmp("vector", token.value) == 0) {
         token.type = 1;
+
+        Token variable = tokens->pGet(tokens, 1);
+        if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        variable.type = 20;
+
+        Token left_brace = tokens->pGet(tokens, 2);
+        if (is_single_character(left_brace.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        left_brace.type = 7;
+
+        
+
+
+
         
     } else if (strcmp("matrix", token.value) == 0) {
         token.type = 2;
+
+        Token variable = tokens->pGet(tokens,1);
+        if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        variable.type = 21;
+
 
     } else if (token.type ==  3) {
     } else if (token.type ==  4) {
@@ -200,6 +232,10 @@ void parser(Vector *tokens, int line_number) {
     } else if (token.type == 15) {
     } else if (token.type == 16) {
     }
+}
+
+void assign_type() {
+
 }
 
 /*

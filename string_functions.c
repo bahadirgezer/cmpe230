@@ -9,8 +9,8 @@
     0 if ch is not an alphanumeric character
     @param ch character to check
 */
-int isAlphaNumeric(char ch) {
-    if (isLetter(ch) == 1 || isNumber(ch) == 1) {
+int is_alphanumeric(char ch) {
+    if (is_letter(ch) == 1 || is_number(ch) == 1) {
         return 1;
     } else {
         return 0;
@@ -24,9 +24,9 @@ int isAlphaNumeric(char ch) {
     0 if the string ch[] does not have only alphanumeric characters
     @param ch character to check
 */
-int isAlphaNumericLiteral(char ch[]) {
+int is_alphanumeric_literal(char ch[]) {
     for (int i = 0; i < strlen(ch); i++) {
-        if (isLetter(ch[i]) == 0 || isNumber(ch[i]) == 0) {
+        if (is_alphanumeric(ch[i]) == 0) {
             return 0;
         }
     }
@@ -42,7 +42,7 @@ int isAlphaNumericLiteral(char ch[]) {
     @param ch character to check
 
 */
-int isLetter(char ch) {
+int is_letter(char ch) {
     if (('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z')) {
         return 1;
     } else {
@@ -57,9 +57,9 @@ int isLetter(char ch) {
     0 if the string ch[] does not have only letters
     @param ch character to check
 */
-int isLetterLiteral(char ch[]) {
+int is_letter_literal(char ch[]) {
     for (int i = 0; i < strlen(ch); i++) {
-        if (isLetter(ch[i] == 0)) {
+        if (is_letter(ch[i]) == 0) {
             return 0;
         }
     }
@@ -73,7 +73,7 @@ int isLetterLiteral(char ch[]) {
     0 if ch is not a number
     @param ch character to check
 */
-int isNumber(char ch) {
+int is_number(char ch) {
     if ('0' <= ch && ch <= '9') {
         return 1;
     } else {
@@ -88,9 +88,9 @@ int isNumber(char ch) {
     0 if the string ch[] does not have only numbers
     @param ch character to check
 */
-int isNumberLiteral(char ch[]) {
+int is_number_literal(char ch[]) {
     for (int i = 0; i < strlen(ch); i++) {
-        if (isNumber(ch[i]) == 0) {
+        if (is_number(ch[i]) == 0) {
             return 0;
         }
     }
@@ -105,7 +105,7 @@ int isNumberLiteral(char ch[]) {
     0 if ch is not a paranthesis
     @param ch character to check
 */
-int isParanthesis(char ch) {
+int is_paranthesis(char ch) {
     if (ch == '(' || ch == ')') {
         if (ch == '(') {
             return 1;
@@ -124,7 +124,7 @@ int isParanthesis(char ch) {
     0 is ch is not a special character
     @param ch character to check
 */
-int isSpecialCharacter(char ch) {
+int is_special_character(char ch) {
     if (ch == '(' || ch == ')' || ch == '[' || ch == ']' || ch == '{' || ch == '}' || ch == '=' || ch == '+' || ch == '*' || ch == '-' || ch == ',' || ch == ':') {
         return 1;
     } else {
@@ -139,7 +139,7 @@ int isSpecialCharacter(char ch) {
     0 if ch is not a white-space
     @param ch character to check
 */
-int isWhitespace(char ch) {
+int is_whitespace(char ch) {
     if (ch == ' ' || ch == '\t' || ch == '\v' || ch == '\n') {
         return 1;
     } else {
@@ -154,7 +154,7 @@ int isWhitespace(char ch) {
     0 if ch is not a dot
     @param ch character to check
 */
-int isDot(char ch) {
+int is_dot(char ch) {
     if (ch == '.') {
         return 1;
     } else {
@@ -169,8 +169,54 @@ int isDot(char ch) {
     0 if ch is not a character for comments
     @param ch character to check
 */
-int isComment(char ch) {
+int is_comment(char ch) {
     if (ch == '#') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if ch is a left brace
+    @returns
+    1 if ch is a left brace
+    0 if ch is not a left brace
+    @param ch character to check
+*/
+int is_left_brace(char ch) {
+    if (ch == '[') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if ch is a right brace
+    @returns
+    1 if ch is a right brace
+    0 if ch is not a right brace
+    @param ch character to check
+*/
+int is_right_brace(char ch) {
+    if (ch == ']') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if a character array is made up of a single character, this function is used for
+    special characters. 
+    @returns 
+    1 if ch[] is a single character
+    0 if ch[] is not a single character
+    @param char[] ch character array to check 
+*/
+int is_single_character(char ch[]) {
+    if (strlen(ch) == 1) {
         return 1;
     } else {
         return 0;
