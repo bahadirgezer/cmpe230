@@ -179,8 +179,12 @@ void parser(Vector *tokens, int line_number) {
         }
         variable.type = 19;
 
-    } else if (token.type ==  1) {
-    } else if (token.type ==  2) {
+    } else if (strcmp("vector", token.value) == 0) {
+        token.type = 1;
+        
+    } else if (strcmp("matrix", token.value) == 0) {
+        token.type = 2;
+
     } else if (token.type ==  3) {
     } else if (token.type ==  4) {
     } else if (token.type ==  5) {
