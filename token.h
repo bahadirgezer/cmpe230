@@ -2,9 +2,14 @@ struct Token{
     char value[256];
     int type;
     int isOk;
+    int matrix_i;
+    int matrix_j;
+    int vector;
 };
 
 typedef struct Token Token;
+
+//https://www.javatpoint.com/convert-infix-to-postfix-notation
 
 /*
     lookup table for int type

@@ -6,19 +6,29 @@
 Vector tokens;
 /*
 process_line(char line[], File c_file) {
-	malloc(tokens)
 	tokens = tokenizer(line)
 	parser(tokens)
 	//no syntax error at this point
 	c_line = line_builder(tokens)
 	printf(C_file, c_line)
-	free(tokens)
+	
 }
 
 print(C.out, neededfunctions)
 while(nextLine) {
 	line
 	process_line(line, C.out)
+}
+
+
+parser(Vector tokens) {
+	expression(subTokens) //calls expression when necessarry
+}
+
+
+expression(Vector subTokens) {
+	Vector postfixSubTokens = infixToPostfix(subTokens)
+	evaluatePostfix(postfixSubTokens)
 }
 */
 
@@ -163,18 +173,11 @@ void parser(Vector *tokens, int line_number) {
     if (strcmp("scalar", token.value) == 0) {
         token.type = 0;
 
-        Token equals = tokens->pGet(tokens, 1); // second token
-        if (strcmp("=", equals.value) != 0 || equals.isOk != 1) { //should be the equals sign
-            error(line_number);
-        }
-        equals.type = 11;
-
-        Token variable = tokens->pGet(tokens, 2);
+        Token variable = tokens->pGet(tokens, 1);
         if (isAlphaNumericLiteral(variable.value) != 1 || variable.isOk != 1) {
             error(line_number);
         }
         variable.type = 19;
-
 
     } else if (token.type ==  1) {
     } else if (token.type ==  2) {
