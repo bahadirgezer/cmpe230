@@ -127,6 +127,7 @@ Vector* tokenizer(char line[], int line_number) {
 */
 void extract_token(char *token_start, int token_len, Vector *tokens, int token_type) {
     Token token;
+    token.isOk = 1;
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
     token.type = token_type;
@@ -138,16 +139,25 @@ void error(int line_number) {
 }
 
 void parser(Vector *tokens, int line_number) {
-    Token token = tokens->pGet(&tokens, 0);
-
+    if (tokens->pSize == 0) {
+        return;
+    }
+    Token token = tokens->pGet(&tokens, 0); //checking first token
+    
     if (strcmp("scalar", token.value) == 0) {
         token.type = 0;
 
-        Token scalar_variable = tokens->pGet(&tokens, 1);
-        if (scalar_variable.type != 0) {
+        Token equals = tokens->pGet(&tokens, 1); // second token
+        if (strcmp("=", equals.value) != 0 || equals.isOk != 1) { //should be the equals sign
             error(line_number);
         }
+        equals.type = 11;
 
+        Token variable = tokens->pGet(&tokens, 2);
+        if (isAlphaNumericLiteral(variable.value) != 1 || variable.isOk != 1) {
+            error(line_number);
+        }
+        variable.type = 19;
 
 
     } else if (token.type == 1) {
