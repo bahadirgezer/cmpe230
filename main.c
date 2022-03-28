@@ -273,6 +273,33 @@ void parser(Vector *tokens, int line_number) {
             error(line_number);
             return;
         }
+        left_paranthesis = 5;
+
+        //INSIDE OF FOR ASSIGNMENT
+
+        Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
+        if (is_single_character(right_paranthesis.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        right_paranthesis = 6;
+
+        Token left_curly_brace = tokens->pGet(tokens, placeholder_index + 1);
+        if (is_single_character(right_paranthesis.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if (is_left_curly_brace(left_curly_brace.value[0]) != 1 || left_curly_brace.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        left_curly_brace.type = 9;
+
+        //WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
 
     } else if (token.type ==  4) {
     } else if (token.type ==  5) {
@@ -289,6 +316,8 @@ void parser(Vector *tokens, int line_number) {
     } else if (token.type == 16) {
     }
 }
+
+for  variables
 
 int parse_expression(int start_index, Vector *tokens, int delimiter_type) {
     Token current_token;

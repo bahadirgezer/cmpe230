@@ -13,4 +13,6 @@ int is_left_brace(char ch);
 int is_right_brace(char ch);
 int is_left_paranthesis(char ch);
 int is_right_paranthesis(char ch);
+int is_left_curly_brace(char ch);
+int is_right_curly_brace(char ch);
 int is_single_character(char ch[]);

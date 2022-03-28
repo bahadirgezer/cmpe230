@@ -238,6 +238,36 @@ int is_right_paranthesis(char ch) {
 }
 
 /*
+    Checks if ch is a left curly brace
+    @returns
+    1 if ch is a left curly brace
+    0 if ch is not a left curly brace
+    @param ch character to check
+*/
+int is_left_curly_brace(char ch) {
+    if (ch == '{') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if ch is a right curly brace
+    @returns
+    1 if ch is a right curly brace
+    0 if ch is not a right curly brace
+    @param ch character to check
+*/
+int is_right_curly_brace(char ch) {
+    if (ch == '}') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
     Checks if a character array is made up of a single character, this function is used for
     special characters. 
     @returns 

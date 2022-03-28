@@ -23,7 +23,7 @@ typedef struct Token Token;
     7  -> left square brace
     8  -> right square brace
     9  -> left curly brace
-    10 -> right curely brace
+    10 -> right curly brace
     11 -> equals
     12 -> multiplication
     13 -> addition
@@ -35,4 +35,5 @@ typedef struct Token Token;
     19 -> scalar variable
     20 -> vector variable
     21 -> matrix variable
+    22 -> for variable
 */
