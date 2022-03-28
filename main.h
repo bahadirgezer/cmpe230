@@ -7,4 +7,6 @@ void tokenizer(char line[], int line_number);
 void error(int line_number);
 void parser(Vector *tokens, int line_number);
 Token get_variable(char name[]);
+int parse_expression(int start_index, Vector *tokens, int delimiter_type);
+
 

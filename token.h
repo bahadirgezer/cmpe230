@@ -17,7 +17,7 @@ typedef struct Token Token;
     1  -> vector keyword
     2  -> matrix keyword
     3  -> function keyword (tr, sqrt, choose, print, printsep)
-    4  -> for
+    4  -> for keyword
     5  -> left paranthesis
     6  -> right paranthesis
     7  -> left square brace

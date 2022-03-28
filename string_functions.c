@@ -208,6 +208,36 @@ int is_right_brace(char ch) {
 }
 
 /*
+    Checks if ch is a left paranthesis
+    @returns
+    1 if ch is a left paranthesis
+    0 if ch is not a left paranthesis
+    @param ch character to check
+*/
+int is_left_paranthesis(char ch) {
+    if (ch == '(') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if ch is a right paranthesis
+    @returns
+    1 if ch is a right paranthesis
+    0 if ch is not a right paranthesis
+    @param ch character to check
+*/
+int is_right_paranthesis(char ch) {
+    if (ch == ')') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
     Checks if a character array is made up of a single character, this function is used for
     special characters. 
     @returns 

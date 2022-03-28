@@ -165,6 +165,7 @@ void error(int line_number) {
 }
 
 void parser(Vector *tokens, int line_number) {
+    int delimiter_index;
     if (tokens->pSize == 0) {
         return;
     }
@@ -201,23 +202,78 @@ void parser(Vector *tokens, int line_number) {
         }
         left_brace.type = 7;
 
-        
+        //int delimiter_index = parse_expression(); //right brace as delimiter
+        //WILL PASS EXPRESSION INTO VECTOR VALUE
 
+        Token right_brace = tokens->pGet(tokens, delimiter_index);
+        if (is_single_character(right_brace.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        right_brace.type = 8;
 
+        // WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
 
         
     } else if (strcmp("matrix", token.value) == 0) {
         token.type = 2;
 
-        Token variable = tokens->pGet(tokens,1);
+        Token variable = tokens->pGet(tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
             error(line_number);
             return;
         }
         variable.type = 21;
 
+        Token left_brace = tokens->pGet(tokens, 2);
+        if (is_single_character(left_brace.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        left_brace.type = 7;
 
-    } else if (token.type ==  3) {
+        //int delimiter_index = parse_expression(); //comma as delimiter
+        //WILL PASS EXPRESSION INTO VECTOR VALUE
+
+        //int delimiter_index = parse_expression(); //right brace as delimiter
+        //WILL PASS EXPRESSION INTO VECTOR VALUE
+
+
+        Token right_brace = tokens->pGet(tokens, delimiter_index);
+        if (is_single_character(right_brace.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+            error(line_number);
+            return;
+        }
+        right_brace.type = 8;
+
+        //WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
+
+
+    } else if (strcmp("for", token.value) == 0) {
+        token.type = 4;
+
+        Token left_paranthesis = tokens->pGet(tokens, 1);
+        if (is_single_character(left_paranthesis.value) != 1) {
+            error(line_number);
+            return;
+        }
+        if(is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+            error(line_number);
+            return;
+        }
+
     } else if (token.type ==  4) {
     } else if (token.type ==  5) {
     } else if (token.type ==  6) {
@@ -232,6 +288,13 @@ void parser(Vector *tokens, int line_number) {
     } else if (token.type == 15) {
     } else if (token.type == 16) {
     }
+}
+
+int parse_expression(int start_index, Vector *tokens, int delimiter_type) {
+    Token current_token;
+    Token next_token;
+
+    return 0;
 }
 
 void assign_type() {
