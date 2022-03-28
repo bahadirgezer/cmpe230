@@ -20,11 +20,9 @@ while(nextLine) {
 	process_line(line, C.out)
 }
 
-
 parser(Vector tokens) {
 	expression(subTokens) //calls expression when necessarry
 }
-
 
 expression(Vector subTokens) {
 	Vector postfixSubTokens = infixToPostfix(subTokens)
@@ -166,6 +164,8 @@ void error(int line_number) {
 
 void parser(Vector *tokens, int line_number) {
     int delimiter_index;
+    int placeholder_index;
+
     if (tokens->pSize == 0) {
         return;
     }
@@ -218,7 +218,6 @@ void parser(Vector *tokens, int line_number) {
 
         // WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
 
-        
     } else if (strcmp("matrix", token.value) == 0) {
         token.type = 2;
 
@@ -260,7 +259,6 @@ void parser(Vector *tokens, int line_number) {
 
         //WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
 
-
     } else if (strcmp("for", token.value) == 0) {
         token.type = 4;
 
@@ -273,7 +271,7 @@ void parser(Vector *tokens, int line_number) {
             error(line_number);
             return;
         }
-        left_paranthesis = 5;
+        left_paranthesis.type = 5;
 
         //INSIDE OF FOR ASSIGNMENT
 
@@ -286,7 +284,7 @@ void parser(Vector *tokens, int line_number) {
             error(line_number);
             return;
         }
-        right_paranthesis = 6;
+        right_paranthesis.type = 6;
 
         Token left_curly_brace = tokens->pGet(tokens, placeholder_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
@@ -301,7 +299,9 @@ void parser(Vector *tokens, int line_number) {
 
         //WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
 
-    } else if (token.type ==  4) {
+    //} else if (is_variable(token.value) == 1) {
+    //    Token variable = get_variable(token.value);
+
     } else if (token.type ==  5) {
     } else if (token.type ==  6) {
     } else if (token.type ==  7) {
@@ -317,7 +317,6 @@ void parser(Vector *tokens, int line_number) {
     }
 }
 
-for  variables
 
 int parse_expression(int start_index, Vector *tokens, int delimiter_type) {
     Token current_token;
@@ -340,14 +339,25 @@ Token get_variable(char name[]) {
     return token;
 }
 
+/*
+    Checks if a given alphanumeric string is a variable name.
+    @param char[] name - value )as in the value field inside the token) of the suspected variable.
+    @returns int - 
+    1 if there is a variable with name name[]
+    0 if there isn't a variable with name name[]
+*/
+int is_variable(char name[]) {
+    
+    return 0;
+}
 
 int main(int argc, char *argv[]) {
-    char line[256] = "matrix A[2,2]     \t # variables and stuff and ]][][][{}[]])_0-=-&@@@@";    
+    char line[256] = "scalar X   ";    
     tokenizer(line, 1);
+    parser(&tokens, 1);
     
-    for (int i = 0; i < tokens.pSize(&tokens); i++)
-    {
-        Token first_token = tokens.pGet(&tokens, i);
-        printf("\"%s\"\n", first_token.value);
+    for (int i = 0; i < tokens.pSize(&tokens); i++) {
+        Token token = tokens.pGet(&tokens, i);
+        printf("\"%d\"\n", token.type);
     }
 }
