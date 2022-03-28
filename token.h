@@ -24,4 +24,6 @@ typedef struct Token Token;
     14 -> subtraction
     15 -> comma 
     16 -> colon
+    17 -> undetermined
+    18 -> comment
 */

@@ -29,16 +29,16 @@ Vector* tokenizer(char line[], int line_number) {
         if (isComment(current) == 1) {
             if (token_type == 0) {
                 if (token_start == line) {
-                    extract_token(token_start, line_len - index, &tokens);
+                    extract_token(token_start, line_len - index, &tokens, 18);
                 } else {
-                    extract_token(token_start + 1, line_len - index, &tokens);
+                    extract_token(token_start + 1, line_len - index, &tokens, 18);
                 }
             } else if (token_type == 1) {
-                extract_token(token_start, token_len, &tokens);
-                extract_token(token_start + 1, line_len - index, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
+                extract_token(token_start + 1, line_len - index, &tokens, 18);
             } else if (token_type == 2) {
-                extract_token(token_start, token_len, &tokens);
-                extract_token(token_start + 1, line_len - index, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
+                extract_token(token_start + 1, line_len - index, &tokens, 18);
             }
             break;
         }
@@ -60,12 +60,12 @@ Vector* tokenizer(char line[], int line_number) {
                 token_start = line + index;
                 index++;
             } else if (token_type == 1) {
-                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
                 token_len = 0;
                 token_start = line + index;
                 index++;
             } else if (token_type == 2) {
-                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
                 token_len = 0;
                 token_start = line + index;
                 index++;
@@ -80,12 +80,12 @@ Vector* tokenizer(char line[], int line_number) {
                 token_start = line + index;
                 index++;
             } else if (token_type == 1) {
-                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
                 token_len = 1;
                 token_start = line + index;
                 index++;
             } else if (token_type == 2) {
-                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
                 token_len = 1;
                 token_start = line + index;
                 index++;
@@ -100,7 +100,7 @@ Vector* tokenizer(char line[], int line_number) {
                 token_start = line + index;
                 index++;
             } else if (token_type == 1) {
-                extract_token(token_start, token_len, &tokens);
+                extract_token(token_start, token_len, &tokens, 17);
                 token_len = 1;
                 token_start = line + index;
                 index++;
@@ -125,10 +125,11 @@ Vector* tokenizer(char line[], int line_number) {
     @param int token_len 
     @param Vector* tokens
 */
-void extract_token(char *token_start, int token_len, Vector *tokens) {
+void extract_token(char *token_start, int token_len, Vector *tokens, int token_type) {
     Token token;
     memset(token.value, '\0', sizeof(token.value));
     strncpy(token.value, token_start, token_len);
+    token.type = token_type;
     tokens->pAdd(tokens, token);
 }
 
@@ -136,13 +137,35 @@ void error(int line_number) {
     printf("Error on line %d\n", line_number);
 }
 
-void parser(Vector *tokens) {
-    for (int i = 0; i < tokens->pSize; i++) {
-        Token token = tokens->pGet(&tokens, i);
+void parser(Vector *tokens, int line_number) {
+    Token token = tokens->pGet(&tokens, 0);
 
-        if (token.type == 0) {
-            
+    if (strcmp("scalar", token.value) == 0) {
+        token.type = 0;
+
+        Token scalar_variable = tokens->pGet(&tokens, 1);
+        if (scalar_variable.type != 0) {
+            error(line_number);
         }
+
+
+
+    } else if (token.type == 1) {
+    } else if (token.type ==  2) {
+    } else if (token.type ==  3) {
+    } else if (token.type ==  4) {
+    } else if (token.type ==  5) {
+    } else if (token.type ==  6) {
+    } else if (token.type ==  7) {
+    } else if (token.type ==  8) {
+    } else if (token.type ==  9) {
+    } else if (token.type == 10) {
+    } else if (token.type == 11) {
+    } else if (token.type == 12) {
+    } else if (token.type == 13) {
+    } else if (token.type == 14) {
+    } else if (token.type == 15) {
+    } else if (token.type == 16) {
     }
 }
 
