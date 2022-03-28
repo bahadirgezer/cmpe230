@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "token.h"
 #define DEFAULT_CAPACITY 10
 
 typedef struct Vector Vector;
@@ -9,6 +8,7 @@ struct VectorAttributes{
     Token *array;       // an array of Tokens
     int capacity;       // the capacity of the array
     int currentSize;    //the current size of the array
+    Token nullToken;
 };
 
 
@@ -71,6 +71,8 @@ int Size(Vector *vector){
 Token Get(Vector *vector, int index){
     if (index < vector->attributes.currentSize){
         return vector->attributes.array[index];
+    } else {
+        return vector->attributes.nullToken;
     }
 }
 
@@ -86,4 +88,5 @@ void CreateVector(Vector *vector){
     vector->attributes.currentSize = 0;
     vector->attributes.capacity = DEFAULT_CAPACITY;
     vector->attributes.array = malloc(sizeof(Token) * DEFAULT_CAPACITY);
+    vector->attributes.nullToken.isOk = 0;
 }

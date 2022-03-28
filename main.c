@@ -142,25 +142,25 @@ void parser(Vector *tokens, int line_number) {
     if (tokens->pSize == 0) {
         return;
     }
-    Token token = tokens->pGet(&tokens, 0); //checking first token
+    Token token = tokens->pGet(tokens, 0); //checking first token
     
     if (strcmp("scalar", token.value) == 0) {
         token.type = 0;
 
-        Token equals = tokens->pGet(&tokens, 1); // second token
+        Token equals = tokens->pGet(tokens, 1); // second token
         if (strcmp("=", equals.value) != 0 || equals.isOk != 1) { //should be the equals sign
             error(line_number);
         }
         equals.type = 11;
 
-        Token variable = tokens->pGet(&tokens, 2);
+        Token variable = tokens->pGet(tokens, 2);
         if (isAlphaNumericLiteral(variable.value) != 1 || variable.isOk != 1) {
             error(line_number);
         }
         variable.type = 19;
 
 
-    } else if (token.type == 1) {
+    } else if (token.type ==  1) {
     } else if (token.type ==  2) {
     } else if (token.type ==  3) {
     } else if (token.type ==  4) {
@@ -191,6 +191,7 @@ Token get_variable(char name[]) {
 
 
 int main(int argc, char *argv[]) {
+
     char line[256] = "matrix A[2,2]     \t # variables and stuff and ]][][][{}[]])_0-=-&@@@@";
     Vector firstline;
     CreateVector(&firstline);
@@ -200,4 +201,10 @@ int main(int argc, char *argv[]) {
         Token first_token = v.pGet(&v, i);
         printf("\"%s\"\n", first_token.value);
     }
+
+
+
+
+
+
 }

@@ -1,3 +1,4 @@
+#include "token.h"
 #include "vector.h"
 #include "stack.h"
 
