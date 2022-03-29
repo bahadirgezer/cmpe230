@@ -11,7 +11,6 @@ process_line(char line[], File c_file) {
 	//no syntax error at this point
 	c_line = line_builder(tokens)
 	printf(C_file, c_line)
-	
 }
 
 print(C.out, neededfunctions)
@@ -161,6 +160,12 @@ void extract_token(char *token_start, int token_len, Vector *tokens, int token_t
 void error(int line_number) {
     printf("Error on line %d\n", line_number);
 }
+
+//parser -> assignment, decleration (with keyword), for loop, print(), printsep(), 
+//needs expression parser, expression parser is recursive.
+//parser is not recursive.
+//function_parser is used as the last part (else) of these two functions.
+//function_parser is not recursive, but it calls expression parser, which is.
 
 void parser(Vector *tokens, int line_number) {
     int delimiter_index;
@@ -317,15 +322,16 @@ void parser(Vector *tokens, int line_number) {
     }
 }
 
-
-int parse_expression(int start_index, Vector *tokens, int delimiter_type) {
+int get_expression(int start_index, Vector *tokens, int delimiter_type) {
     Token current_token;
     Token next_token;
+    //parser(get);
+
 
     return 0;
 }
 
-void assign_type() {
+void assign_type(Token type) {
 
 }
 
