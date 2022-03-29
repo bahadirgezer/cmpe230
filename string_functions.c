@@ -268,6 +268,64 @@ int is_right_curly_brace(char ch) {
 }
 
 /*
+    Checks if ch is a star character
+    @returns
+    1 if ch is a star character
+    0 if ch is not a star character
+    @param ch character to check
+*/
+int is_star(char ch) {
+    if (ch == '*') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if ch is a minus character
+    @returns
+    1 if ch is a minus character
+    0 if ch is not a minus character
+    @param ch character to check
+*/
+int is_minus(char ch) {
+    if (ch == '-') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if ch is a plus character
+    @returns
+    1 if ch is a plus character
+    0 if ch is not a plus character
+    @param ch character to check
+*/
+int is_plus(char ch) {
+    if (ch == '+') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if the char array is a function keyword for function that are not print functions.
+    @returns 
+    1 if ch is a function keyword
+    0 if ch is not a function keyword
+    @param char[] ch character array to check
+*/
+int is_function_keyword(char ch[]) {
+    if (strcmp(ch, "choose") == 0 || strcmp(ch, "tr") == 0 || strcmp(ch, "sqrt") == 0) {
+
+    }
+}
+
+/*
     Checks if a character array is made up of a single character, this function is used for
     special characters. 
     @returns 

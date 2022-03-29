@@ -162,6 +162,83 @@ void error() {
     printf("Error on line %d\n", line_number);
 }
 
+void function_parser() {
+
+}
+
+/*
+    Returns -1 if there is an error. Assigns type and attribute values to tokens inside of an expression.
+    Returns the index of the last token of the expression.
+*/
+int get_expression(Vector *tokens, int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
+    int delimiter_found = 0; // can have right curly brace, right square brace or comment as delimiter
+    int tokens_size = tokens->pSize;
+    if (tokens->pSize == start_index) {
+        return -1;
+    }
+    int increment = 0;
+    while(!delimiter_found) {
+        Token token = tokens->pGet(tokens, start_index + increment);
+        if (token.isOk != 1) {
+            return -1;
+        }
+
+        if (is_variable(token.value) == 1) {
+            Token attributed_variable = get_variable(token.value);
+            assign_type(&token, &attributed_variable);
+
+        } else if (is_number_literal(token.value) == 1 || is_float(token.value) == 1) {
+            token.value = 19;
+
+        } else if (is_function_keyword(token.value) == 1) {
+            
+
+        } else if (is_comment(token.value[0]) == 1) {
+            token.type = 18;
+            if (delimiter_type != token.type) { //might have a semantic error
+                return -1;
+            }
+            return start_index + increment - 1;
+
+        } else if (is_single_character(token.value) == 1) {
+            if (is_left_paranthesis(token.value[0]) == 1) {
+                token.value = 5;
+            } else if (is_right_paranthesis(token.value[0] == 1)) {
+                token.value = 6;
+            } else if (is_star(token.value[0]) == 1) {
+                token.value = 12;
+            } else if (is_plus(token.value[0]) == 1) {
+                token.value = 13;
+            } else if (is_minus(token.value[0]) == 1) {
+                token.value = 14;
+            
+            } else if () {
+
+            } else if (is_right_curly_brace(token.value[0]) == 1) {
+                token.value = 10;
+                if (delimiter_type != token.type) {
+                    return -1;
+                }
+                return start_index + increment - 1;
+
+            } else if (is_right_square_brace(token.value[0]) == 1) {
+                token.value = 8;
+                if (delimiter_type != token.type) {
+                    return -1;
+                }
+                return start_index + increment - 1;
+            } else { // add delimiter
+                return -1;
+            }
+        }
+
+        increment++;
+    }
+
+
+    return 0;
+}
+
 //parser -> assignment, decleration (with keyword), for loop, print(), printsep(), 
 //needs expression parser, expression parser is recursive.
 //parser is not recursive.
@@ -420,7 +497,7 @@ void parser(Vector *tokens) {
             error();
             return;
         }
-    
+
         if (is_ok_ending(&tokens, placeholder_index) != 1) {
             error();
             return;
@@ -429,15 +506,6 @@ void parser(Vector *tokens) {
     } else {
         error();
     }
-}
-
-int get_expression(Vector *tokens, int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
-    Token current_token;
-    Token next_token;
-    //parser(get);
-
-
-    return 0;
 }
 
 /*
@@ -456,10 +524,10 @@ int is_ok_ending(Vector *tokens, int start_index) {
     }
     if (start_index == vector_size-1) {
         Token comment = tokens->pGet(tokens, start_index-1);
-        if (is_comment(comment.value[0]) == 1) {
-            comment.type = 18;
+        if (is_comment(comment.value[0]) != 1) {
             return 0;
         }
+        comment.type = 18;
     }
     return 1;
 }
@@ -506,4 +574,303 @@ int main(int argc, char *argv[]) {
         Token token = tokens.pGet(&tokens, i);
         printf("\"%d\"\n", token.type);
     }
+}
+
+void infix_to_postfix(Vector subtokens){
+    CreateVector(&postfix_vector);
+    Stack postfix_stack;
+    CreateStack(&postfix_stack);
+    int i = 0;
+
+    while(i < subtokens.pSize(&subtokens)){
+        // printf("%d\n", subtokens.pSize(&subtokens));
+        Token next_token = subtokens.pGet(&subtokens,i);
+        // printf("%d\n",next_token.type);
+
+        if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21) { // if the next token is an operand
+            postfix_vector.pAdd(&postfix_vector, next_token);
+        } else if (next_token.type == 5) { // if the next token is a left paranthesis
+            postfix_stack.pPush(&postfix_stack,next_token);
+        } else if (next_token.type == 6) { // if the next token is a right paranthesis
+            while (postfix_stack.pPeek(&postfix_stack).type != 5) { // while we don't encounter a right paranthesis
+                if (postfix_stack.pIsEmpty(&postfix_stack)) {
+                    error(0);
+                    break;
+                }
+                // printf("banana");
+                // printf("abc-%s\n", postfix_stack.pPeek(&postfix_stack).value);
+                Token tokenPoped;
+                tokenPoped = postfix_stack.pPop(&postfix_stack);
+                postfix_vector.pAdd(&postfix_vector,tokenPoped);
+                // printf("----------------------%s\n",tokenPoped.value);
+            }
+            if (postfix_stack.pPeek(&postfix_stack).type == 5) {
+                postfix_stack.pPop(&postfix_stack);
+            }
+        } else if (next_token.type == 12 || next_token.type == 13 || next_token.type == 14) { // if the next token is an operator
+            if (postfix_stack.pIsEmpty(&postfix_stack) == 1) { // if the stack is empty push the operator into the stack
+                postfix_stack.pPush(&postfix_stack,next_token);
+            } else if (postfix_stack.pPeek(&postfix_stack).type == 5) { // if the top element is a left paranthesis push the operator into the stack
+                postfix_stack.pPush(&postfix_stack,next_token);
+            } else if (has_higher_precedence(next_token.type,postfix_stack.pPeek(&postfix_stack).type) == 1) { // if the operator has higher precedence than the top of the stack
+                postfix_stack.pPush(&postfix_stack,next_token);
+            } else if (has_higher_precedence(next_token.type,postfix_stack.pPeek(&postfix_stack).type) == 0) { // if the operator has lower precedence than the top of the stack
+                while(has_higher_precedence(next_token.type,postfix_stack.pPeek(&postfix_stack).type == 0)) {
+                    Token tokenPoped;
+                    tokenPoped = postfix_stack.pPop(&postfix_stack);
+                    postfix_vector.pAdd(&postfix_vector,tokenPoped);
+                    if (postfix_stack.pIsEmpty(&postfix_stack)){
+                        break;
+                    }
+                }
+                postfix_stack.pPush(&postfix_stack,next_token);
+            }
+            // if they have the same precedence assume left associativity
+            else if (has_higher_precedence(next_token.type,postfix_stack.pPeek(&postfix_stack).type) == 2) {
+                Token tokenPoped;
+                tokenPoped = postfix_stack.pPop(&postfix_stack);
+                postfix_vector.pAdd(&postfix_vector,tokenPoped);
+                postfix_stack.pPush(&postfix_stack, next_token);
+            }
+        }
+        i++;
+    }
+    // printf("asasdad-");
+    // printf("%d", postfix_stack.pSize(&postfix_stack));
+    // printf("%d", postfix_stack.pIsEmpty(&postfix_stack));
+    if (postfix_stack.pIsEmpty(&postfix_stack) == 0) {
+        // printf("asasasasasasasasasa");
+        while (postfix_stack.pIsEmpty(&postfix_stack) != 1) {
+            // printf("aloha");
+            if (postfix_stack.pPeek(&postfix_stack).type != 5) {
+                postfix_vector.pAdd(&postfix_vector,postfix_stack.pPop(&postfix_stack));
+            } else {
+                error(0);
+                break;
+            }
+        }
+    }
+    // return(postfix_vector);
+}
+
+void evaluate_postfix(Vector postfix) {
+    int i = 0;
+    int flag = 0;
+    Stack evaluation_stack;
+    CreateStack(&evaluation_stack);
+
+    while(i < postfix.pSize(&postfix)){
+        Token next_token = postfix.pGet(&postfix,i);
+
+        if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21) { // if the next token is an operand
+            evaluation_stack.pPush(&evaluation_stack,next_token);
+        } else if (next_token.type == 12 || next_token.type == 13 || next_token.type == 14) { // if the next token is an operator
+            if (evaluation_stack.pSize(&evaluation_stack) >= 2) {
+                Token op2 = evaluation_stack.pPop(&evaluation_stack);
+                Token op1 = evaluation_stack.pPop(&evaluation_stack);
+                Token result;
+                result = type_check(op1,op2,next_token);
+                if (result.isOk == 0) {
+                    error(0);
+                    flag = 1;
+                    break;
+                } else {
+                    evaluation_stack.pPush(&evaluation_stack,result);
+                }
+            } else {
+                error(0);
+                flag = 1; 
+                break;
+            }
+            
+        }
+        i++;
+    }
+
+    if (evaluation_stack.pSize(&evaluation_stack) != 1) {
+        error(0);
+        flag = 1;
+    } else if (flag == 0) {
+        printf("no error\n"); //printf???
+    }
+}
+
+Token type_check(Token op1, Token op2, Token operator) {
+   Token result_token;
+
+   if (operator.type == 12) { // if the operator is *
+       if (op1.type == 18) { // if op1 is scalar
+            if (op2.type == 18) { // if op2 is scalar
+                // the resulting token is a scalar
+                result_token.type = 18;
+                result_token.isOk = 1;
+                return result_token;
+            } else if (op2.type == 19) { // if op2 is vector
+                result_token.type = 19;
+                result_token.isOk = 1;
+                return result_token;
+            } else if (op2.type == 20) { // if op2 is matrix
+                result_token.type = 20;
+                result_token.isOk = 1;
+                return result_token;
+            }
+        } else if (op1.type == 19) { // if op1 is vector
+            if (op2.type == 18) { // if op2 is scalar
+                if (op1.vector == 1) {
+                    result_token.type = 18;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           } else if (op2.type == 19) { // if op2 is vector
+                if (op2.vector == 1) {
+                    result_token.type = 19;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            } else if (op2.type == 20) { // if op2 is matrix
+                if(op2.matrix_i == 1) {
+                    result_token.type = 20;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            }
+        } else if (op1.type == 20) { // if op1 is a matrix
+            if (op2.type == 18) { // if op2 is scalar
+                if (op1.matrix_i == 1 && op1.matrix_j == 1) {
+                    result_token.type = 18;
+                    result_token.isOk = 1;
+                    return result_token;
+                }
+            } else if (op2.type == 19){ // if op2 is vector
+                if (op1.matrix_j == op2.vector) {
+                    result_token.type = 19;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            } else if (op2.type == 20) { // if op2 is matrix
+                if (op1.matrix_j == op2.matrix_i) {
+                    result_token.type = 20;
+                    result_token.isOk =1;
+                    return result_token;
+                }
+            }
+        }
+   } if (operator.type == 13 || operator.type == 14) { // if the operator is + or - 
+       if (op1.type == 18) { // if op1 is scalar
+            if (op2.type == 18) { // if op2 is scalar
+                result_token.type = 18;
+                result_token.isOk = 1;
+                return result_token;
+           } else if (op2.type == 19) { // if op2 is vector
+                if(op2.vector == 1) {
+                    result_token.type = 18;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           } else if (op2.type == 20) { // if op2 is matrix
+                if (op2.matrix_i == 1 && op2.matrix_j == 1) {
+                    result_token.type = 18;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           }
+       } else if (op1.type == 19) {  // if op1 is vector
+            if (op2.type == 18) { // if op2 is scalar
+                if (op1.vector == 1) {
+                    result_token.type = 18;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           } else if (op2.type == 19) { // if op2 is vector
+                if (op1.vector == op2.vector) {
+                    result_token.type = 19;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           } else if (op2.type == 20) { // if op2 is matrix
+                if (op1.vector == op2.matrix_i && op2.matrix_j == 1) {
+                    result_token.type = 19;
+                    result_token.isOk  = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           }
+        } else if (op1.type == 20) { // if op1 is a matrix
+            if (op2.type == 18) { // if op2 is scalar
+                if (op2.matrix_i == 1 && op2.matrix_j == 1) {
+                    result_token.type = 18;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            } else if (op2.type == 19) { // if op2 is vector
+                if (op1.matrix_i == op2.vector && op1.matrix_j == 1) {
+                    result_token.type = 19;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            } else if (op2.type == 20) { // if op3 is matrix
+                if (op1.matrix_i == op2.matrix_i && op1.matrix_j == op2.matrix_j) {
+                    result_token.type = 20;
+                    result_token.isOk = 1;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            }
+        }
+    }
+}
+
+int has_higher_precedence(int incoming, int top) {
+    // if the given operator is *
+    if (incoming == 12) {
+        if (top == 13 || top == 14){
+            return 1;
+        }
+        else if (top == 12) {
+            return 2;
+        }
+    } else if (incoming == 13 || incoming == 14) s{
+        if (top == 12) {
+            return 0;
+        }
+        else if (top == 13 || top == 14) {
+            return 2;
+        }
+    }
+
+    return 3;
 }

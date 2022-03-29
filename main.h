@@ -9,4 +9,9 @@ void parser(Vector *tokens);
 Token get_variable(char name[]);
 int parse_expression(int start_index, Vector *tokens, int delimiter_type);
 int is_variable(char name[]);
+void infix_to_postfix(Vector subtokens);
+void evaluate_postfix(Vector postfix);
+Token type_check(Token op1, Token op2, Token operator);
+int has_higher_precedence(int incoming, int top);
+
 

@@ -36,5 +36,5 @@ typedef struct Token Token;
     20 -> vector variable
     21 -> matrix variable
     22 -> for variable
-    23 -> print function (print, printsep)
+    23 -> print function keyword(print, printsep)
 */
