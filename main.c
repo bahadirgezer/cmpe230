@@ -322,7 +322,7 @@ void parser(Vector *tokens) {
     } else if (is_variable(token.value) == 1) {
         Token attributed_variable = get_variable(token.value);
         assign_type(&token, &attributed_variable);
-    
+
         Token equals = tokens->pGet(tokens, 1);
         if (is_single_character(equals.value) != 1) {
             error();
@@ -367,18 +367,67 @@ void parser(Vector *tokens) {
             return;
         }
 
-    } else if (token.type ==  5) {
-    } else if (token.type ==  6) {
-    } else if (token.type ==  7) {
-    } else if (token.type ==  8) {
-    } else if (token.type ==  9) {
-    } else if (token.type == 10) {
-    } else if (token.type == 11) {
-    } else if (token.type == 12) {
-    } else if (token.type == 13) {
-    } else if (token.type == 14) {
-    } else if (token.type == 15) {
-    } else if (token.type == 16) {
+    } else if (strcmp("print", token.value) == 0) {
+        token.type = 23;
+
+        Token left_paranthesis = tokens->pGet(tokens, 1);
+        if (is_single_character(left_paranthesis.value) != 1) {
+            error();
+            return;
+        }
+        if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+
+        //Token variable;
+        //might give an index if it is a matrix or vector
+
+        Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
+        if (is_single_character(right_paranthesis.value) != 1) {
+            error();
+            return;
+        }
+        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
+
+    } else if (strcmp("printsep", token.value) == 0) {
+        token.type = 23;
+
+        Token left_paranthesis = tokens->pGet(tokens, 1);
+        if (is_single_character(left_paranthesis.value) != 1) {
+            error();
+            return;
+        }
+        if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+
+        Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
+        if (is_single_character(right_paranthesis.value) != 1) {
+            error();
+            return;
+        }
+        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+    
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
+
+    } else {
+        error();
     }
 }
 
