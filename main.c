@@ -4,6 +4,7 @@
 #include "string_functions.h"
 
 Vector tokens;
+int line_number;
 /*
 process_line(char line[], File c_file) {
 	tokens = tokenizer(line)
@@ -35,7 +36,7 @@ expression(Vector subTokens) {
     the token to the token struct. Uses token_type to keep track of which token is being parsed.
     @param char[] line
 */
-void tokenizer(char line[], int line_number) {
+void tokenizer(char line[]) {
     CreateVector(&tokens);
 
     char append = ' '; // needs an not important character at the end to read the last token.
@@ -73,7 +74,7 @@ void tokenizer(char line[], int line_number) {
                 index++;
                 continue;
             } else {
-                error(line_number);
+                error();
                 break;
             }
         }
@@ -136,7 +137,7 @@ void tokenizer(char line[], int line_number) {
             continue;
         }
 
-        error(line_number);
+        error();
         break;
     }
 }
@@ -157,7 +158,7 @@ void extract_token(char *token_start, int token_len, Vector *tokens, int token_t
     tokens->pAdd(tokens, token);
 }
 
-void error(int line_number) {
+void error() {
     printf("Error on line %d\n", line_number);
 }
 
@@ -167,7 +168,7 @@ void error(int line_number) {
 //function_parser is used as the last part (else) of these two functions.
 //function_parser is not recursive, but it calls expression parser, which is.
 
-void parser(Vector *tokens, int line_number) {
+void parser(Vector *tokens) {
     int delimiter_index;
     int placeholder_index;
 
@@ -181,28 +182,33 @@ void parser(Vector *tokens, int line_number) {
 
         Token variable = tokens->pGet(tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         variable.type = 19;
+
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
 
     } else if (strcmp("vector", token.value) == 0) {
         token.type = 1;
 
         Token variable = tokens->pGet(tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         variable.type = 20;
 
         Token left_brace = tokens->pGet(tokens, 2);
         if (is_single_character(left_brace.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         left_brace.type = 7;
@@ -212,34 +218,37 @@ void parser(Vector *tokens, int line_number) {
 
         Token right_brace = tokens->pGet(tokens, delimiter_index);
         if (is_single_character(right_brace.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         right_brace.type = 8;
 
-        // WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
 
     } else if (strcmp("matrix", token.value) == 0) {
         token.type = 2;
 
         Token variable = tokens->pGet(tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         variable.type = 21;
 
         Token left_brace = tokens->pGet(tokens, 2);
         if (is_single_character(left_brace.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         left_brace.type = 7;
@@ -253,27 +262,30 @@ void parser(Vector *tokens, int line_number) {
 
         Token right_brace = tokens->pGet(tokens, delimiter_index);
         if (is_single_character(right_brace.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         right_brace.type = 8;
 
-        //WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
 
     } else if (strcmp("for", token.value) == 0) {
         token.type = 4;
 
         Token left_paranthesis = tokens->pGet(tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if(is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         left_paranthesis.type = 5;
@@ -282,30 +294,78 @@ void parser(Vector *tokens, int line_number) {
 
         Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         right_paranthesis.type = 6;
 
         Token left_curly_brace = tokens->pGet(tokens, placeholder_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error(line_number);
+            error();
             return;
         }
         if (is_left_curly_brace(left_curly_brace.value[0]) != 1 || left_curly_brace.isOk != 1) {
-            error(line_number);
+            error();
             return;
         }
         left_curly_brace.type = 9;
 
-        //WILL CHECK IF THERE IS ANYTHING LEFT INSIDE THIS VECTOR
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
 
-    //} else if (is_variable(token.value) == 1) {
-    //    Token variable = get_variable(token.value);
+    } else if (is_variable(token.value) == 1) {
+        Token attributed_variable = get_variable(token.value);
+        assign_type(&token, &attributed_variable);
+    
+        Token equals = tokens->pGet(tokens, 1);
+        if (is_single_character(equals.value) != 1) {
+            error();
+            return;
+        }
+        if (is_equals(equals.value[0]) != 1 || equals.isOk != 1) {
+            error();
+            return;
+        }
+        equals.type = 11;
+
+        Token after_equals = tokens->pGet(tokens, 2);
+        if (is_single_character(after_equals) != 1) {
+            error();
+            return;
+        }
+        if (is_left_curly_brace(after_equals.value[0]) != 1 || after_equals.isOk != 1) {
+            //delimiter right curly brace
+            //get_expression() -> this part is an expression
+
+            Token right_curly_brace = tokens->pGet(tokens, placeholder_index); 
+            if (is_single_character(right_curly_brace.value) != 1) {
+                error();
+                return;
+            }
+            if (is_right_curly_brace(right_curly_brace.value[0] != 1 || right_curly_brace.isOk != 1) {
+                error();
+                return;
+            }
+
+            if (is_ok_ending(&tokens, placeholder_index) != 1) {
+                error();
+                return;
+            }
+        }
+
+        //delimiter comment or line end
+        //get_expression() -> this part is an expression
+        
+        if (is_ok_ending(&tokens, placeholder_index) != 1) {
+            error();
+            return;
+        }
 
     } else if (token.type ==  5) {
     } else if (token.type ==  6) {
@@ -322,7 +382,7 @@ void parser(Vector *tokens, int line_number) {
     }
 }
 
-int get_expression(int start_index, Vector *tokens, int delimiter_type) {
+int get_expression(Vector *tokens, int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
     Token current_token;
     Token next_token;
     //parser(get);
@@ -331,18 +391,28 @@ int get_expression(int start_index, Vector *tokens, int delimiter_type) {
     return 0;
 }
 
-void assign_type(Token type) {
-
-}
-
 /*
-    Gets the value of the variable for the given name.
-    @param char[] name - value (as in the value field inside the token) of the variable.
-    @returns Token token - struct Token of the variable
+    Checks if there is something left in the remaining part of the vector. 
+    @returns 
+    0 if there is something left -which is not a comment-
+    1 if there is nothing left
+    @param Vector* tokens
+    @param int start_index  
 */
-Token get_variable(char name[]) {
-    Token token;
-    return token;
+int is_ok_ending(Vector *tokens, int start_index) {
+    int vector_size = tokens.pSize;
+    int index = start_index;
+    if (start_index == vector_size) {
+        return 0;
+    }
+    if (start_index == vector_size-1) {
+        Token comment = tokens->pGet(tokens, start_index-1);
+        if (is_comment(comment.value[0]) == 1) {
+            comment.type = 18;
+            return 0;
+        }
+    }
+    return 1;
 }
 
 /*
@@ -357,10 +427,31 @@ int is_variable(char name[]) {
     return 0;
 }
 
+/*
+    Gets the fully attributed token for the given variable name.
+    @param char[] name - value (as in the value field inside the token) of the variable.
+    @returns Token token - struct Token of the variable
+*/
+Token get_variable(char name[]) {
+    Token token;
+
+    return token;
+}
+
+/*
+    Returns the type of that variable. Type values are assigned in the lookup table
+    inside the token.h file
+*/
+int assign_type(Token *variable) {
+    
+    return 0;
+}
+
 int main(int argc, char *argv[]) {
+    int line_number = 1;
     char line[256] = "scalar X   ";    
-    tokenizer(line, 1);
-    parser(&tokens, 1);
+    tokenizer(line);
+    parser(&tokens);
     
     for (int i = 0; i < tokens.pSize(&tokens); i++) {
         Token token = tokens.pGet(&tokens, i);
