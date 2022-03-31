@@ -76,9 +76,9 @@ Token Get(Vector *vector, int index){
     }
 }
 
-void updateType(Vector *vector, int index,int type){
+void updateType(Vector *vector, int index, int new_type) {
     if (index < vector->attributes.currentSize){
-        vector->attributes.array[index].type = type;
+        vector->attributes.array[index].type = new_type;
     }
 }
 

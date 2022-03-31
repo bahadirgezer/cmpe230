@@ -313,6 +313,46 @@ int is_plus(char ch) {
 }
 
 /*
+    Checks if ch is an equals character
+    @returns
+    1 if ch is an equals character
+    0 if ch is not an equals character
+    @param ch character to check
+*/
+int is_equals(char ch) {
+    if (ch == '=') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Checks if the char array is a floating point number.
+    @returns 
+    1 if ch is a floating point number 
+    0 if ch is not a floating point number
+    @param char[] ch character array to check
+*/
+int is_float(char ch[]) {
+    int dot = 0;
+    for (int i = 0; i < strlen(ch); i++) {
+        if (is_dot(ch[i]) == 1) {
+            dot += 1;
+            continue;
+        }
+        if (is_number(ch[i]) != 1) {
+            return 0;
+        }
+    }
+    if (dot == 1) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
     Checks if the char array is a function keyword for function that are not print functions.
     @returns 
     1 if ch is a function keyword

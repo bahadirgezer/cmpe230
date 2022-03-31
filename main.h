@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "token.h"
 #include "vector.h"
 #include "stack.h"
@@ -14,14 +13,8 @@ void infix_to_postfix(Vector subtokens);
 void evaluate_postfix(Vector postfix);
 Token type_check(Token op1, Token op2, Token operator);
 int has_higher_precedence(int incoming, int top);
+int is_ok_ending(int start_index);
+int assign_type(Token *variable, Token *complete_variable);
+int get_expression(int start_index, int delimiter_type);
 
-=======
-typedef struct Token Token;
-
-void NumericLiteral_init(Token *token, char *value, int val);
-int isAlphaNumeric(char ch);
-int isLetter(char ch);
-int isNumber(char ch);
-int isParanthesis(char ch);
->>>>>>> cec54b1 (Added rudimentary isNumber, isLetter functions)
 
