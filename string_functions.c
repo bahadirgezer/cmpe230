@@ -321,7 +321,9 @@ int is_plus(char ch) {
 */
 int is_function_keyword(char ch[]) {
     if (strcmp(ch, "choose") == 0 || strcmp(ch, "tr") == 0 || strcmp(ch, "sqrt") == 0) {
-
+        return 1;
+    } else {
+        return 0;
     }
 }
 

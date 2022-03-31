@@ -4,6 +4,7 @@
 #include "string_functions.h"
 
 Vector tokens;
+Vector postfix_vector;
 int line_number;
 /*
 process_line(char line[], File c_file) {
@@ -26,9 +27,11 @@ parser(Vector tokens) {
 
 expression(Vector subTokens) {
 	Vector postfixSubTokens = infixToPostfix(subTokens)
-	evaluatePostfix(postfixSubTokens)
+	evaluatePostfix(postfixSubTokens) 
 }
 */
+
+// v[1,2] * tr(m1[3,1])
 
 /*
     Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
@@ -162,15 +165,96 @@ void error() {
     printf("Error on line %d\n", line_number);
 }
 
-void function_parser() {
+/*
+    Returns the first index after the functions ends. (the index after the right paranthesis.)
+*/
+int function_parser(int start_token_index) {
+    Token token = tokens->pGet(tokens, start_token_index);
 
+    if (strcmp(token.value, "tr")) { // WRONG WRONG WRONG WEONGGGG 
+        Token left_paranthesis = tokens->pGet(tokens, start_token_index + 1);
+        if (is_single_character(left_paranthesis) != 1) {
+            error();
+            return;
+        }
+        if (is_left_paranthesis(left_paranthesis[0]) != 1 || left_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+        left_paranthesis.type = 5;
+
+        int expression_last_token_index = get_expression(start_token_index + 2);
+
+        Token right_paranthesis = tokens->pGet(tokens, expression_last_token_index + 1);
+        if (is_single_character(right_paranthesis) != 1) {
+            error();
+            return;
+        }
+        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis != 1) {
+            error();
+            return;
+        }
+        right_paranthesis.type = 6;
+
+    } else if (strcmp(token.value, "choose")) {
+        Token left_paranthesis = tokens->pGet(tokens, start_token_index + 1);
+        if (is_single_character(left_paranthesis) != 1) {
+            error();
+            return;
+        }
+        if (is_left_paranthesis(left_paranthesis[0]) != 1 || left_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+        left_paranthesis.type = 5;
+
+        int expression_last_token_index = get_expression(start_token_index + 2);
+        
+        Token right_paranthesis = tokens->pGet(tokens, expression_last_token_index + 1);
+        if (is_single_character(right_paranthesis) != 1) {
+            error();
+            return;
+        }
+        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis != 1) {
+            error();
+            return;
+        }
+        right_paranthesis.type = 6;
+
+    } else if (strcmp(token.value, "sqrt")) {
+        Token left_paranthesis = tokens->pGet(tokens, start_token_index + 1);
+        if (is_single_character(left_paranthesis) != 1) {
+            error();
+            return;
+        }
+        if (is_left_paranthesis(left_paranthesis[0]) != 1 || left_paranthesis.isOk != 1) {
+            error();
+            return;
+        }
+        left_paranthesis.type = 5;
+
+        int expression_last_token_index = get_expression(start_token_index + 2);
+            
+        Token right_paranthesis = tokens->pGet(tokens, expression_last_token_index + 1);
+        if (is_single_character(right_paranthesis) != 1) {
+            error();
+            return;
+        }
+        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis != 1) {
+            error();
+            return;
+        }
+        right_paranthesis.type = 6;
+    } else {
+        printf("shouldn't even be in here");
+    }
 }
 
 /*
     Returns -1 if there is an error. Assigns type and attribute values to tokens inside of an expression.
     Returns the index of the last token of the expression.
 */
-int get_expression(Vector *tokens, int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
+int get_expression(int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
     int delimiter_found = 0; // can have right curly brace, right square brace or comment as delimiter
     int tokens_size = tokens->pSize;
     if (tokens->pSize == start_index) {
@@ -187,13 +271,19 @@ int get_expression(Vector *tokens, int start_index, int delimiter_type) { //if d
             Token attributed_variable = get_variable(token.value);
             assign_type(&token, &attributed_variable);
 
+            if (1) { //if variable type is  matrix, check for square braces
+
+            }
+
         } else if (is_number_literal(token.value) == 1 || is_float(token.value) == 1) {
             token.value = 19;
 
         } else if (is_function_keyword(token.value) == 1) {
             
+            int function_parser(start_index + increment);
 
-        } else if (is_comment(token.value[0]) == 1) {
+
+        } else if (is_comment(token.value[0]) == 1) { //
             token.type = 18;
             if (delimiter_type != token.type) { //might have a semantic error
                 return -1;
@@ -487,7 +577,7 @@ void parser(Vector *tokens) {
             error();
             return;
         }
-
+      
         Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
         if (is_single_character(right_paranthesis.value) != 1) {
             error();
@@ -497,6 +587,7 @@ void parser(Vector *tokens) {
             error();
             return;
         }
+
 
         if (is_ok_ending(&tokens, placeholder_index) != 1) {
             error();
@@ -576,6 +667,10 @@ int main(int argc, char *argv[]) {
     }
 }
 
+
+
+
+
 void infix_to_postfix(Vector subtokens){
     CreateVector(&postfix_vector);
     Stack postfix_stack;
@@ -583,9 +678,7 @@ void infix_to_postfix(Vector subtokens){
     int i = 0;
 
     while(i < subtokens.pSize(&subtokens)){
-        // printf("%d\n", subtokens.pSize(&subtokens));
         Token next_token = subtokens.pGet(&subtokens,i);
-        // printf("%d\n",next_token.type);
 
         if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21) { // if the next token is an operand
             postfix_vector.pAdd(&postfix_vector, next_token);
@@ -594,15 +687,12 @@ void infix_to_postfix(Vector subtokens){
         } else if (next_token.type == 6) { // if the next token is a right paranthesis
             while (postfix_stack.pPeek(&postfix_stack).type != 5) { // while we don't encounter a right paranthesis
                 if (postfix_stack.pIsEmpty(&postfix_stack)) {
-                    error(0);
+                    error();
                     break;
                 }
-                // printf("banana");
-                // printf("abc-%s\n", postfix_stack.pPeek(&postfix_stack).value);
                 Token tokenPoped;
                 tokenPoped = postfix_stack.pPop(&postfix_stack);
                 postfix_vector.pAdd(&postfix_vector,tokenPoped);
-                // printf("----------------------%s\n",tokenPoped.value);
             }
             if (postfix_stack.pPeek(&postfix_stack).type == 5) {
                 postfix_stack.pPop(&postfix_stack);
@@ -635,17 +725,12 @@ void infix_to_postfix(Vector subtokens){
         }
         i++;
     }
-    // printf("asasdad-");
-    // printf("%d", postfix_stack.pSize(&postfix_stack));
-    // printf("%d", postfix_stack.pIsEmpty(&postfix_stack));
     if (postfix_stack.pIsEmpty(&postfix_stack) == 0) {
-        // printf("asasasasasasasasasa");
         while (postfix_stack.pIsEmpty(&postfix_stack) != 1) {
-            // printf("aloha");
             if (postfix_stack.pPeek(&postfix_stack).type != 5) {
                 postfix_vector.pAdd(&postfix_vector,postfix_stack.pPop(&postfix_stack));
             } else {
-                error(0);
+                error();
                 break;
             }
         }

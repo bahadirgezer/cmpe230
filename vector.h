@@ -11,7 +11,6 @@ struct VectorAttributes{
     Token nullToken;
 };
 
-
 struct Vector{
     VectorAttributes attributes;        // the attributes of the vector
     // pointers to the functions we need
@@ -20,6 +19,7 @@ struct Vector{
     int (*pIsFull)(Vector *);
     Token (*pGet)(Vector *, int index);
     int (*pSize)(Vector *);
+    void (*p_update_type)(Vector *, int index, int type);
 };
 
 /*
@@ -76,6 +76,12 @@ Token Get(Vector *vector, int index){
     }
 }
 
+void updateType(Vector *vector, int index,int type){
+    if (index < vector->attributes.currentSize){
+        vector->attributes.array[index].type = type;
+    }
+}
+
 /*
  * Initializes the Vector
  */
@@ -85,6 +91,7 @@ void CreateVector(Vector *vector){
     vector->pIncrementSize = IncrementSize;
     vector->pIsFull = IsFull;
     vector->pSize = Size;
+    vector->p_update_type = updateType;
     vector->attributes.currentSize = 0;
     vector->attributes.capacity = DEFAULT_CAPACITY;
     vector->attributes.array = malloc(sizeof(Token) * DEFAULT_CAPACITY);
