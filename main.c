@@ -367,7 +367,7 @@ void parser(Vector *tokens) {
             return;
         }
         variable.type = 19;
-        initialize(variable.value);
+        initialize_scalar(variable.value);
 
         if (is_ok_ending(placeholder_index) != 1) {
             error();
@@ -642,6 +642,50 @@ void parser(Vector *tokens) {
 }
 
 /*
+    Initializes the attributes and adds scalar to Vector variables.
+    @param char[] name - name of the variable.
+*/
+void initialize_scalar(char name[]) {
+    Token scalar;
+    vector.isOk = 1;
+    strcpy(scalar.value, name);
+    scalar.type = 19;
+    variables.pAdd(&variables, scalar);
+
+}
+
+/*
+    Initializes the attributes and adds vector to Vector variables.
+    @param char[] name - name of the variable.
+    @param int vector_size - lenght of the vector
+*/
+void initialize_vector(char name[], int vector_size) {
+    Token vector;
+    vector.isOk = 1;
+    strcpy(vector.value, name);
+    vector.vector = vector_size;
+    vector.type = 20;
+    variables.pAdd(&variables, vector);
+
+}
+
+/*
+    Initializes the attributes and adds matrix to Vector variables.
+    @param char[] name - name of the variable.
+    @param int matrix_i - i size of the matrix
+    @param int matrix_j - j size of the matrix
+*/
+void initialize_matrix(char name[], int matrix_i, int matrix_j) {
+    Token matrix;
+    matrix.isOk = 1;
+    strcpy(matrix.value, name);
+    matrix.matrix_i = matrix_i;
+    matrix.matrix_j = matrix_j;
+    matrix.type = 21;
+    variables.pAdd(&variables, matrix);
+}
+
+/*
     Returns the index of the right curly brace which closes the initialization.
 */
 int parse_vector_matrix_initialization(int start_index) {
@@ -776,7 +820,7 @@ int main(int argc, char *argv[]) {
         tokenizer(line);
         parser(&tokens);
 
-        tokens.p_free(&tokens);
+        tokens.p_parser(&tokens);
         i++;
     }
 
