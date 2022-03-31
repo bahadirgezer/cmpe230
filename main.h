@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "token.h"
 #include "vector.h"
 #include "stack.h"
@@ -14,4 +15,13 @@ void evaluate_postfix(Vector postfix);
 Token type_check(Token op1, Token op2, Token operator);
 int has_higher_precedence(int incoming, int top);
 
+=======
+typedef struct Token Token;
+
+void NumericLiteral_init(Token *token, char *value, int val);
+int isAlphaNumeric(char ch);
+int isLetter(char ch);
+int isNumber(char ch);
+int isParanthesis(char ch);
+>>>>>>> cec54b1 (Added rudimentary isNumber, isLetter functions)
 
