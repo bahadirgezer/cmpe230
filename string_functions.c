@@ -335,9 +335,9 @@ int is_equals(char ch) {
     @param ch character to check
 */
 int is_comma(char ch) {
-    if (ch == ',') [
+    if (ch == ',') {
         return 1;
-    ] else {
+    } else {
         return 0;
     }
 }

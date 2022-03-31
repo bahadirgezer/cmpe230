@@ -17,5 +17,5 @@ int get_expression(int start_index, int delimiter_type);
 Token evaluate_postfix(Vector *postfix);
 Token infix_to_postfix(Vector subtokens, int start, int end);
 void initialize_scalar(char name[]);
-void initialize_vector(char name[]);
-void initialize_matrix(char name[]);
+void initialize_vector(char name[], int vector_size);
+void initialize_matrix(char name[], int matrix_i, int matrix_j);

@@ -6,6 +6,7 @@
 Vector tokens;
 Vector variables;
 Vector postfix_vector;
+int for_counter;
 int line_number;
 /*
 process_line(char line[], File c_file) {
@@ -443,7 +444,7 @@ void parser(Vector *tokens) {
 
 
         Token matrix_size_i = tokens->pGet(tokens, 3);
-        if (is_number_literal(matrix_size_i) != 1 || matrix_size_i.isOk != 1) {
+        if (is_number_literal(matrix_size_i.value) != 1 || matrix_size_i.isOk != 1) {
             error();
             return;
         }
@@ -455,14 +456,14 @@ void parser(Vector *tokens) {
             error();
             return;
         }
-        if (is_comma(comma[0]) != 1 || comma.isOk != 1) {
+        if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
             error();
             return;
         }
         comma.type = 15;
 
         Token matrix_size_j = tokens->pGet(tokens, 5);
-        if (is_number_literal(matrix_size_j) != 1 || matrix_size_j.isOk != 1) {
+        if (is_number_literal(matrix_size_j.value) != 1 || matrix_size_j.isOk != 1) {
             error();
             return;
         }
@@ -647,7 +648,7 @@ void parser(Vector *tokens) {
 */
 void initialize_scalar(char name[]) {
     Token scalar;
-    vector.isOk = 1;
+    scalar.isOk = 1;
     strcpy(scalar.value, name);
     scalar.type = 19;
     variables.pAdd(&variables, scalar);
@@ -693,11 +694,11 @@ int parse_vector_matrix_initialization(int start_index) {
     int index = 0;
     int tokens_size = tokens.pSize(&tokens);
     while (index < tokens_size) {
-        token = tokens.get(&tokens, start_index + index);
-        if (is_single_right_curly_brace(tokens.value) == 1) {
+        token = tokens.pGet(&tokens, start_index + index);
+        if (is_single_right_curly_brace(token.value) == 1) {
             return start_index + index;
         }
-        if (is_number_literal(tokens.value) != 1 || is_float(tokens.value) != 1) {
+        if (is_number_literal(token.value) != 1 || is_float(token.value) != 1) {
             return -1;
         }
         index++;
@@ -728,14 +729,6 @@ int is_ok_ending(int start_index) {
         comment.type = 18;
     }
     return 1;
-}
-
-/*
-    COPIES VARIABLE TOKENS TO VARIABLES VECTOR 
-*/
-int initialize_variable(Token *token) {
-    if ()
-    return 0;
 }
 
 /*
@@ -813,14 +806,15 @@ int main(int argc, char *argv[]) {
         return(1);
 
     }
+    
+    int for_counter = 0;
+
 
     while(fgets(line,256,file) != NULL ) {
         int i = 0;
         line_number = i;
         tokenizer(line);
         parser(&tokens);
-
-        tokens.p_parser(&tokens);
         i++;
     }
 
