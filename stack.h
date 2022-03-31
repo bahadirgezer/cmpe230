@@ -19,6 +19,7 @@ struct Stack{
     Token (*pPeek)(Stack *);
     Token (*pPop)(Stack *);
     int (*pIsEmpty)(Stack *);
+    void (*p_free)(Stack *);
 };
 
 /*
@@ -77,7 +78,7 @@ int StackSize(Stack *stack){
 
 Token Peek(Stack *stack){
     if (IsEmpty(stack) == 0){
-        Token t = stack->attributes.array[stack->attributes.currentSize];
+        Token t = stack->attributes.array[stack->attributes.currentSize-1];
         return t;
     } else {
         return stack->attributes.nullToken;
@@ -94,6 +95,10 @@ Token Pop(Stack *stack){
     }
 }
 
+void freeStack(Stack *stack){
+    free(stack->attributes.array);
+}
+
 void CreateStack(Stack *stack){
     stack->pSize = StackSize;
     stack->pIsFull = StackIsFull;
@@ -102,6 +107,7 @@ void CreateStack(Stack *stack){
     stack->pPeek = Peek;
     stack->pPop = Pop;
     stack->pPush = Push;
+    stack->p_free = freeStack;
     stack->attributes.currentSize = 0;
     stack->attributes.capacity = DEFAULT_CAPACITY;
     stack->attributes.array = malloc(sizeof(Token) * DEFAULT_CAPACITY);
