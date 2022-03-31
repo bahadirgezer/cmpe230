@@ -19,6 +19,7 @@ int is_minus(char ch);
 int is_equals(char ch);
 int is_plus(char ch);
 int is_star(char ch);
+int is_comma(char ch);
 int is_float(char ch[]);
 int is_function_keyword(char ch[]);
 int is_single_character(char ch[]);

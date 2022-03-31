@@ -328,6 +328,21 @@ int is_equals(char ch) {
 }
 
 /*
+    Checks if ch is an comma
+    @returns
+    1 if ch is an comma
+    0 if ch is not an comma
+    @param ch character to check
+*/
+int is_comma(char ch) {
+    if (ch == ',') [
+        return 1;
+    ] else {
+        return 0;
+    }
+}
+
+/*
     Checks if the char array is a floating point number.
     @returns 
     1 if ch is a floating point number 

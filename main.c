@@ -367,6 +367,7 @@ void parser(Vector *tokens) {
             return;
         }
         variable.type = 19;
+        initialize(variable.value);
 
         if (is_ok_ending(placeholder_index) != 1) {
             error();
@@ -394,11 +395,16 @@ void parser(Vector *tokens) {
         }
         left_brace.type = 7;
 
+        Token vector_size = tokens->pGet(tokens, 3);
+        if (is_number_literal(vector_size.value) != 1 || vector_size.isOk != 1) {
+            error();
+            return;
+        }
+        vector_size.type = 19;
+        int integer_vector_size = atoi(vector_size.value);
+        initialize_vector(variable.value, integer_vector_size);
         
-        //int delimiter_index = parse_expression(); //right brace as delimiter
-        //WILL PASS EXPRESSION INTO VECTOR VALUE
-
-        Token right_brace = tokens->pGet(tokens, delimiter_index);
+        Token right_brace = tokens->pGet(tokens, 4);
         if (is_single_character(right_brace.value) != 1) {
             error();
             return;
@@ -435,14 +441,36 @@ void parser(Vector *tokens) {
         }
         left_brace.type = 7;
 
-        //int delimiter_index = parse_expression(); //comma as delimiter
-        //WILL PASS EXPRESSION INTO VECTOR VALUE
 
-        //int delimiter_index = parse_expression(); //right brace as delimiter
-        //WILL PASS EXPRESSION INTO VECTOR VALUE
+        Token matrix_size_i = tokens->pGet(tokens, 3);
+        if (is_number_literal(matrix_size_i) != 1 || matrix_size_i.isOk != 1) {
+            error();
+            return;
+        }
+        matrix_size_i.type = 19;
+        int integer_matrix_size_i = atoi(matrix_size_i.value);
 
+        Token comma = tokens->pGet(tokens, 4);
+        if (is_single_character(comma.value) != 1) {
+            error();
+            return;
+        }
+        if (is_comma(comma[0]) != 1 || comma.isOk != 1) {
+            error();
+            return;
+        }
+        comma.type = 15;
 
-        Token right_brace = tokens->pGet(tokens, delimiter_index);
+        Token matrix_size_j = tokens->pGet(tokens, 5);
+        if (is_number_literal(matrix_size_j) != 1 || matrix_size_j.isOk != 1) {
+            error();
+            return;
+        }
+        matrix_size_j.type = 19; 
+        int integer_matrix_size_j = atoi(matrix_size_j.value);
+        initialize_matrix(variable.value, integer_matrix_size_i, integer_matrix_size_j);
+
+        Token right_brace = tokens->pGet(tokens, 6);
         if (is_single_character(right_brace.value) != 1) {
             error();
             return;
@@ -521,7 +549,7 @@ void parser(Vector *tokens) {
             error();
             return;
         }
-        if (is_left_curly_brace(after_equals.value[0]) != 1 || after_equals.isOk != 1) {
+        if (is_left_curly_brace(after_equals.value[0]) != 1 || after_equals.isOk != 1) { /////// VARIABLE ACCESSSSS !! ! ! !  ! ! !  ! ! !  
             //delimiter right curly brace
             //get_expression() -> this part is an expression
 
@@ -593,7 +621,7 @@ void parser(Vector *tokens) {
             return;
         }
       
-        Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
+        Token right_paranthesis = tokens->pGet(tokens, 2);
         if (is_single_character(right_paranthesis.value) != 1) {
             error();
             return;
@@ -603,7 +631,7 @@ void parser(Vector *tokens) {
             return;
         }
 
-        if (is_ok_ending(placeholder_index) != 1) {
+        if (is_ok_ending(3) != 1) {
             error();
             return;
         }
@@ -616,11 +644,22 @@ void parser(Vector *tokens) {
 /*
     Returns the index of the right curly brace which closes the initialization.
 */
-void parse_vector_matrix_initialization(int start_index) {
+int parse_vector_matrix_initialization(int start_index) {
     Token token;
-    while(is_single_right_curly_brace(token.value)) {
-        
+    int index = 0;
+    int tokens_size = tokens.pSize(&tokens);
+    while (index < tokens_size) {
+        token = tokens.get(&tokens, start_index + index);
+        if (is_single_right_curly_brace(tokens.value) == 1) {
+            return start_index + index;
+        }
+        if (is_number_literal(tokens.value) != 1 || is_float(tokens.value) != 1) {
+            return -1;
+        }
+        index++;
     }
+
+    return -1; //placeholder
 }
 
 /*
