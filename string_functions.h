@@ -22,3 +22,4 @@ int is_star(char ch);
 int is_float(char ch[]);
 int is_function_keyword(char ch[]);
 int is_single_character(char ch[]);
+int is_single_right_curly_brace(char ch[]);

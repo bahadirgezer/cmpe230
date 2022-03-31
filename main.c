@@ -394,6 +394,7 @@ void parser(Vector *tokens) {
         }
         left_brace.type = 7;
 
+        
         //int delimiter_index = parse_expression(); //right brace as delimiter
         //WILL PASS EXPRESSION INTO VECTOR VALUE
 
@@ -613,6 +614,16 @@ void parser(Vector *tokens) {
 }
 
 /*
+    Returns the index of the right curly brace which closes the initialization.
+*/
+void parse_vector_matrix_initialization(int start_index) {
+    Token token;
+    while(is_single_right_curly_brace(token.value)) {
+        
+    }
+}
+
+/*
     Checks if there is something left in the remaining part of the vector. 
     @returns 
     0 if there is something left -which is not a comment-
@@ -640,6 +651,7 @@ int is_ok_ending(int start_index) {
     COPIES VARIABLE TOKENS TO VARIABLES VECTOR 
 */
 int initialize_variable(Token *token) {
+    if ()
     return 0;
 }
 
@@ -665,7 +677,7 @@ int is_variable(char name[]) {
     @param char[] name - value (as in the value field inside the token) of the variable.
     @returns Token token - struct Token of the variable
 */
-Token get_variable(char name[]) { // don't
+Token get_variable(char name[]) { 
     Token variable;
     for (int i = 0; i < variables.pSize(&tokens); i++) {
         variable = tokens.pGet(&tokens, i);
@@ -695,14 +707,13 @@ void output_generator() {
     }
 }
 
-
 int main(int argc, char *argv[]) {
     
     FILE *file;
 
     char line[256];
 
-    if (argc != 2) {
+    if (argc != 3) {
 
         printf("Give filename as command line argument\n") ;
 
@@ -725,8 +736,6 @@ int main(int argc, char *argv[]) {
         line_number = i;
         tokenizer(line);
         parser(&tokens);
-
-
 
         tokens.p_free(&tokens);
         i++;
@@ -874,11 +883,10 @@ Token evaluate_postfix(Vector *postfix) {
         last_result = evaluation_stack.pPop(&evaluation_stack);
         evaluation_stack.p_free(&evaluation_stack);
         return last_result;
-    } else {
-        last_result.isOk = 0;
-        evaluation_stack.p_free(&evaluation_stack);
-        return last_result;
     }
+    last_result.isOk = 0;
+    evaluation_stack.p_free(&evaluation_stack);
+    return last_result;
 }
 
 /*
