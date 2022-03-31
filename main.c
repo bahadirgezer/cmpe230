@@ -169,10 +169,10 @@ void error() {
     Returns the first index after the functions ends. (the index after the right paranthesis.)
 */
 int function_parser(int start_token_index) {
-    Token token = tokens->pGet(tokens, start_token_index);
+    Token token = tokens.pGet(&tokens, start_token_index);
 
     if (strcmp(token.value, "tr")) { // WRONG WRONG WRONG WEONGGGG 
-        Token left_paranthesis = tokens->pGet(tokens, start_token_index + 1);
+        Token left_paranthesis = tokens.pGet(&tokens, start_token_index + 1);
         if (is_single_character(left_paranthesis) != 1) {
             error();
             return;
@@ -740,7 +740,6 @@ int isParanthesis(char ch) {
 }
 
 int main(int argc, char *argv[]) {
-<<<<<<< HEAD
     int line_number = 1;
     char line[256] = "scalar X   ";    
     tokenizer(line);
@@ -821,23 +820,6 @@ void infix_to_postfix(Vector subtokens){
         }
     }
     // return(postfix_vector);
-=======
-    char expression[] = "9+10";
-    printf("%d", isParanthesis('('));
-    printf("%d", isParanthesis('a'));
-    printf("%d", isParanthesis(')'));
-
-    /*
-    char line[256];
-    struct Token num1;
-    char value[60] = "19204381923";
-    int val = 109238102;
-    Token *num1_p = &num1;
-    */
-    
-    //NumericLiteral_init(num1_p, *value, val);
-    //printf("%s %s %d\n", num1.type, num1.value, val);
->>>>>>> cec54b1 (Added rudimentary isNumber, isLetter functions)
 }
 
 void evaluate_postfix(Vector postfix) {
