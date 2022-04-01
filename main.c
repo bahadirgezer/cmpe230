@@ -6,8 +6,9 @@
 Vector tokens;
 Vector variables;
 Vector postfix_vector;
-int for_counter;
+int in_for_loop;
 int line_number;
+
 /*
 process_line(char line[], File c_file) {
 	tokens = tokenizer(line)
@@ -329,6 +330,13 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 }
                 return start_index + increment - 1;
 
+            } else if (is_comma(token.value[0]) == 1) { //DELIMITER
+                token.type = 15;
+                if (delimiter_type != token.type) {
+                    return -1;
+                }
+                return start_index + increment - 1;
+
             } else if (is_right_curly_brace(token.value[0]) == 1) { //DELIMITER
                 token.type = 10;
                 if (delimiter_type != token.type) {
@@ -513,41 +521,145 @@ void parser(Vector *tokens) {
             error();
             return;
         }
-        variable_1 = 19;
+        variable_1.type = 19;
 
-        Token in = tokens->pGet(tokens, 3)
-        if (strcmp(in.value, "in") == 0) {
+        int right_paranthesis_index;
+        Token in = tokens->pGet(tokens, 3);
+        if (strcmp(in.value, "in") == 0 && in.isOk == 1) {
+            in.type = 24;
+            
+            int expr_end_1 = get_expression(4, 16);
+            if (expr_end_1 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, 4, expr_end_1, 19) != 1) {
+                error();
+                return;
+            }
+            
+            int expr_end_2 = get_expression(expr_end_1 + 1, 16);
+            if (expr_end_2 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, expr_end_1 + 1, expr_end_2, 19) != 1) {
+                error();
+                return;
+            }
 
-                
+            int expr_end_3 = get_expression(expr_end_2 + 1, 6);
+            if (expr_end_3 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, expr_end_2 + 1, expr_end_3, 19) != 1) {
+                error();
+                return;
+            }
+            right_paranthesis_index = expr_end_3 + 1;
+
         } else {
-
-            Token comma = tokens->pGet(tokens, 3);
-            if (is_single_character(comma.value) != 1) {
+            Token comma_1 = tokens->pGet(tokens, 3);
+            if (is_single_character(comma_1.value) != 1) {
                 error();
                 return;
             }
-            if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
+            if (is_comma(comma_1.value[0]) != 1 || comma_1.isOk != 1) {
                 error();
                 return;
             }
-            comma.type = 15;
+            comma_1.type = 15;
 
             Token variable_2 = tokens->pGet(tokens, 4);
-            if (is_alphanumeric_literal(variable_2.value) != 1 || variable_2 != 1) {
+            if (is_alphanumeric_literal(variable_2.value) != 1 || variable_2.isOk != 1) {
+                error();
+                return;
+            }
+            variable_2.type = 19;
+
+            Token in = tokens->pGet(tokens, 5);
+            if (strcmp(in.value, "in") != 0 || in.isOk != 1) {
+                error();
+                return;
+            }
+            in.type = 24;
+
+            int expr_end_1 = get_expression(6, 16);
+            if (expr_end_1 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, 6, expr_end_1, 19) != 1) {
                 error();
                 return;
             }
 
+            int expr_end_2 = get_expression(expr_end_1 + 1, 16); ///ADD COMMA AS DELIMITER IN GET_EXPRESSION()
+            if (expr_end_2 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, expr_end_1 + 1, expr_end_2, 19) != 1) {
+                error();
+                return;
+            }
 
-            Token comma_2 = tokens->pGet(tokens, );
+            int expr_end_3 = get_expression(expr_end_2 + 1, 15);
+            if (expr_end_3 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, expr_end_2 + 1, expr_end_3, 19) != 1) {
+                error();
+                return;
+            }
 
+            Token comma_2 = tokens->pGet(tokens, expr_end_3 + 1);
+            if (is_single_character(comma_2.value) != 1) {
+                error();
+                return;
+            }
+            if (is_comma(comma_2.value[0]) != 1 || comma_2.isOk != 1) {
+                error();
+                return;
+            }
+            comma_2.type = 15;
 
+            int expr_end_4 = get_expression(expr_end_3 + 2, 16);
+            if (expr_end_4 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, 6, expr_end_4, 19) != 1) {
+                error();
+                return;
+            }
+
+            int expr_end_5 = get_expression(expr_end_4 + 1, 16); ///ADD COMMA AS DELIMITER IN GET_EXPRESSION()
+            if (expr_end_5 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, expr_end_4 + 1, expr_end_5, 19) != 1) {
+                error();
+                return;
+            }
+
+            int expr_end_6 = get_expression(expr_end_5 + 1, 15);
+            if (expr_end_6 == -1) {
+                error();
+                return;
+            }
+            if (expression(*tokens, expr_end_5 + 1, expr_end_6, 19) != 1) {
+                error();
+                return;
+            }
+
+            right_paranthesis_index = expr_end_6 + 1;
         }
 
-
-        //                                                                                                              INSIDE OF FOR ASSIGNMENT !!
-
-        Token right_paranthesis = tokens->pGet(tokens, placeholder_index);
+        Token right_paranthesis = tokens->pGet(tokens, right_paranthesis_index);
         if (is_single_character(right_paranthesis.value) != 1) {
             error();
             return;
@@ -568,13 +680,14 @@ void parser(Vector *tokens) {
             return;
         }
         left_curly_brace.type = 9;
+        in_for_loop = 1;
 
         if (is_ok_ending(placeholder_index) != 1) {
             error();
             return;
         }
 
-    } else if (is_variable(token.value) == 1) {
+    } else if (is_variable(token.value) == 1) { //                                                  VARIABLE ACCESS 
         //Token attributed_variable = *get_variable(token.value);
         //assign_type(&token, &attributed_variable);
 
@@ -830,29 +943,11 @@ void output_generator() {
 int main(int argc, char *argv[]) {
     
     FILE *file;
+    file = fopen(argv[1], "r");
+    int line_number = 0;
+    int in_for_loop = 0;
 
     char line[256];
-
-    if (argc != 3) {
-
-        printf("Give filename as command line argument\n") ;
-
-        return(1);
-
-    }
-
-    file = fopen(argv[1], "r");
-
-    if(file == NULL) {
-
-        printf("Cannot open %s\n",argv[1]);
-
-        return(1);
-
-    }
-    
-    int for_counter = 0;
-
 
     while(fgets(line,256,file) != NULL ) {
         int i = 0;
@@ -863,7 +958,7 @@ int main(int argc, char *argv[]) {
     }
 
     fclose(file);
-} 
+}
 
 // NEEDS AN EXPRESSION FUNCTION WHICH WILL GET THE VECTOR AND THE DESIRED TYPE THAN RETURN 1 OR 0; IF 1 EXPRESSION IS VALID IF 0 EXPRESSION IS INVALID. 
 // OUTPUT BOOLEAN WILL BE AFFECTED FROM BOTH SYNTAX AND EXPECTED OUTPUT
