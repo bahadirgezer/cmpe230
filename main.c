@@ -322,6 +322,13 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 }
                 return start_index + increment - 1;
 
+            } else if (is_colon(token.value[0]) == 1) { //DELIMITER
+                token.type = 16;
+                if (delimiter_type != token.type) {
+                    return -1;
+                }
+                return start_index + increment - 1;
+
             } else if (is_right_curly_brace(token.value[0]) == 1) { //DELIMITER
                 token.type = 10;
                 if (delimiter_type != token.type) {
@@ -500,6 +507,41 @@ void parser(Vector *tokens) {
             return;
         }
         left_paranthesis.type = 5;
+
+        Token variable_1 = tokens->pGet(tokens, 2);
+        if (is_alphanumeric_literal(variable_1.value) != 1 || variable_1.isOk != 1) {
+            error();
+            return;
+        }
+        variable_1 = 19;
+
+        Token in = tokens->pGet(tokens, 3)
+        if (strcmp(in.value, "in") == 0) {
+                
+        } else {
+            Token comma = tokens->pGet(tokens, 3);
+            if (is_single_character(comma.value) != 1) {
+                error();
+                return;
+            }
+            if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
+                error();
+                return;
+            }
+            comma.type = 15;
+
+            Token variable_2 = tokens->pGet(tokens, 4);
+            if (is_alphanumeric_literal(variable_2.value) != 1 || variable_2 != 1) {
+                error();
+                return;
+            }
+
+
+            Token comma_2 = tokens->pGet(tokens, );
+
+
+        }
+
 
         //                                                                                                              INSIDE OF FOR ASSIGNMENT !!
 
@@ -814,12 +856,20 @@ int main(int argc, char *argv[]) {
         int i = 0;
         line_number = i;
         tokenizer(line);
-        parser(&tokens);
+        parser(&tokens);    
         i++;
     }
 
     fclose(file);
-}
+} 
+
+
+// NEEDS AN EXPRESSION FUNCTION WHICH WILL GET THE VECTOR AND THE DESIRED TYPE THAN RETURN 1 OR 0; IF 1 EXPRESSION IS VALID IF 0 EXPRESSION IS INVALID. 
+// OUTPUT BOOLEAN WILL BE AFFECTED FROM BOTH SYNTAX AND EXPECTED OUTPUT
+int expression(Vector tokens, int start_index, int end_index, int expected_type);
+
+
+
 
 /*
 returns the pseudo-token needed for the expression function

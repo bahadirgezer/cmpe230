@@ -313,6 +313,21 @@ int is_plus(char ch) {
 }
 
 /*
+    Checks if ch is a colon
+    @returns
+    1 if ch is a colon
+    0 if ch is not a colon
+    @param ch character to check
+*/
+int is_colon(char ch) {
+    if (ch == ':') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
     Checks if ch is an equals character
     @returns
     1 if ch is an equals character
@@ -397,6 +412,7 @@ int is_single_character(char ch[]) {
         return 0;
     }
 }
+
 
 /*
     Checks if a character array is made up of a single right curly brace character, this function is used for
