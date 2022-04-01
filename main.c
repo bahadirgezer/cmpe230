@@ -371,14 +371,14 @@ void parser() {
     int delimiter_index;
     int placeholder_index;
     
-    if (tokens.pSize == 0) {
+    if (tokens.pSize(&tokens) == 0) {
         return;
     }
     Token token = tokens.pGet(&tokens, 0); //checking first token
     if (in_for_loop == 1) {
         if (is_single_character(token.value) == 1 && token.isOk == 1) {
             if (is_right_curly_brace(token.value[0]) == 1) {
-                token.type = 10;
+                tokens.p_update_type(&tokens, 0, 10);
                 in_for_loop -= 1;
 
                 if (is_ok_ending(placeholder_index) != 1) {
@@ -388,14 +388,14 @@ void parser() {
             }
         }
     } else if (strcmp("scalar", token.value) == 0) {
-        token.type = 0;
+        tokens.p_update_type(&tokens, 0, 0);
 
         Token variable = tokens.pGet(&tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
             error();
             return;
         }
-        variable.type = 19;
+        tokens.p_update_type(&tokens, 1, 19);
         initialize_scalar(variable.value);
 
         if (is_ok_ending(placeholder_index) != 1) {
@@ -404,14 +404,14 @@ void parser() {
         }
 
     } else if (strcmp("vector", token.value) == 0) {
-        token.type = 1;
+        tokens.p_update_type(&tokens, 0, 1);
 
         Token variable = tokens.pGet(&tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
             error();
             return;
         }
-        variable.type = 20;
+        tokens.p_update_type(&tokens, 1, 20);
 
         Token left_brace = tokens.pGet(&tokens, 2);
         if (is_single_character(left_brace.value) != 1) {
@@ -422,14 +422,14 @@ void parser() {
             error();
             return;
         }
-        left_brace.type = 7;
+        tokens.p_update_type(&tokens, 2, 7);
 
         Token vector_size = tokens.pGet(&tokens, 3);
         if (is_number_literal(vector_size.value) != 1 || vector_size.isOk != 1) {
             error();
             return;
         }
-        vector_size.type = 19;
+        tokens.p_update_type(&tokens, 3, 19);
         int integer_vector_size = atoi(vector_size.value);
         initialize_vector(variable.value, integer_vector_size);
         
@@ -442,7 +442,7 @@ void parser() {
             error();
             return;
         }
-        right_brace.type = 8;
+        tokens.p_update_type(&tokens, 4, 8);
 
         if (is_ok_ending(placeholder_index) != 1) {
             error();
@@ -450,14 +450,14 @@ void parser() {
         }
 
     } else if (strcmp("matrix", token.value) == 0) {
-        token.type = 2;
+        tokens.p_update_type(&tokens, 0, 2);
 
         Token variable = tokens.pGet(&tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
             error();
             return;
         }
-        variable.type = 21;
+        tokens.p_update_type(&tokens, 1, 21);
 
         Token left_brace = tokens.pGet(&tokens, 2);
         if (is_single_character(left_brace.value) != 1) {
@@ -468,7 +468,7 @@ void parser() {
             error();
             return;
         }
-        left_brace.type = 7;
+        tokens.p_update_type(&tokens, 2, 7);
 
 
         Token matrix_size_i = tokens.pGet(&tokens, 3);
@@ -476,7 +476,7 @@ void parser() {
             error();
             return;
         }
-        matrix_size_i.type = 19;
+        tokens.p_update_type(&tokens, 3, 19);
         int integer_matrix_size_i = atoi(matrix_size_i.value);
 
         Token comma = tokens.pGet(&tokens, 4);
@@ -488,14 +488,14 @@ void parser() {
             error();
             return;
         }
-        comma.type = 15;
+        tokens.p_update_type(&tokens, 4, 15);
 
         Token matrix_size_j = tokens.pGet(&tokens, 5);
         if (is_number_literal(matrix_size_j.value) != 1 || matrix_size_j.isOk != 1) {
             error();
             return;
         }
-        matrix_size_j.type = 19; 
+        tokens.p_update_type(&tokens, 5, 19);
         int integer_matrix_size_j = atoi(matrix_size_j.value);
         initialize_matrix(variable.value, integer_matrix_size_i, integer_matrix_size_j);
 
@@ -508,7 +508,7 @@ void parser() {
             error();
             return;
         }
-        right_brace.type = 8;
+        tokens.p_update_type(&tokens, 6, 8);
 
         if (is_ok_ending(placeholder_index) != 1) {
             error();
@@ -516,7 +516,7 @@ void parser() {
         }
 
     } else if (strcmp("for", token.value) == 0) {
-        token.type = 4;
+        tokens.p_update_type(&tokens, 0, 4);
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
@@ -527,20 +527,21 @@ void parser() {
             error();
             return;
         }
-        left_paranthesis.type = 5;
+        tokens.p_update_type(&tokens, 1, 5);
 
         Token variable_1 = tokens.pGet(&tokens, 2);
         if (is_alphanumeric_literal(variable_1.value) != 1 || variable_1.isOk != 1) {
             error();
             return;
         }
-        variable_1.type = 19;
+        tokens.p_update_type(&tokens, 2, 19);
 
         int right_paranthesis_index;
         Token in = tokens.pGet(&tokens, 3);
         if (strcmp(in.value, "in") == 0 && in.isOk == 1) {
             in.type = 24;
-            
+            tokens.p_update_type(&tokens, 3, 24);
+
             int expr_end_1 = get_expression(4, 16);
             if (expr_end_1 == -1) {
                 error();
@@ -582,7 +583,7 @@ void parser() {
                 error();
                 return;
             }
-            comma_1.type = 15;
+            tokens.p_update_type(&tokens, 3, 15);
 
             Token variable_2 = tokens.pGet(&tokens, 4);
             if (is_alphanumeric_literal(variable_2.value) != 1 || variable_2.isOk != 1) {
@@ -590,13 +591,14 @@ void parser() {
                 return;
             }
             variable_2.type = 19;
+            tokens.p_update_type(&tokens, 4, 19);
 
             Token in = tokens.pGet(&tokens, 5);
             if (strcmp(in.value, "in") != 0 || in.isOk != 1) {
                 error();
                 return;
             }
-            in.type = 24;
+            tokens.p_update_type(&tokens, 5, 24);
 
             int expr_end_1 = get_expression(6, 16);
             if (expr_end_1 == -1) {
@@ -637,7 +639,7 @@ void parser() {
                 error();
                 return;
             }
-            comma_2.type = 15;
+            tokens.p_update_type(&tokens, expr_end_3 + 1, 15);
 
             int expr_end_4 = get_expression(expr_end_3 + 2, 16);
             if (expr_end_4 == -1) {
@@ -681,9 +683,9 @@ void parser() {
             error();
             return;
         }
-        right_paranthesis.type = 6;
+        tokens.p_update_type(&tokens, right_paranthesis_index, 6);
 
-        Token left_curly_brace = tokens.pGet(&tokens, placeholder_index + 1);
+        Token left_curly_brace = tokens.pGet(&tokens, right_paranthesis_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
             error();
             return;
@@ -692,7 +694,7 @@ void parser() {
             error();
             return;
         }
-        left_curly_brace.type = 9;
+        tokens.p_update_type(&tokens, right_paranthesis_index + 1, 9);
         in_for_loop = 1;
 
         if (is_ok_ending(placeholder_index) != 1) {
@@ -700,9 +702,11 @@ void parser() {
             return;
         }
 
-    } else if (is_variable(token.value) == 1) { //                                                  VARIABLE ACCESS 
+    } else if (is_variable(token.value) == 1) { //                                                  VARIABLE ACCESS  //AKJSHDLKASJHDLKAJSHDLKJASHDLKASHJDHKAS
         //Token attributed_variable = *get_variable(token.value);
         //assign_type(&token, &attributed_variable);
+        
+        /*
 
         Token equals = tokens.pGet(&tokens, 1);
         if (is_single_character(equals.value) != 1) {
@@ -741,15 +745,17 @@ void parser() {
         }
 
         //delimiter comment or line end
-        //get_expression() -> this part is an expression
+        //get_expression() -> this part is an expression KLAJSDLKASJD:LASJD:LAJSKDJAK:SLJDKLASJDKLJAS:KLDHAJSKLDBAKHSBD:AKSJDBLJA
         
         if (is_ok_ending(placeholder_index) != 1) {
             error();
             return;
         }
 
+        */  //                                                   COMMENT 
+
     } else if (strcmp("print", token.value) == 0) {
-        token.type = 23;
+        tokens.p_update_type(&tokens, 0, 23);
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
@@ -760,24 +766,26 @@ void parser() {
             error();
             return;
         }
+        tokens.p_update_type(&tokens, 1, 5);
 
-        //Token variable;
+        //Token variable;                                                                           KLSNADKLASKJBDLAKSNDLAHSBDN:LAMSLDJBASLNDKJBASKJDH
         //might give an index if it is a matrix or vector
 
-        Token right_paranthesis = tokens.pGet(&tokens, placeholder_index);
-        if (is_single_character(right_paranthesis.value) != 1) {
-            error();
-            return;
-        }
-        if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
-            return;
-        }
+        //Token right_paranthesis = tokens.pGet(&tokens, placeholder_index); //PLACEHOLDER INDEX
+        // if (is_single_character(right_paranthesis.value) != 1) {
+        //     error();
+        //     return;
+        // }
+        // if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+        //     error();
+        //     return;
+        // }
+        //tokens.p_update_type(&tokens, 0, 10); // PLACEHOLDER INDEX 
 
-        if (is_ok_ending(placeholder_index) != 1) {
-            error();
-            return;
-        }
+        // if (is_ok_ending(placeholder_index) != 1) {                              NEED TO FINISH THIS 
+        //     error();
+        //     return;
+        // }
 
     } else if (strcmp("printsep", token.value) == 0) {
         token.type = 23;
@@ -791,6 +799,7 @@ void parser() {
             error();
             return;
         }
+        tokens.p_update_type(&tokens, 1, 5);
       
         Token right_paranthesis = tokens.pGet(&tokens, 2);
         if (is_single_character(right_paranthesis.value) != 1) {
@@ -801,6 +810,7 @@ void parser() {
             error();
             return;
         }
+        tokens.p_update_type(&tokens, 2, 6);
 
         if (is_ok_ending(3) != 1) {
             error();
@@ -955,18 +965,17 @@ void output_generator() {
 
 int main(int argc, char *argv[]) {
     
-    FILE *file;
-    file = fopen(argv[1], "r");
+    //FILE *file;
+    //file = fopen(argv[1], "r");
     int line_number = 0;
     int in_for_loop = 0;
-    char line[256] = "scalar i";
+    char line[256] = "scalar #sdasdasd";
 
     line_number = 1;
     printf("%s",line);
     tokenizer(line);
-
-    printf("here");
     parser();
+    
     //printf("no no no");
     //index++;
 
@@ -983,7 +992,7 @@ int main(int argc, char *argv[]) {
         index++;
     }
     */
-    fclose(file);
+    //fclose(file);
 }
 
 // NEEDS AN EXPRESSION FUNCTION WHICH WILL GET THE VECTOR AND THE DESIRED TYPE THAN RETURN 1 OR 0; IF 1 EXPRESSION IS VALID IF 0 EXPRESSION IS INVALID. 
