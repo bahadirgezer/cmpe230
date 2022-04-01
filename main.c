@@ -517,8 +517,10 @@ void parser(Vector *tokens) {
 
         Token in = tokens->pGet(tokens, 3)
         if (strcmp(in.value, "in") == 0) {
+
                 
         } else {
+
             Token comma = tokens->pGet(tokens, 3);
             if (is_single_character(comma.value) != 1) {
                 error();
@@ -863,13 +865,23 @@ int main(int argc, char *argv[]) {
     fclose(file);
 } 
 
-
 // NEEDS AN EXPRESSION FUNCTION WHICH WILL GET THE VECTOR AND THE DESIRED TYPE THAN RETURN 1 OR 0; IF 1 EXPRESSION IS VALID IF 0 EXPRESSION IS INVALID. 
 // OUTPUT BOOLEAN WILL BE AFFECTED FROM BOTH SYNTAX AND EXPECTED OUTPUT
-int expression(Vector tokens, int start_index, int end_index, int expected_type);
-
-
-
+int expression(Vector tokens, int start_index, int end_index, int expected_type){
+    Token expr;
+    expr = infix_to_postfix(tokens, start_index, end_index);
+    if (expr.isOk == 0){
+        return 0;
+    }
+    else{
+        if (expr.type == expected_type){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+}
 
 /*
 returns the pseudo-token needed for the expression function
