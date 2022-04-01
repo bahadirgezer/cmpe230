@@ -431,3 +431,21 @@ int is_single_right_curly_brace(char ch[]) {
     }
     return 1;
 }
+
+/*
+    Checks if a character array is made up of a single left curly brace character, this function is used for
+    matrix and vector initialization. 
+    @returns 
+    1 if ch[] is a single left curly brace character
+    0 if ch[] is not a single left curly brace character
+    @param char[] ch character array to check 
+*/
+int is_single_left_curly_brace(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_left_curly_brace(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
