@@ -319,7 +319,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 int expr_end_index_2 = get_expression(index, 8); //                                                              COMMA COMMA COMMA DELIMITER
                 if (expr_end_index_2 == -1) {
                     return -1;
-                }
+                } //                                                                    CHECKING THE INDEX
             }
 
         } else if (is_number_literal(token.value) == 1 || is_float(token.value) == 1) {
@@ -340,63 +340,149 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 tokens.p_update_type(&tokens, index, 5);
 
                 index++;
-                int expr_end_index_1 = get_expression(index, 15); // RIGHT BRACE DELIMITER
+                int expr_end_index_1 = get_expression(index, 15); // COMMA DELIMITER
                 if (expr_end_index_1 == -1) {
+                    return -1;
+                }
+                if (expression(&tokens, index, expr_end_index_1, 19) != 1) {
                     return -1;
                 }
                 
                 index = expr_end_index_1 + 1;
                 Token comma_1 = tokens.pGet(&tokens, index);
-                if (is_single_character(right_brace.value) != 1) {
+                if (is_single_character(comma_1.value) != 1) {
                     return -1;
                 }
-                if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                if (is_right_brace(comma_1.value[0]) != 1 || comma_1.isOk != 1) {
                     return -1;
                 }
-                tokens.p_update_type(&tokens, index, 8);
+                tokens.p_update_type(&tokens, index, 15);
+
+                index++;
+                int expr_end_index_2 = get_expression(index, 15); // COMMA DELIMITER
+                if (expr_end_index_2 == -1) {
+                    return -1;
+                }
+                if (expression(&tokens, index, expr_end_index_2, 19) != 1) {
+                    return -1;
+                }
+
+                index = expr_end_index_2 + 1;
+                Token comma_2 = tokens.pGet(&tokens, index);
+                if (is_single_character(comma_2.value) != 1) {
+                    return -1;
+                }
+                if (is_right_brace(comma_2.value[0]) != 1 || comma_2.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 15);
+
+                index++;
+                int expr_end_index_3 = get_expression(index, 15); //COMMA DELIMITER
+                if (expr_end_index_3 == -1) {
+                    return -1;
+                }
+                if (expression(&tokens, index, expr_end_index_3, 19) != 1) {
+                    return -1;
+                }
 
 
+                index = expr_end_index_3 + 1;
+                Token comma_3 = tokens.pGet(&tokens, index);
+                if (is_single_character(comma_3.value) != 1) {
+                    return -1;
+                }
+                if (is_right_brace(comma_3.value[0]) != 1 || comma_3.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 15);
+
+                index++;
+                int expr_end_index_4 = get_expression(index, 6);
+                if (expr_end_index_4 == -1) {
+                    return -1;
+                }
+                if (expression(&tokens, index, expr_end_index_4, 19) != 1) {
+                    return -1;
+                }
+
+                index = expr_end_index_4 + 1;
+                Token right_paranthesis = tokens.pGet(&tokens, index);
+                if (is_single_character(right_paranthesis.value) != 1) {
+                    return -1;
+                }
+                if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+                    return -1;
+                }
 
             } else if (strcmp(token.value, "sqrt") == 0) {
+                index++;
+                Token left_paranthesis = tokens.pGet(&tokens, index);
+                if (is_single_character(left_paranthesis.value) != 1) {
+                    return -1;
+                }
+                if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 5);
+
+                index++;
+                int expr_end_index = get_expression(index, 6); // COMMA DELIMITER
+                if (expr_end_index == -1) {
+                    return -1;
+                }
+                if (expression(&tokens, index, expr_end_index, 19) != 1) {
+                    return -1;
+                }
+                
+                index = expr_end_index + 1;
+                Token right_paranthesis = tokens.pGet(&tokens, index);
+                if (is_single_character(right_paranthesis.value) != 1) {
+                    return -1;
+                }
+                if (is_right_brace(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 6);
 
             } else if (strcmp(token.value, "tr") == 0) {
+                index++;
+                Token left_paranthesis = tokens.pGet(&tokens, index);
+                if (is_single_character(left_paranthesis.value) != 1) {
+                    return -1;
+                }
+                if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 5);
 
+                index++;
+                int expr_end_index = get_expression(index, 6); // COMMA DELIMITER
+                if (expr_end_index == -1) {
+                    return -1;
+                }
+                if (expression(&tokens, index, expr_end_index, 19) != 1 && expression(&tokens, index, expr_end_index, 20) != 1 && expression(&tokens, index, expr_end_index, 21) != 1) {
+                    return -1;
+                }
+                
+                index = expr_end_index + 1;
+                Token right_paranthesis = tokens.pGet(&tokens, index);
+                if (is_single_character(right_paranthesis.value) != 1) {
+                    return -1;
+                }
+                if (is_right_brace(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 6);
             }
-
-            index++;
-            Token left_paranthesis = tokens.pGet(&tokens, index);
-            if (is_single_character(left_paranthesis.value) != 1) {
-                return -1;
-            }
-            if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-                return -1;
-            }
-            tokens.p_update_type(&tokens, index, 5);
-
-
-
-            index++;
-            Token right_paranthesis = tokens.pGet(&tokens, index);
-            if (is_single_character(left_paranthesis.value) != 1) {
-                return -1;
-            } 
-            if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-                return -1;
-            }
-            tokens.p_update_type(&tokens, index, 6);
-
         } else if (1) {
 
-        } else if () {
+        } else if (1) {
         
         }
         index++;
 
-
-
-
-
-        } else if (is_comment(token.value[0]) == 1) { //DELIMITER
+        if (is_comment(token.value[0]) == 1) { //DELIMITER
             token.type = 18;
             if (delimiter_type != token.type) { //might have a semantic error
                 return -1;
