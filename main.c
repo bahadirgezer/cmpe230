@@ -54,10 +54,8 @@ void tokenizer(char line[]) { //                                                
     char current;
 
     int index = 0;
-    printf("%d\n", line_len);
     while (index < line_len) {
         char current = line[index]; 
-        printf("%d\n", index);
         
         if (is_comment(current) == 1) {
             if (token_type == 0) {
@@ -148,22 +146,6 @@ void tokenizer(char line[]) { //                                                
         error();
         break;
     }
-}
-
-/*
-    Helper function for the tokenizer() function. extracts the token and puts it
-    inside a struct Token.
-    @param char* token_start
-    @param int token_len 
-    @param Vector* tokens
-*/
-void extract_token(char *token_start, int token_len, int token_type) {
-    Token token;
-    token.isOk = 1;
-    memset(token.value, '\0', sizeof(token.value));
-    strncpy(token.value, token_start, token_len);
-    token.type = token_type;
-    tokens.pAdd(&tokens, token);
 }
 
 void error() {
@@ -398,10 +380,10 @@ void parser() {
         tokens.p_update_type(&tokens, 1, 19);
         initialize_scalar(variable.value);
 
-        if (is_ok_ending(placeholder_index) != 1) {
-            error();
-            return;
-        }
+        // if (is_ok_ending(placeholder_index) != 1) {
+        //     error();
+        //     return;
+        // }
 
     } else if (strcmp("vector", token.value) == 0) {
         tokens.p_update_type(&tokens, 0, 1);
@@ -823,12 +805,29 @@ void parser() {
 }
 
 /*
+    Helper function for the tokenizer() function. extracts the token and puts it
+    inside a struct Token.
+    @param char* token_start
+    @param int token_len 
+    @param Vector* tokens
+*/
+void extract_token(char *token_start, int token_len, int token_type) {
+    Token token;
+    token.isOk = 1;
+    memset(token.value, '\0', sizeof(token.value));
+    strncpy(token.value, token_start, token_len);
+    token.type = token_type;
+    tokens.pAdd(&tokens, token);
+}
+
+/*
     Initializes the attributes and adds scalar to Vector variables.
     @param char[] name - name of the variable.
 */
 void initialize_scalar(char name[]) {
     Token scalar;
     scalar.isOk = 1;
+    memset(scalar.value, '\0', sizeof(scalar.value));
     strcpy(scalar.value, name);
     scalar.type = 19;
     variables.pAdd(&variables, scalar);
@@ -841,12 +840,13 @@ void initialize_scalar(char name[]) {
     @param int vector_size - lenght of the vector
 */
 void initialize_vector(char name[], int vector_size) {
-    Token vector;
-    vector.isOk = 1;
-    strcpy(vector.value, name);
-    vector.vector = vector_size;
-    vector.type = 20;
-    variables.pAdd(&variables, vector);
+    Token vector_token;
+    vector_token.isOk = 1;
+    memset(vector_token.value, '\0', sizeof(vector_token.value));
+    strcpy(vector_token.value, name);
+    vector_token.vector = vector_size;
+    vector_token.type = 20;
+    variables.pAdd(&variables, vector_token);
 
 }
 
@@ -859,6 +859,7 @@ void initialize_vector(char name[], int vector_size) {
 void initialize_matrix(char name[], int matrix_i, int matrix_j) {
     Token matrix;
     matrix.isOk = 1;
+    memset(matrix.value, '\0', sizeof(matrix.value));
     strcpy(matrix.value, name);
     matrix.matrix_i = matrix_i;
     matrix.matrix_j = matrix_j;
@@ -969,13 +970,14 @@ int main(int argc, char *argv[]) {
     //file = fopen(argv[1], "r");
     int line_number = 0;
     int in_for_loop = 0;
-    char line[256] = "scalar #sdasdasd";
+    char line[256] = "scalar i\nvector y[2]\nmatrix B[2,2]\n";
+    CreateVector(&variables);
 
     line_number = 1;
-    printf("%s",line);
+    printf("%s\n",line);
     tokenizer(line);
     parser();
-    
+
     //printf("no no no");
     //index++;
 
