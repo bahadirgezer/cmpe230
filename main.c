@@ -251,27 +251,149 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
     if (tokens_size == start_index) {
         return -1;
     }
-    int increment = 0;
+    
+    int index = start_index;
     while(!delimiter_found) {
-        Token token = tokens.pGet(&tokens, start_index + increment);
+        Token token = tokens.pGet(&tokens, index);
         if (token.isOk != 1) {
             return -1;
         }
 
         if (is_variable(token.value) == 1) {
-            //Token attributed_variable = get_variable(token.value);
-            //assign_type(&token, &attributed_variable);
+            assign_type(&token);
 
-            if (1) { //if variable type is  matrix, check for square braces
-                ///                                                                 EXPRESSION VARIABLE PARSING WILL BE IN HERE 
+            if (token.type == 20) {
+                index++;
+                Token left_brace = tokens.pGet(&tokens, index);
+                if (is_single_character(left_brace.value) != 1) {
+                    return -1;
+                }
+                if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 7);
+
+                index++;
+                int expr_end_index = get_expression(index, 8); // RIGHT BRACE DELIMITER
+                if (expr_end_index == -1) {
+                    return -1;
+                }
+                
+                index = expr_end_index + 1;
+                Token right_brace = tokens.pGet(&tokens, index);
+                if (is_single_character(right_brace.value) != 1) {
+                    return -1;
+                }
+                if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 8);
+
+            } else if (token.type == 21) {
+                index++;
+                Token left_brace = tokens.pGet(&tokens, index);
+                if (is_single_character(left_brace.value) != 1) {
+                    return -1;
+                }
+                if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 7);
+
+                index++;
+                int expr_end_index_1 = get_expression(index, 15); //                                                              COMMA COMMA COMMA DELIMITER
+                if (expr_end_index_1 == -1) {
+                    return -1;
+                }
+
+                index = expr_end_index_1 + 1;                
+                Token comma = tokens.pGet(&tokens, index);
+                if (is_single_character(comma.value) != 1) {
+                    return -1;
+                }
+                if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 15);                       //CURRENTLY SENDING RIGHT AND LEFT SQUARE BRACES TO EXPRESSION
+
+                int expr_end_index_2 = get_expression(index, 8); //                                                              COMMA COMMA COMMA DELIMITER
+                if (expr_end_index_2 == -1) {
+                    return -1;
+                }
             }
 
         } else if (is_number_literal(token.value) == 1 || is_float(token.value) == 1) {
-            tokens.p_update_type(&tokens, start_index + increment, 19);
+            tokens.p_update_type(&tokens, index, 19);
 
         } else if (is_function_keyword(token.value) == 1) {
-            
-            int after_function_index = function_parser(start_index + increment);
+            tokens.p_update_type(&tokens, index, 3);
+
+            if (strcmp(token.value, "choose") == 0) {
+                index++;
+                Token left_paranthesis = tokens.pGet(&tokens, index);
+                if (is_single_character(left_paranthesis.value) != 1) {
+                    return -1;
+                }
+                if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 5);
+
+                index++;
+                int expr_end_index_1 = get_expression(index, 15); // RIGHT BRACE DELIMITER
+                if (expr_end_index_1 == -1) {
+                    return -1;
+                }
+                
+                index = expr_end_index_1 + 1;
+                Token comma_1 = tokens.pGet(&tokens, index);
+                if (is_single_character(right_brace.value) != 1) {
+                    return -1;
+                }
+                if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                    return -1;
+                }
+                tokens.p_update_type(&tokens, index, 8);
+
+
+
+            } else if (strcmp(token.value, "sqrt") == 0) {
+
+            } else if (strcmp(token.value, "tr") == 0) {
+
+            }
+
+            index++;
+            Token left_paranthesis = tokens.pGet(&tokens, index);
+            if (is_single_character(left_paranthesis.value) != 1) {
+                return -1;
+            }
+            if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 5);
+
+
+
+            index++;
+            Token right_paranthesis = tokens.pGet(&tokens, index);
+            if (is_single_character(left_paranthesis.value) != 1) {
+                return -1;
+            } 
+            if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 6);
+
+        } else if (1) {
+
+        } else if () {
+        
+        }
+        index++;
+
+
+
 
 
         } else if (is_comment(token.value[0]) == 1) { //DELIMITER
@@ -775,7 +897,7 @@ void parser() {
         }
 
     } else if (strcmp("printsep", token.value) == 0) {
-        token.type = 23;
+        tokens.p_update_type(&tokens, 0, 23);
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
