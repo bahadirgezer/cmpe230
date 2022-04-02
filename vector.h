@@ -22,6 +22,8 @@ struct Vector{
     int (*pSize)(Vector *);
     void (*p_update_type)(Vector *, int index, int type);
     void (*p_free)(Vector *);
+    void (*p_update_vector)(Vector *, int index, int vector_size);
+    void (*p_update_matrix)(Vector *, int index, int matrix_i, int matrix_j);
 };
 
 /*
@@ -85,6 +87,19 @@ void updateType(Vector *vector, int index,int type){
     }
 }
 
+void update_vector(Vector *vector, int index, int vector_size) {
+    if (index < vector->attributes.currentSize){
+        vector->attributes.array[index].vector = vector_size;
+    }
+}
+
+void update_matrix_i_j(Vector *vector, int index, int matrix_i, int matrix_j) {
+    if (index < vector->attributes.currentSize) {
+        vector->attributes.array[index].matrix_i = matrix_i;
+        vector->attributes.array[index].matrix_j = matrix_j;
+    }
+}
+
 void freeVector(Vector *vector){
     free(vector->attributes.array);
 }
@@ -104,13 +119,15 @@ void freeVector(Vector *vector){
 /*
  * Initializes the Vector
  */
-void CreateVector(Vector *vector){
+void CreateVector(Vector *vector) {
     vector->pAdd = Add;
     vector->pGet = Get;
     vector->pIncrementSize = IncrementSize;
     vector->pIsFull = IsFull;
     vector->pSize = Size;
     vector->p_update_type = updateType;
+    vector->p_update_vector = update_vector;
+    vector->p_update_matrix = update_matrix_i_j;
     vector->p_free = freeVector;
     vector->attributes.currentSize = 0;
     vector->attributes.capacity = DEFAULT_CAPACITY;
