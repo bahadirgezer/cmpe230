@@ -1013,10 +1013,13 @@ void parser() {
 
         int ending_index;
         Token left_curly_brace = tokens.pGet(&tokens, 2);
+        printf("in here2\n");
         if (is_single_left_curly_brace(left_curly_brace.value) == 1) {
             tokens.p_update_type(&tokens, 2, 9);
+            printf("in here3\n");
 
-            int right_curly_brace_index = parse_vector_matrix_initialization(3, &token); // SHOULD GIVE EXPECTED TYPE
+            printf("token: %d %d\n", token.type, token.vector); //assign type calismiyor
+            int right_curly_brace_index = parse_vector_matrix_initialization(3, &token); // SHOULD GIVE EXPECTED TYPE // jkhkjhkjhgkhjftyfjhgfghjfhfhgghgfhjgfjggkjkh
             if (right_curly_brace_index == -1) {
                 error(81);
                 return;
@@ -1076,7 +1079,7 @@ void parser() {
         } 
         assign_type(&variable, 2);
 
-        Token right_paranthesis = tokens.pGet(&tokens, 3); //PLACEHOLDER INDEX
+        Token right_paranthesis = tokens.pGet(&tokens, 3);
         if (is_single_character(right_paranthesis.value) != 1) {
             error(90);
             return;
@@ -1085,7 +1088,7 @@ void parser() {
             error(91);
             return;
         }
-        tokens.p_update_type(&tokens, 0, 10); // PLACEHOLDER INDEX 
+        tokens.p_update_type(&tokens, 3, 10);
 
         if (is_ok_ending(4) != 1) {
             error(92);
@@ -1213,17 +1216,22 @@ int parse_vector_matrix_initialization(int start_index, Token *expected_type) {
         token = tokens.pGet(&tokens, start_index + index);
         if (is_single_right_curly_brace(token.value) == 1) {
             to_return = start_index + index;
+            tokens.p_update_type(&tokens, start_index + index, 10);
             break;
         }
-        if (is_number_literal(token.value) != 1 || is_float(token.value) != 1) {
+        if (is_number_literal(token.value) != 1 && is_float(token.value) != 1) {
             return -1;
         }
+        printf("in here\n");
+        tokens.p_update_type(&tokens, start_index + index, 19);
         index++;
     }
     
+    printf("expected: %s %d %d\n", expected_type->value, expected_type->vector, expected_type->type);
     int array_lenght;
     if (expected_type->type == 20) {
         array_lenght = expected_type->vector;
+        printf("arrlen:%d\n", array_lenght);
     }  else if (expected_type->type == 21) {
         array_lenght = expected_type->matrix_i * expected_type->matrix_j;
     }
