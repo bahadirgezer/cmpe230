@@ -10,6 +10,14 @@ int in_for_loop;
 int line_number;
 
 /*
+    --- TO DO AND EDGE CASES ---
+
+    *   For loop scalars can only be access inside the for loop assignment line.
+    *   Must check float values
+    *   Must check variable names
+*/
+
+/*
 process_line(char line[], File c_file) {
 	tokens = tokenizer(line)
 	parser(tokens)
@@ -583,7 +591,6 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
 //function_parser is not recursive, but it calls expression parser, which is.
 
 void parser() {
-    
     if (tokens.pSize(&tokens) == 0) {
         return;
     }
@@ -597,7 +604,7 @@ void parser() {
                 if (is_ok_ending(1) != 1) {
                     error();
                     return;
-                }
+                }    ///DELETE SCALARS
             }
         }
     } else if (strcmp("scalar", token.value) == 0) {
@@ -748,6 +755,8 @@ void parser() {
             return;
         }
         tokens.p_update_type(&tokens, 2, 19);
+        initialize_scalar(variable_1.value);
+        //                                                                                          INITIALIZE FOR LOOP SCALAR
 
         int right_paranthesis_index;
         Token in = tokens.pGet(&tokens, 3);
@@ -764,23 +773,41 @@ void parser() {
                 error();
                 return;
             }
+
+            Token colon_1 = tokens.pGet(&tokens, expr_end_1 + 1); 
+            if (is_single_character(colon_1.value) != 1) {
+                return -1;
+            }
+            if (is_colon(colon_1.value[0]) != 1 || colon_1.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, expr_end_1 + 1, 16);
             
-            int expr_end_2 = get_expression(expr_end_1 + 1, 16);
+            int expr_end_2 = get_expression(expr_end_1 + 2, 16);
             if (expr_end_2 == -1) {
                 error();
                 return;
             }
-            if (expression(&tokens, expr_end_1 + 1, expr_end_2, 19) != 1) {
+            if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1) {
                 error();
                 return;
             }
 
-            int expr_end_3 = get_expression(expr_end_2 + 1, 6);
+            Token colon_2 = tokens.pGet(&tokens, expr_end_2 + 1); 
+            if (is_single_character(colon_2.value) != 1) {
+                return -1;
+            }
+            if (is_colon(colon_2.value[0]) != 1 || colon_2.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, expr_end_2 + 1, 16);
+
+            int expr_end_3 = get_expression(expr_end_2 + 2, 6);
             if (expr_end_3 == -1) {
                 error();
                 return;
             }
-            if (expression(&tokens, expr_end_2 + 1, expr_end_3, 19) != 1) {
+            if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1) {
                 error();
                 return;
             }
@@ -803,8 +830,8 @@ void parser() {
                 error();
                 return;
             }
-            variable_2.type = 19;
             tokens.p_update_type(&tokens, 4, 19);
+            initialize_scalar(variable_2.value); //                             NEED TO INDICATE THAT THIS IS A FOR LOOP SCALAR
 
             Token in = tokens.pGet(&tokens, 5);
             if (strcmp(in.value, "in") != 0 || in.isOk != 1) {
@@ -823,22 +850,44 @@ void parser() {
                 return;
             }
 
-            int expr_end_2 = get_expression(expr_end_1 + 1, 16); ///ADD COMMA AS DELIMITER IN GET_EXPRESSION()
+            Token colon_1 = tokens.pGet(&tokens, expr_end_1 + 1); 
+            if (is_single_character(colon_1.value) != 1) {
+                error();
+                return;
+            }
+            if (is_colon(colon_1.value[0]) != 1 || colon_1.isOk != 1) {
+                error();
+                return;
+            }
+            tokens.p_update_type(&tokens, expr_end_1 + 1, 16);
+
+            int expr_end_2 = get_expression(expr_end_1 + 2, 16);
             if (expr_end_2 == -1) {
                 error();
                 return;
             }
-            if (expression(&tokens, expr_end_1 + 1, expr_end_2, 19) != 1) {
+            if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1) {
                 error();
                 return;
             }
 
-            int expr_end_3 = get_expression(expr_end_2 + 1, 15);
+            Token colon_2 = tokens.pGet(&tokens, expr_end_2 + 1); 
+            if (is_single_character(colon_2.value) != 1) {
+                error();
+                return;
+            }
+            if (is_colon(colon_2.value[0]) != 1 || colon_2.isOk != 1) {
+                error();
+                return;
+            }
+            tokens.p_update_type(&tokens, expr_end_2 + 1, 16);
+
+            int expr_end_3 = get_expression(expr_end_2 + 2, 15);
             if (expr_end_3 == -1) {
                 error();
                 return;
             }
-            if (expression(&tokens, expr_end_2 + 1, expr_end_3, 19) != 1) {
+            if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1) {
                 error();
                 return;
             }
@@ -864,12 +913,33 @@ void parser() {
                 return;
             }
 
-            int expr_end_5 = get_expression(expr_end_4 + 1, 16); ///ADD COMMA AS DELIMITER IN GET_EXPRESSION()
+            Token colon_3 = tokens.pGet(&tokens, expr_end_4 + 1);
+            if (is_single_character(colon_3.value) != 1) {
+                error();
+                return;
+            }
+            if (is_colon(colon_3.value[0]) != 1 || colon_3.isOk != 1) {
+                error();
+                return;
+            }
+            tokens.p_update_type(&tokens, expr_end_4 + 1, 16);
+
+            int expr_end_5 = get_expression(expr_end_4 + 2, 16); ///ADD COMMA AS DELIMITER IN GET_EXPRESSION()
             if (expr_end_5 == -1) {
                 error();
                 return;
             }
-            if (expression(&tokens, expr_end_4 + 1, expr_end_5, 19) != 1) {
+            if (expression(&tokens, expr_end_4 + 2, expr_end_5, 19) != 1) {
+                error();
+                return;
+            }
+
+            Token colon_4 = tokens.pGet(&tokens, expr_end_5 + 1);
+            if (is_single_character(colon_4.value) != 1) {
+                error();
+                return;
+            }
+            if (is_colon(colon_4.value[0]) != 1 || colon_4.isOk != 1) {
                 error();
                 return;
             }
