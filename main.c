@@ -87,7 +87,7 @@ void tokenizer(char line[]) { //                                                
                 index++;
                 continue;
             } else {
-                error();
+                error(1);
                 break;
             }
         }
@@ -150,13 +150,13 @@ void tokenizer(char line[]) { //                                                
             continue;
         }
 
-        error();
+        error(2);
         break;
     }
 }
 
-void error() {
-    printf("Error on line %d\n", line_number);
+void error(int error_id) {
+    printf("\t\t\t\tError on line %d. Error ID: %d\n", line_number, error_id);
 }
 
 /*
@@ -169,11 +169,11 @@ int function_parser(int start_token_index) {
     if (strcmp(token.value, "tr")) { // WRONG WRONG WRONG WEONGGGG 
         Token left_paranthesis = tokens.pGet(&tokens, start_token_index + 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error();
+            error(3);
             return -1;
         }
         if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error();
+            error(4);
             return -1;
         }
         left_paranthesis.type = 5;
@@ -183,11 +183,11 @@ int function_parser(int start_token_index) {
 
         Token right_paranthesis = tokens.pGet(&tokens, expression_last_token_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(5);
             return -1;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
+            error(6);
             return -1;
         }
         right_paranthesis.type = 6;
@@ -195,11 +195,11 @@ int function_parser(int start_token_index) {
     } else if (strcmp(token.value, "choose")) {
         Token left_paranthesis = tokens.pGet(&tokens, start_token_index + 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error();
+            error(7);
             return -1;
         }
         if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error();
+            error(8);
             return -1;
         }
         left_paranthesis.type = 5;
@@ -208,11 +208,11 @@ int function_parser(int start_token_index) {
         
         Token right_paranthesis = tokens.pGet(&tokens, expression_last_token_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(9);
             return -1;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
+            error(10);
             return -1;
         }
         right_paranthesis.type = 6;
@@ -220,11 +220,11 @@ int function_parser(int start_token_index) {
     } else if (strcmp(token.value, "sqrt")) {
         Token left_paranthesis = tokens.pGet(&tokens, start_token_index + 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error();
+            error(11);
             return -1;
         }
         if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error();
+            error(12);
             return -1;
         }
         left_paranthesis.type = 5;
@@ -233,11 +233,11 @@ int function_parser(int start_token_index) {
             
         Token right_paranthesis = tokens.pGet(&tokens, expression_last_token_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(13);
             return -1;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
+            error(14);
             return -1;
         }
         right_paranthesis.type = 6;
@@ -267,7 +267,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
         }
 
         if (is_variable(token.value) == 1) {
-            assign_type(&token);
+            assign_type(&token, index);
 
             if (token.type == 20) {
                 index++;
@@ -581,6 +581,9 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             }
         }
         index++;
+        if (index == tokens_size) {
+            return index;
+        }
     }
 }
 
@@ -602,7 +605,7 @@ void parser() {
                 in_for_loop -= 1;
 
                 if (is_ok_ending(1) != 1) {
-                    error();
+                    error(15);
                     return;
                 }    ///DELETE SCALARS
             }
@@ -612,14 +615,14 @@ void parser() {
 
         Token variable = tokens.pGet(&tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
-            error();
+            error(16);
             return;
         }
         tokens.p_update_type(&tokens, 1, 19);
         initialize_scalar(variable.value);
 
         if (is_ok_ending(2) != 1) {
-            error();
+            error(17);
             return;
         }
 
@@ -628,25 +631,25 @@ void parser() {
 
         Token variable = tokens.pGet(&tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
-            error();
+            error(18);
             return;
         }
         tokens.p_update_type(&tokens, 1, 20);
 
         Token left_brace = tokens.pGet(&tokens, 2);
         if (is_single_character(left_brace.value) != 1) {
-            error();
+            error(19);
             return;
         }
         if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-            error();
+            error(20);
             return;
         }
         tokens.p_update_type(&tokens, 2, 7);
 
         Token vector_size = tokens.pGet(&tokens, 3);
         if (is_number_literal(vector_size.value) != 1 || vector_size.isOk != 1) {
-            error();
+            error(21);
             return;
         }
         tokens.p_update_type(&tokens, 3, 19);
@@ -655,17 +658,17 @@ void parser() {
         
         Token right_brace = tokens.pGet(&tokens, 4);
         if (is_single_character(right_brace.value) != 1) {
-            error();
+            error(22);
             return;
         }
         if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-            error();
+            error(23);
             return;
         }
         tokens.p_update_type(&tokens, 4, 8);
 
         if (is_ok_ending(5) != 1) {
-            error();
+            error(24);
             return;
         }
 
@@ -674,18 +677,18 @@ void parser() {
 
         Token variable = tokens.pGet(&tokens, 1);
         if (is_alphanumeric_literal(variable.value) != 1 || variable.isOk != 1) {
-            error();
+            error(25);
             return;
         }
         tokens.p_update_type(&tokens, 1, 21);
 
         Token left_brace = tokens.pGet(&tokens, 2);
         if (is_single_character(left_brace.value) != 1) {
-            error();
+            error(26);
             return;
         }
         if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-            error();
+            error(27);
             return;
         }
         tokens.p_update_type(&tokens, 2, 7);
@@ -693,7 +696,7 @@ void parser() {
 
         Token matrix_size_i = tokens.pGet(&tokens, 3);
         if (is_number_literal(matrix_size_i.value) != 1 || matrix_size_i.isOk != 1) {
-            error();
+            error(28);
             return;
         }
         tokens.p_update_type(&tokens, 3, 19);
@@ -701,18 +704,18 @@ void parser() {
 
         Token comma = tokens.pGet(&tokens, 4);
         if (is_single_character(comma.value) != 1) {
-            error();
+            error(29);
             return;
         }
         if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
-            error();
+            error(30);
             return;
         }
         tokens.p_update_type(&tokens, 4, 15);
 
         Token matrix_size_j = tokens.pGet(&tokens, 5);
         if (is_number_literal(matrix_size_j.value) != 1 || matrix_size_j.isOk != 1) {
-            error();
+            error(31);
             return;
         }
         tokens.p_update_type(&tokens, 5, 19);
@@ -721,17 +724,17 @@ void parser() {
 
         Token right_brace = tokens.pGet(&tokens, 6);
         if (is_single_character(right_brace.value) != 1) {
-            error();
+            error(32);
             return;
         }
         if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-            error();
+            error(33);
             return;
         }
         tokens.p_update_type(&tokens, 6, 8);
 
         if (is_ok_ending(7) != 1) {
-            error();
+            error(34);
             return;
         }
 
@@ -740,18 +743,18 @@ void parser() {
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error();
+            error(35);
             return;
         }
         if(is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error();
+            error(36);
             return;
         }
         tokens.p_update_type(&tokens, 1, 5);
 
         Token variable_1 = tokens.pGet(&tokens, 2);
         if (is_alphanumeric_literal(variable_1.value) != 1 || variable_1.isOk != 1) {
-            error();
+            error(37);
             return;
         }
         tokens.p_update_type(&tokens, 2, 19);
@@ -766,53 +769,53 @@ void parser() {
 
             int expr_end_1 = get_expression(4, 16);
             if (expr_end_1 == -1) {
-                error();
+                error(38);
                 return;
             }
             if (expression(&tokens, 4, expr_end_1, 19) != 1) {
-                error();
+                error(39);
                 return;
             }
 
             Token colon_1 = tokens.pGet(&tokens, expr_end_1 + 1); 
             if (is_single_character(colon_1.value) != 1) {
-                error();
+                error(40);
                 return;
             }
             if (is_colon(colon_1.value[0]) != 1 || colon_1.isOk != 1) {
-                error();
+                error(41);
                 return;
             }
             tokens.p_update_type(&tokens, expr_end_1 + 1, 16);
             
             int expr_end_2 = get_expression(expr_end_1 + 2, 16);
             if (expr_end_2 == -1) {
-                error();
+                error(42);
                 return;
             }
             if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1) {
-                error();
+                error(43);
                 return;
             }
 
             Token colon_2 = tokens.pGet(&tokens, expr_end_2 + 1); 
             if (is_single_character(colon_2.value) != 1) {
-                error();
+                error(44);
                 return;
             }
             if (is_colon(colon_2.value[0]) != 1 || colon_2.isOk != 1) {
-                error();
+                error(45);
                 return;
             }
             tokens.p_update_type(&tokens, expr_end_2 + 1, 16);
 
             int expr_end_3 = get_expression(expr_end_2 + 2, 6);
             if (expr_end_3 == -1) {
-                error();
+                error(46);
                 return;
             }
             if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1) {
-                error();
+                error(47);
                 return;
             }
             right_paranthesis_index = expr_end_3 + 1;
@@ -820,18 +823,18 @@ void parser() {
         } else {
             Token comma_1 = tokens.pGet(&tokens, 3);
             if (is_single_character(comma_1.value) != 1) {
-                error();
+                error(48);
                 return;
             }
             if (is_comma(comma_1.value[0]) != 1 || comma_1.isOk != 1) {
-                error();
+                error(49);
                 return;
             }
             tokens.p_update_type(&tokens, 3, 15);
 
             Token variable_2 = tokens.pGet(&tokens, 4);
             if (is_alphanumeric_literal(variable_2.value) != 1 || variable_2.isOk != 1) {
-                error();
+                error(50);
                 return;
             }
             tokens.p_update_type(&tokens, 4, 19);
@@ -839,122 +842,122 @@ void parser() {
 
             Token in = tokens.pGet(&tokens, 5);
             if (strcmp(in.value, "in") != 0 || in.isOk != 1) {
-                error();
+                error(51);
                 return;
             }
             tokens.p_update_type(&tokens, 5, 24);
 
             int expr_end_1 = get_expression(6, 16);
             if (expr_end_1 == -1) {
-                error();
+                error(52);
                 return;
             }
             if (expression(&tokens, 6, expr_end_1, 19) != 1) {
-                error();
+                error(53);
                 return;
             }
 
             Token colon_1 = tokens.pGet(&tokens, expr_end_1 + 1); 
             if (is_single_character(colon_1.value) != 1) {
-                error();
+                error(54);
                 return;
             }
             if (is_colon(colon_1.value[0]) != 1 || colon_1.isOk != 1) {
-                error();
+                error(55);
                 return;
             }
             tokens.p_update_type(&tokens, expr_end_1 + 1, 16);
 
             int expr_end_2 = get_expression(expr_end_1 + 2, 16);
             if (expr_end_2 == -1) {
-                error();
+                error(56);
                 return;
             }
             if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1) {
-                error();
+                error(57);
                 return;
             }
 
             Token colon_2 = tokens.pGet(&tokens, expr_end_2 + 1); 
             if (is_single_character(colon_2.value) != 1) {
-                error();
+                error(58);
                 return;
             }
             if (is_colon(colon_2.value[0]) != 1 || colon_2.isOk != 1) {
-                error();
+                error(59);
                 return;
             }
             tokens.p_update_type(&tokens, expr_end_2 + 1, 16);
 
             int expr_end_3 = get_expression(expr_end_2 + 2, 15);
             if (expr_end_3 == -1) {
-                error();
+                error(60);
                 return;
             }
             if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1) {
-                error();
+                error(61);
                 return;
             }
 
             Token comma_2 = tokens.pGet(&tokens, expr_end_3 + 1);
             if (is_single_character(comma_2.value) != 1) {
-                error();
+                error(62);
                 return;
             }
             if (is_comma(comma_2.value[0]) != 1 || comma_2.isOk != 1) {
-                error();
+                error(63);
                 return;
             }
             tokens.p_update_type(&tokens, expr_end_3 + 1, 15);
 
             int expr_end_4 = get_expression(expr_end_3 + 2, 16);
             if (expr_end_4 == -1) {
-                error();
+                error(64);
                 return;
             }
             if (expression(&tokens, 6, expr_end_4, 19) != 1) {
-                error();
+                error(65);
                 return;
             }
 
             Token colon_3 = tokens.pGet(&tokens, expr_end_4 + 1);
             if (is_single_character(colon_3.value) != 1) {
-                error();
+                error(66);
                 return;
             }
             if (is_colon(colon_3.value[0]) != 1 || colon_3.isOk != 1) {
-                error();
+                error(67);
                 return;
             }
             tokens.p_update_type(&tokens, expr_end_4 + 1, 16);
 
             int expr_end_5 = get_expression(expr_end_4 + 2, 16); ///ADD COMMA AS DELIMITER IN GET_EXPRESSION()
             if (expr_end_5 == -1) {
-                error();
+                error(68);
                 return;
             }
             if (expression(&tokens, expr_end_4 + 2, expr_end_5, 19) != 1) {
-                error();
+                error(69);
                 return;
             }
 
             Token colon_4 = tokens.pGet(&tokens, expr_end_5 + 1);
             if (is_single_character(colon_4.value) != 1) {
-                error();
+                error(70);
                 return;
             }
             if (is_colon(colon_4.value[0]) != 1 || colon_4.isOk != 1) {
-                error();
+                error(71);
                 return;
             }
 
             int expr_end_6 = get_expression(expr_end_5 + 1, 15);
             if (expr_end_6 == -1) {
-                error();
+                error(72);
                 return;
             }
             if (expression(&tokens, expr_end_5 + 1, expr_end_6, 19) != 1) {
-                error();
+                error(73);
                 return;
             }
 
@@ -963,42 +966,42 @@ void parser() {
 
         Token right_paranthesis = tokens.pGet(&tokens, right_paranthesis_index);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(74);
             return;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
+            error(75);
             return;
         }
         tokens.p_update_type(&tokens, right_paranthesis_index, 6);
 
         Token left_curly_brace = tokens.pGet(&tokens, right_paranthesis_index + 1);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(76);
             return;
         }
         if (is_left_curly_brace(left_curly_brace.value[0]) != 1 || left_curly_brace.isOk != 1) {
-            error();
+            error(77);
             return;
         }
         tokens.p_update_type(&tokens, right_paranthesis_index + 1, 9);
         in_for_loop = 1;
 
         if (is_ok_ending(right_paranthesis_index + 2) != 1) {
-            error();
+            error(78);
             return;
         }
 
     } else if (is_variable(token.value) == 1) {
-        assign_type(&token);
+        assign_type(&token, 0);
 
         Token equals = tokens.pGet(&tokens, 1);
         if (is_single_character(equals.value) != 1) {
-            error();
+            error(79);
             return;
         }
         if (is_equals(equals.value[0]) != 1 || equals.isOk != 1) {
-            error();
+            error(80);
             return;
         }
         tokens.p_update_type(&tokens, 1, 11);
@@ -1010,17 +1013,17 @@ void parser() {
 
             int right_curly_brace_index = parse_vector_matrix_initialization(3, &token); // SHOULD GIVE EXPECTED TYPE
             if (right_curly_brace_index == -1) {
-                error();
+                error(81);
                 return;
             }
 
             Token right_curly_brace = tokens.pGet(&tokens, right_curly_brace_index);
             if (is_single_character(right_curly_brace.value) != 1) {
-                error();
+                error(82);
                 return;
             }
             if (is_right_curly_brace(right_curly_brace.value[0]) != 1 || right_curly_brace.isOk != 1) {
-                error();
+                error(83);
                 return;
             }
             tokens.p_update_type(&tokens, right_curly_brace_index, 10);
@@ -1030,18 +1033,18 @@ void parser() {
             Token assignment = tokens.pGet(&tokens, 2);
             ending_index = get_expression(2, 18);
             if (ending_index == -1) {
-                error();
+                error(84);
                 return;
             }
             if (expression(&tokens, 2, ending_index, token.type) != 1) { //expected type done
-                error();
+                error(85);
                 return;
             }
             ending_index++;
         }
 
         if (is_ok_ending(ending_index) != 1) {
-            error();
+            error(86);
             return;
         }
 
@@ -1050,35 +1053,35 @@ void parser() {
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error();
+            error(87);
             return;
         }
         if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error();
+            error(88);
             return;
         }
         tokens.p_update_type(&tokens, 1, 5);
 
         Token variable = tokens.pGet(&tokens, 2);
         if (is_variable(variable.value) != 1) {
-            error();
+            error(89);
             return;
         } 
-        assign_type(&variable);
+        assign_type(&variable, 2);
 
         Token right_paranthesis = tokens.pGet(&tokens, 3); //PLACEHOLDER INDEX
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(90);
             return;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
+            error(91);
             return;
         }
         tokens.p_update_type(&tokens, 0, 10); // PLACEHOLDER INDEX 
 
         if (is_ok_ending(4) != 1) {
-            error();
+            error(92);
             return;
         }
 
@@ -1087,33 +1090,44 @@ void parser() {
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);
         if (is_single_character(left_paranthesis.value) != 1) {
-            error();
+            error(93);
             return;
         }
         if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-            error();
+            error(94);
             return;
         }
         tokens.p_update_type(&tokens, 1, 5);
       
         Token right_paranthesis = tokens.pGet(&tokens, 2);
         if (is_single_character(right_paranthesis.value) != 1) {
-            error();
+            error(95);
             return;
         }
         if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-            error();
+            error(96);
             return;
         }
         tokens.p_update_type(&tokens, 2, 6);
 
         if (is_ok_ending(3) != 1) {
-            error();
+            error(97);
+            return;
+        }
+    } else if (is_comment(token.value[0]) == 1) {
+        if (token.isOk != 1) {
+            error(98);
+            return;
+        }
+        tokens.p_update_type(&tokens, 0, 18);
+
+        if (is_ok_ending(1) != 1) {
+            error(99);
             return;
         }
 
     } else {
-        error();
+        error(100);
     }
 }
 
@@ -1275,7 +1289,7 @@ Token get_variable(char name[]) {
     Returns the type of that variable. Type values are assigned in the lookup table
     inside the token.h file
 */
-void assign_type(Token *variable) {
+void assign_type(Token *variable, int index) {
     Token state_variable;
     for (int i = 0; i < variables.pSize(&variables); i++) {
         state_variable = variables.pGet(&variables, i);
@@ -1285,14 +1299,15 @@ void assign_type(Token *variable) {
     }
     
     if (state_variable.type == 19) {
+        tokens.p_update_type(&tokens, index, 19);
         variable->type = 19; //                         WATCH OUT
 
     } else  if (state_variable.type == 20) {
-        variable->type = 20;
-        variable->vector = state_variable.vector;
+        tokens.p_update_type(&tokens, index, 20);
+        variable->vector = state_variable.vector; //                                            HAS ERROR
 
     } else if (state_variable.type == 21) {
-        variable->type = 21;
+        tokens.p_update_type(&tokens, index, 21);
         variable->matrix_i = state_variable.matrix_i;
         variable->matrix_j = state_variable.matrix_j;
 
@@ -1308,6 +1323,15 @@ void output_generator() {
     }
 }
 
+void tokens_status() {
+    printf("============ LINE: %d ============\n", line_number);
+    for (int i = 0; i < tokens.pSize(&tokens); i++) {
+        Token token = tokens.pGet(&tokens, i);
+        printf("Value: \"%s\", Type: %d\n", token.value, token.type);
+    }
+    printf("============ END ============\n");
+}
+
 int main(int argc, char *argv[]) {
     
     FILE *file;
@@ -1319,11 +1343,18 @@ int main(int argc, char *argv[]) {
     
     int index = 1;
     while(fgets(line,256,file) != NULL ) {
-        printf("%s",line);
+    
         line_number = index;
+        
+
         tokenizer(line);
         
+        tokens_status();
+
         parser();
+
+        tokens_status();
+
         index++;
     }
     
@@ -1372,7 +1403,7 @@ Token infix_to_postfix(Vector *subtokens, int start, int end){
             while (postfix_stack.pPeek(&postfix_stack).type != 5) { // while we don't encounter a right paranthesis
                 if (postfix_stack.pIsEmpty(&postfix_stack)) {
                     flag = 0;
-                    error();
+                    error(101);
                     break;
                 }
                 Token tokenPoped;
@@ -1416,7 +1447,7 @@ Token infix_to_postfix(Vector *subtokens, int start, int end){
                 postfix_vector.pAdd(&postfix_vector,postfix_stack.pPop(&postfix_stack));
             } else {
                 flag = 0;
-                error();
+                error(102);
                 break;
             }
         }
@@ -1458,14 +1489,14 @@ Token evaluate_postfix(Vector *postfix) {
                 Token result;
                 result = type_check(op1,op2,next_token);
                 if (result.isOk == 0) {
-                    error();
+                    error(103);
                     flag = 1;
                     break;
                 } else {
                     evaluation_stack.pPush(&evaluation_stack,result);
                 }
             } else {
-                error();
+                error(104);
                 flag = 1; 
                 break;
             }
@@ -1480,7 +1511,7 @@ Token evaluate_postfix(Vector *postfix) {
     }
 
     if (evaluation_stack.pSize(&evaluation_stack) != 1) {
-        error();
+        error(105);
         flag = 1;
     } else if (flag == 0) {
         printf("no error\n"); //printf???
