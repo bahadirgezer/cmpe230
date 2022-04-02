@@ -246,14 +246,13 @@ int function_parser(int start_token_index) {
 */
 int get_expression(int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
     int delimiter_stack = 0;
-    int delimiter_found = 0; // can have right curly brace, right square brace or comment as delimiter
     int tokens_size = tokens.pSize(&tokens); //Vector pointer to int conversion error
     if (tokens_size == start_index) {
         return -1;
     }
     
     int index = start_index;
-    while(!delimiter_found) {
+    while(1) {
         Token token = tokens.pGet(&tokens, index);
         if (token.isOk != 1) {
             return -1;
@@ -386,7 +385,6 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                     return -1;
                 }
 
-
                 index = expr_end_index_3 + 1;
                 Token comma_3 = tokens.pGet(&tokens, index);
                 if (is_single_character(comma_3.value) != 1) {
@@ -475,79 +473,107 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 }
                 tokens.p_update_type(&tokens, index, 6);
             }
-        } else if (1) {
+        } else if (is_comment(token.value[0]) == 1) { //COMMENT DELIMITER
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 18);
+            if (delimiter_type != token.type) {
+                return -1;
+            }
+            return index - 1;
 
-        } else if (1) {
+        } else if (is_single_comma(token.value) == 1) { //COMMA DELIMITER
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 15);
+
+            if (delimiter_type != token.type) {
+                return -1;
+            }
+            return index - 1;
+
+        } else if (is_single_colon(token.value) == 1) { //COLON DELIMITER
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 16);
+
+            if (delimiter_type != token.type) {
+                return -1;
+            }
+            return index - 1;
+
+        } else if (is_single_left_paranthesis(token.value) == 1) {
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 5);
+            if (delimiter_type == 6) {
+                delimiter_stack++;
+            }
+
+        } else if (is_single_right_paranthesis(token.value) == 1) { //RIGHT PARANTHESIS DELIMITER
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 6);
+            if (delimiter_type == 6) {
+                if (delimiter_stack == 0) {
+                    return index - 1;
+                } else {
+                    delimiter_stack--;
+                }
+            }
+        } else if (is_single_right_curly_brace(token.value) == 1) { //RIGHT CURLY BRACE DELIMITER
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 10);
+
+            if (delimiter_type != token.type) {
+                return -1;
+            }
+            return index - 1;
         
+        } else if (is_single_right_brace(token.value) == 1) { // RIGHT SQUARE BRACE DELIMITER
+            if (token.isOk != 1) {
+                return -1;
+            }
+            tokens.p_update_type(&tokens, index, 8);
+            if (delimiter_type != token.type) {
+                return -1;
+            }
+            return index - 1;
+
+        } else if (is_single_star(token.value) == 1) {
+        if (token.isOk != 1) {
+            return -1;
+        }
+        tokens.p_update_type(&tokens, index, 12);
+
+        } else if (is_single_plus(token.value) == 1) {
+        if (token.isOk != 1) {
+            return -1;
+        }
+        tokens.p_update_type(&tokens, index, 13);
+
+        } else if (is_single_minus(token.value) == 1) {
+        if (token.isOk != 1) {
+            return -1;
+        }
+        tokens.p_update_type(&tokens, index, 14);
+
+        } else {
+            if (index == tokens.pSize(&tokens)) { //END OF TOKENS AND WE NEED TO RETURN; NO COMMENT FOUND
+                return index - 1;
+            } else {
+                return -1;
+            }
         }
         index++;
-
-        if (is_comment(token.value[0]) == 1) { //DELIMITER
-            token.type = 18;
-            if (delimiter_type != token.type) { //might have a semantic error
-                return -1;
-            }
-            return start_index + increment - 1;
-
-        } else if (is_single_character(token.value) == 1) {
-            if (is_left_paranthesis(token.value[0]) == 1) {
-                token.type = 5;
-                if (delimiter_type == 5) {
-                    delimiter_stack += 1;
-                }
-
-            } else if (is_star(token.value[0]) == 1) {
-                token.type = 12;
-            } else if (is_plus(token.value[0]) == 1) {
-                token.type = 13;
-            } else if (is_minus(token.value[0]) == 1) {
-                token.type = 14;
-            
-            } else if (is_right_paranthesis(token.value[0]) == 1) { //MAYBE A DELIMITER
-                token.type = 6;
-                if (delimiter_stack != 0) {
-                    delimiter_stack -= 1;
-                    continue;
-                }
-                if (delimiter_type != token.type) {
-                    return -1;
-                }
-                return start_index + increment - 1;
-
-            } else if (is_colon(token.value[0]) == 1) { //DELIMITER
-                token.type = 16;
-                if (delimiter_type != token.type) {
-                    return -1;
-                }
-                return start_index + increment - 1;
-
-            } else if (is_comma(token.value[0]) == 1) { //DELIMITER
-                token.type = 15;
-                if (delimiter_type != token.type) {
-                    return -1;
-                }
-                return start_index + increment - 1;
-
-            } else if (is_right_curly_brace(token.value[0]) == 1) { //DELIMITER
-                token.type = 10;
-                if (delimiter_type != token.type) {
-                    return -1;
-                }
-                return start_index + increment - 1;
-
-            } else if (is_right_brace(token.value[0]) == 1) { //DELIMITER
-                token.type = 8;
-                if (delimiter_type != token.type) {
-                    return -1;
-                }
-                return start_index + increment - 1;
-            } else { // add delimiter
-                return -1;
-            }
-        }
-        increment++;
     }
-    return 0;
 }
 
 //parser -> assignment, decleration (with keyword), for loop, print(), printsep(), 
@@ -702,7 +728,7 @@ void parser() {
             return;
         }
 
-    } else if (strcmp("for", token.value) == 0) {
+    } else if (strcmp("for", token.value) == 0) { // FOR LOOP DOESN'T WORK // EXPRESSION END INDEX AND NOT TAKING COLONS
         tokens.p_update_type(&tokens, 0, 4);
 
         Token left_paranthesis = tokens.pGet(&tokens, 1);

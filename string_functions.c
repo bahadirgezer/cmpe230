@@ -449,3 +449,139 @@ int is_single_left_curly_brace(char ch[]) {
     }
     return 1;
 }
+
+/*
+    Checks if a character array is made up of a single left paranthesis character, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single left paranthesis character
+    0 if ch[] is not a single left paranthesis character
+    @param char[] ch character array to check 
+*/
+int is_single_left_paranthesis(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_left_paranthesis(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single left paranthesis character, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single left paranthesis character
+    0 if ch[] is not a single left paranthesis character
+    @param char[] ch character array to check 
+*/
+int is_single_left_paranthesis(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_left_paranthesis(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single right paranthesis character, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single right paranthesis character
+    0 if ch[] is not a single right paranthesis character
+    @param char[] ch character array to check 
+*/
+int is_single_right_paranthesis(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_right_paranthesis(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single plus, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single plus
+    0 if ch[] is not a single plus
+    @param char[] ch character array to check 
+*/
+int is_single_plus(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_plus(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single minus, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single minus
+    0 if ch[] is not a single minus
+    @param char[] ch character array to check 
+*/
+int is_single_minus(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_minus(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single star, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single star
+    0 if ch[] is not a single star
+    @param char[] ch character array to check 
+*/
+int is_single_star(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_star(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single colon, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single colon
+    0 if ch[] is not a single colon
+    @param char[] ch character array to check 
+*/
+int is_single_colon(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_colon(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single right brace, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single right brace
+    0 if ch[] is not a single right brace
+    @param char[] ch character array to check 
+*/
+int is_single_right_brace(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_right_brace(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
