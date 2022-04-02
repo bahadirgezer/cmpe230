@@ -1350,7 +1350,6 @@ void assign_type(Token *variable, int index) {
 
     } else  if (state_variable.type == 20) {
         tokens.p_update_type(&tokens, index, 20);
-        variable->vector = state_variable.vector; //                                            HAS ERROR
         tokens.p_update_vector(&tokens, index, state_variable.vector);
 
     } else if (state_variable.type == 21) {
@@ -1387,13 +1386,8 @@ int main(int argc, char *argv[]) {
         */
 
         tokenizer(line);
-        
-        //tokens_status();
-
         parser();
-
         tokens_status();
-        //tokens_status();
 
         line_number++;
     }
@@ -1461,11 +1455,12 @@ void output_generator(FILE *out) {
 // OUTPUT BOOLEAN WILL BE AFFECTED FROM BOTH SYNTAX AND EXPECTED OUTPUT
 int expression(Vector *tokens, int start_index, int end_index, int expected_type) {
     Token expr;
+    
     expr = infix_to_postfix(tokens, start_index, end_index);
+    printf("Number: %d\n", expr.type);
     if (expr.isOk == 0){
         return 0;
-    }
-    else{
+    } else {
         if (expr.type == expected_type){
             return 1;
         }
@@ -1474,6 +1469,8 @@ int expression(Vector *tokens, int start_index, int end_index, int expected_type
         }
     }
 }
+
+
 
 /*
 returns the pseudo-token needed for the expression function
@@ -1490,8 +1487,39 @@ Token infix_to_postfix(Vector *subtokens, int start, int end) {
     int leftbrace_num = 0;
     int leftbrace_flag = 0;
 
-    while(i <= end){
-        Token next_token = subtokens->pGet(subtokens,i);
+    while(i <= end) {
+        Token next_token = subtokens->pGet(subtokens, i);
+
+        //
+        if (next_token.type == 3) {
+            if (strcmp(next_token.value, "sqrt") == 0) {
+                int paranthesis_count = 0;
+                //next_token.type = 19;
+                //tokens.p_update_type(&tokens, i, 19);
+
+                while(1) {
+                    i++;
+                    Token next_function_token = subtokens->pGet(subtokens, i);
+
+                    if (next_function_token.type == 5) {
+                        paranthesis_count++;
+                    }
+                    if (next_function_token.type == 6) {
+                        if (paranthesis_count == 0) {
+                            i++;
+                            break;
+                        }
+                        paranthesis_count--;
+                    }
+                }
+            } else if (strcmp(next_token.value, "choose") == 0) {
+
+            } else if (strcmp(next_token.value, "tr") == 0) {
+
+            }
+        }
+        //
+
         if (leftbrace_flag == 1){
             if (next_token.type != 7 || next_token.type != 8) {
                 continue;
@@ -1614,8 +1642,7 @@ Token evaluate_postfix(Vector *postfix) {
                 error(104);
                 flag = 1; 
                 break;
-            }
-            
+            }  
         }
         else{
             last_result.isOk = 0;
