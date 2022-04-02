@@ -468,23 +468,6 @@ int is_single_left_paranthesis(char ch[]) {
 }
 
 /*
-    Checks if a character array is made up of a single left paranthesis character, this function is used in get_expression(). 
-    @returns 
-    1 if ch[] is a single left paranthesis character
-    0 if ch[] is not a single left paranthesis character
-    @param char[] ch character array to check 
-*/
-int is_single_left_paranthesis(char ch[]) {
-    if (is_single_character(ch) != 1) {
-        return 0;
-    }
-    if (is_left_paranthesis(ch[0]) != 1) {
-        return 0;
-    }
-    return 1;
-}
-
-/*
     Checks if a character array is made up of a single right paranthesis character, this function is used in get_expression(). 
     @returns 
     1 if ch[] is a single right paranthesis character
@@ -581,6 +564,23 @@ int is_single_right_brace(char ch[]) {
         return 0;
     }
     if (is_right_brace(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
+    Checks if a character array is made up of a single comma, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single comma
+    0 if ch[] is not a single comma
+    @param char[] ch character array to check 
+*/
+int is_single_comma(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_comma(ch[0]) != 1) {
         return 0;
     }
     return 1;

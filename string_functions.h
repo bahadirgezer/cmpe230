@@ -30,5 +30,7 @@ int is_single_right_paranthesis(char ch[]);
 int is_single_left_paranthesis(char ch[]);
 int is_single_plus(char ch[]);
 int is_single_minus(char ch[]);
-int is_single_start(char ch[]);
+int is_single_star(char ch[]);
 int is_single_right_brace(char ch[]);
+int is_single_colon(char ch[]);
+int is_single_comma(char ch[]);

@@ -776,10 +776,12 @@ void parser() {
 
             Token colon_1 = tokens.pGet(&tokens, expr_end_1 + 1); 
             if (is_single_character(colon_1.value) != 1) {
-                return -1;
+                error();
+                return;
             }
             if (is_colon(colon_1.value[0]) != 1 || colon_1.isOk != 1) {
-                return -1;
+                error();
+                return;
             }
             tokens.p_update_type(&tokens, expr_end_1 + 1, 16);
             
@@ -795,10 +797,12 @@ void parser() {
 
             Token colon_2 = tokens.pGet(&tokens, expr_end_2 + 1); 
             if (is_single_character(colon_2.value) != 1) {
-                return -1;
+                error();
+                return;
             }
             if (is_colon(colon_2.value[0]) != 1 || colon_2.isOk != 1) {
-                return -1;
+                error();
+                return;
             }
             tokens.p_update_type(&tokens, expr_end_2 + 1, 16);
 
