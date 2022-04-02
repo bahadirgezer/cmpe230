@@ -8,6 +8,7 @@ Vector variables;
 Vector postfix_vector;
 int in_for_loop;
 int line_number;
+int num_error;
 
 /*
     --- TO DO AND EDGE CASES ---
@@ -156,6 +157,7 @@ void tokenizer(char line[]) { //                                                
 }
 
 void error(int error_id) {
+    num_error++;
     printf("\t\t\t\tError on line %d. Error ID: %d\n", line_number, error_id);
 }
 
@@ -590,7 +592,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
 //parser -> assignment, decleration (with keyword), for loop, print(), printsep(), 
 //needs expression parser, expression parser is recursive.
 //parser is not recursive.
-//function_parser is used as the last part (else) of these two functions.
+//function_parser is used as the last part (else) of these two functions.7
 //function_parser is not recursive, but it calls expression parser, which is.
 
 void parser() {
@@ -1333,19 +1335,21 @@ void tokens_status() {
 }
 
 int main(int argc, char *argv[]) {
-    
     FILE *file;
     file = fopen(argv[1], "r");
-    int in_for_loop = 0;
+    in_for_loop = 0;
+    num_error = 0;
     char line[256];
     CreateVector(&variables);
 
     
-    int index = 1;
+    line_number = 1;
     while(fgets(line,256,file) != NULL ) {
-    
-        line_number = index;
-        
+        /*
+        if (num_error > 0) { //breaks when there is an error
+            break;                      // uncomment this part if you want to see every error
+        }
+        */
 
         tokenizer(line);
         
@@ -1355,7 +1359,7 @@ int main(int argc, char *argv[]) {
 
         tokens_status();
 
-        index++;
+        line_number++;
     }
     
     fclose(file);
