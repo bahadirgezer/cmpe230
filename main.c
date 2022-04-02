@@ -584,6 +584,9 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
         }
         index++;
         if (index == tokens_size) {
+            if (delimiter_type == 18) {
+                index--;
+            }
             return index;
         }
     }
@@ -1042,9 +1045,11 @@ void parser() {
                 error(85);
                 return;
             }
+            printf("%d\n", ending_index);
+
             ending_index++;
         }
-
+        printf("%d\n", ending_index);
         if (is_ok_ending(ending_index) != 1) {
             error(86);
             return;
@@ -1347,7 +1352,7 @@ int main(int argc, char *argv[]) {
     while(fgets(line,256,file) != NULL ) {
         /*
         if (num_error > 0) { //breaks when there is an error
-            break;                      // uncomment this part if you want to see every error
+            break;                      // uncomment this part if you want the program to stop running after the first error
         }
         */
 
