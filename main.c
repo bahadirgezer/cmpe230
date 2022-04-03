@@ -276,8 +276,6 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
     int index = start_index;
     while(1) {
         Token token = tokens.pGet(&tokens, index);
-        printf("%s\n", token.value);
-        printf("index: %d", index);
         if (token.isOk != 1) {
             return -1;
         }
@@ -300,7 +298,6 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                     }
                     tokens.p_update_type(&tokens, index, 7);
                     left_brace.type = 7;
-                    printf("in here23/n");
                     index++;
                     int expr_end_index = get_expression(index, 8); // RIGHT BRACE DELIMITER
                     if (expr_end_index == -1) {
@@ -309,7 +306,6 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                     
                     index = expr_end_index + 1;
                     Token right_brace = tokens.pGet(&tokens, index);
-                    printf("has right brace\n");
                     if (is_single_character(right_brace.value) != 1) {
                         return -1;
                     }
@@ -606,7 +602,6 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             if (token.isOk != 1) {
                 return -1;
             }
-            printf("in here35");
             tokens.p_update_type(&tokens, index, 8);
             token.type = 8;
             if (delimiter_type == 8) {
@@ -646,10 +641,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             }
         }
         index++;
-        printf("\nindex:%d tokens_size:%d\n", index, tokens_size);
-        printf("delimiter_type: %d\n", delimiter_type);
         if (index == tokens_size) {
-            printf("in last part");
             if (delimiter_type == 18) {
                 index--;
             }
@@ -669,19 +661,16 @@ void parser() {
         return;
     }
     Token token = tokens.pGet(&tokens, 0); //checking first token
-    if (in_for_loop == 1) {
-        if (is_single_character(token.value) == 1 && token.isOk == 1) {
-            if (is_right_curly_brace(token.value[0]) == 1) {
-                tokens.p_update_type(&tokens, 0, 10);
-                token.type = 10;
-                in_for_loop -= 1;
-
-                if (is_ok_ending(1) != 1) {
-                    error(15);
-                    return;
-                }    ///DELETE SCALARS
-            }
+    if (in_for_loop == 1 && is_single_right_curly_brace(token.value) == 1) {
+        tokens.p_update_type(&tokens, 0, 10);
+        token.type = 10;
+        in_for_loop--;
+        
+        if (is_ok_ending(1) != 1) {
+            error(15);
+            return;
         }
+        
     } else if (strcmp("scalar", token.value) == 0) {
         tokens.p_update_type(&tokens, 0, 0);
 
@@ -987,7 +976,7 @@ void parser() {
                 error(64);
                 return;
             }
-            if (expression(&tokens, 6, expr_end_4, 19) != 1) {
+            if (expression(&tokens, expr_end_3 + 2, expr_end_4, 19) != 1) {
                 error(65);
                 return;
             }
@@ -1023,7 +1012,7 @@ void parser() {
                 return;
             }
 
-            int expr_end_6 = get_expression(expr_end_5 + 1, 15);
+            int expr_end_6 = get_expression(expr_end_5 + 2, 6);
             if (expr_end_6 == -1) {
                 error(72);
                 return;
@@ -1083,7 +1072,7 @@ void parser() {
         Token left_curly_brace = tokens.pGet(&tokens, 2);
         if (is_single_left_curly_brace(left_curly_brace.value) == 1) {
             tokens.p_update_type(&tokens, 2, 9);
-            if (token.type != 20 || token.type != 21) {
+            if (token.type != 20 && token.type != 21) {
                 error(106);
                 return;
             }
