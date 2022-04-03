@@ -17,6 +17,8 @@ int flag;
     *   For loop scalars can only be access inside the for loop assignment line.
     *   Must check float values
     *   Must check variable names
+    *   Must check redeclerationx
+    *   print(id[index])
 */
 
 /*
@@ -264,7 +266,8 @@ int function_parser(int start_token_index) {
     Returns the index of the last token of the expression.
 */
 int get_expression(int start_index, int delimiter_type) { //if delimiter not found, must stop at the last token
-    int delimiter_stack = 0;
+    int delimiter_stack_brace = 0;
+    int delimiter_stack_paranthesis = 0;
     int tokens_size = tokens.pSize(&tokens); //Vector pointer to int conversion error
     if (tokens_size == start_index) {
         return -1;
@@ -273,78 +276,87 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
     int index = start_index;
     while(1) {
         Token token = tokens.pGet(&tokens, index);
+        printf("%s\n", token.value);
+        printf("index: %d", index);
         if (token.isOk != 1) {
             return -1;
         }
-
+        
         if (is_variable(token.value) == 1) {
             assign_type(&token, index);
             token = tokens.pGet(&tokens, index);
 
-            if (token.type == 20) {
-                index++;
-                Token left_brace = tokens.pGet(&tokens, index);
-                if (is_single_character(left_brace.value) != 1) {
-                    return -1;
-                }
-                if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-                    return -1;
-                }
-                tokens.p_update_type(&tokens, index, 7);
-                left_brace.type = 7;
+            Token left_brace_check = tokens.pGet(&tokens, index + 1);
+            if (is_single_left_brace(left_brace_check.value) == 1) {
 
-                index++;
-                int expr_end_index = get_expression(index, 8); // RIGHT BRACE DELIMITER
-                if (expr_end_index == -1) {
-                    return -1;
-                }
-                
-                index = expr_end_index + 1;
-                Token right_brace = tokens.pGet(&tokens, index);
-                if (is_single_character(right_brace.value) != 1) {
-                    return -1;
-                }
-                if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-                    return -1;
-                }
-                tokens.p_update_type(&tokens, index, 8);
-                right_brace.type = 8;
+                if (token.type == 20) {
+                    index++;
+                    Token left_brace = tokens.pGet(&tokens, index);
+                    if (is_single_character(left_brace.value) != 1) {
+                        return -1;
+                    }
+                    if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                        return -1;
+                    }
+                    tokens.p_update_type(&tokens, index, 7);
+                    left_brace.type = 7;
+                    printf("in here23/n");
+                    index++;
+                    int expr_end_index = get_expression(index, 8); // RIGHT BRACE DELIMITER
+                    if (expr_end_index == -1) {
+                        return -1;
+                    }
+                    
+                    index = expr_end_index + 1;
+                    Token right_brace = tokens.pGet(&tokens, index);
+                    printf("has right brace\n");
+                    if (is_single_character(right_brace.value) != 1) {
+                        return -1;
+                    }
+                    if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                        return -1;
+                    }
+                    tokens.p_update_type(&tokens, index, 8);
+                    right_brace.type = 8;
 
+                } else if (token.type == 21) {
+                    index++;
+                    Token left_brace = tokens.pGet(&tokens, index);
+                    if (is_single_character(left_brace.value) != 1) {
+                        return -1;
+                    }
+                    if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                        return -1;
+                    }
+                    tokens.p_update_type(&tokens, index, 7);
+                    left_brace.type = 7;
 
-            } else if (token.type == 21) {
-                index++;
-                Token left_brace = tokens.pGet(&tokens, index);
-                if (is_single_character(left_brace.value) != 1) {
-                    return -1;
-                }
-                if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-                    return -1;
-                }
-                tokens.p_update_type(&tokens, index, 7);
-                left_brace.type = 7;
+                    index++;
+                    int expr_end_index_1 = get_expression(index, 15); //                                                              COMMA COMMA COMMA DELIMITER
+                    if (expr_end_index_1 == -1) {
+                        return -1;
+                    }
 
-                index++;
-                int expr_end_index_1 = get_expression(index, 15); //                                                              COMMA COMMA COMMA DELIMITER
-                if (expr_end_index_1 == -1) {
-                    return -1;
-                }
+                    index = expr_end_index_1 + 1;                
+                    Token comma = tokens.pGet(&tokens, index);
+                    if (is_single_character(comma.value) != 1) {
+                        return -1;
+                    }
+                    if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
+                        return -1;
+                    }
+                    tokens.p_update_type(&tokens, index, 15);                       //CURRENTLY SENDING RIGHT AND LEFT SQUARE BRACES TO EXPRESSION
+                    comma.type = 15;
 
-                index = expr_end_index_1 + 1;                
-                Token comma = tokens.pGet(&tokens, index);
-                if (is_single_character(comma.value) != 1) {
+                    int expr_end_index_2 = get_expression(index, 8); //                                                              COMMA COMMA COMMA DELIMITER
+                    if (expr_end_index_2 == -1) {
+                        return -1;
+                    } //                                                                    CHECKING THE INDEX
+                } else {
                     return -1;
                 }
-                if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
-                    return -1;
-                }
-                tokens.p_update_type(&tokens, index, 15);                       //CURRENTLY SENDING RIGHT AND LEFT SQUARE BRACES TO EXPRESSION
-                comma.type = 15;
-
-                int expr_end_index_2 = get_expression(index, 8); //                                                              COMMA COMMA COMMA DELIMITER
-                if (expr_end_index_2 == -1) {
-                    return -1;
-                } //                                                                    CHECKING THE INDEX
             }
+
 
         } else if (is_number_literal(token.value) == 1 || is_float(token.value) == 1) {
             tokens.p_update_type(&tokens, index, 19);
@@ -552,7 +564,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             tokens.p_update_type(&tokens, index, 5);
             token.type = 5;
             if (delimiter_type == 6) {
-                delimiter_stack++;
+                delimiter_stack_paranthesis++;
             }
 
         } else if (is_single_right_paranthesis(token.value) == 1) { //RIGHT PARANTHESIS DELIMITER
@@ -562,10 +574,10 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             tokens.p_update_type(&tokens, index, 6);
             token.type = 6;
             if (delimiter_type == 6) {
-                if (delimiter_stack == 0) {
+                if (delimiter_stack_paranthesis == 0) {
                     return index - 1;
                 } else {
-                    delimiter_stack--;
+                    delimiter_stack_paranthesis--;
                 }
             }
         } else if (is_single_right_curly_brace(token.value) == 1) { //RIGHT CURLY BRACE DELIMITER
@@ -579,17 +591,31 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 return -1;
             }
             return index - 1;
-        
-        } else if (is_single_right_brace(token.value) == 1) { // RIGHT SQUARE BRACE DELIMITER
+
+        } else if (is_single_left_brace(token.value) == 1) {
             if (token.isOk != 1) {
                 return -1;
             }
             tokens.p_update_type(&tokens, index, 8);
             token.type = 8;
-            if (delimiter_type != token.type) {
+            if (delimiter_type == 8) {
+                delimiter_stack_brace++;
+            }
+        
+        } else if (is_single_right_brace(token.value) == 1) { // RIGHT SQUARE BRACE DELIMITER
+            if (token.isOk != 1) {
                 return -1;
             }
-            return index - 1;
+            printf("in here35");
+            tokens.p_update_type(&tokens, index, 8);
+            token.type = 8;
+            if (delimiter_type == 8) {
+                if (delimiter_stack_brace == 0) {
+                    return index - 1;
+                } else {
+                    delimiter_stack_brace--;
+                }
+            }
 
         } else if (is_single_star(token.value) == 1) {
             if (token.isOk != 1) {
@@ -620,7 +646,10 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             }
         }
         index++;
+        printf("\nindex:%d tokens_size:%d\n", index, tokens_size);
+        printf("delimiter_type: %d\n", delimiter_type);
         if (index == tokens_size) {
+            printf("in last part");
             if (delimiter_type == 18) {
                 index--;
             }
@@ -1054,6 +1083,10 @@ void parser() {
         Token left_curly_brace = tokens.pGet(&tokens, 2);
         if (is_single_left_curly_brace(left_curly_brace.value) == 1) {
             tokens.p_update_type(&tokens, 2, 9);
+            if (token.type != 20 || token.type != 21) {
+                error(106);
+                return;
+            }
 
             int right_curly_brace_index = parse_vector_matrix_initialization(3, &token); // SHOULD GIVE EXPECTED TYPE // jkhkjhkjhgkhjftyfjhgfghjfhfhgghgfhjgfjggkjkh
             if (right_curly_brace_index == -1) {
@@ -1075,7 +1108,9 @@ void parser() {
 
         } else {
             Token assignment = tokens.pGet(&tokens, 2);
+            printf("parser2");
             ending_index = get_expression(2, 18);
+            printf("parser");
             if (ending_index == -1) {
                 error(84);
                 return;
@@ -1084,8 +1119,7 @@ void parser() {
                 error(85);
                 return;
             }
-
-            ending_index++;
+            ending_index++;  
         }
         if (is_ok_ending(ending_index) != 1) {
             error(86);

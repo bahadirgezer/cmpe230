@@ -570,6 +570,23 @@ int is_single_right_brace(char ch[]) {
 }
 
 /*
+    Checks if a character array is made up of a single left brace, this function is used in get_expression(). 
+    @returns 
+    1 if ch[] is a single left brace
+    0 if ch[] is not a single left brace
+    @param char[] ch character array to check 
+*/
+int is_single_left_brace(char ch[]) {
+    if (is_single_character(ch) != 1) {
+        return 0;
+    }
+    if (is_left_brace(ch[0]) != 1) {
+        return 0;
+    }
+    return 1;
+}
+
+/*
     Checks if a character array is made up of a single comma, this function is used in get_expression(). 
     @returns 
     1 if ch[] is a single comma

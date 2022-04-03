@@ -11,4 +11,4 @@ s = sqrt(s)*A*xy2
 c = A*b
 print(s)
 #xy2 = xy2[x[xy2[1]]]
-#xy2 = xy2[1]
+s = xy2[1]
