@@ -21,3 +21,4 @@ int expression(Vector *tokens, int start_index, int end_index, int expected_type
 Token infix_to_postfix(Vector *subtokens, int start, int end);
 int parse_vector_matrix_initialization(int start_index, Token *expected_type);
 void assign_type(Token *variable, int index);
+void output_generator(FILE *out);
