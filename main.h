@@ -23,3 +23,4 @@ int parse_vector_matrix_initialization(int start_index, Token *expected_type);
 void assign_type(Token *variable, int index);
 void output_generator(FILE *out);
 void tokens_status();
+Token expression_type(Vector *tokens, int start_index, int end_index);

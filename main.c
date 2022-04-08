@@ -21,6 +21,7 @@ int extra_curly;
     *   Must check redeclerationx
     *   print(id[index])
     *   check functions (error code 84)
+    *   
 */
 
 /*
@@ -47,7 +48,6 @@ expression(Vector subTokens) {
 	evaluatePostfix(postfixSubTokens) 
 }
 */
-
 
 /*
     Tokenizes expressions. Takes a single line from the .mat file, returns a vector of tokens.
@@ -387,46 +387,35 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
         } else if (is_function_keyword(token.value) == 1) {
             tokens.p_update_type(&tokens, index, 3);
             token.type = 3;
+            int keyword_index = index;
 
             if (strcmp(token.value, "choose") == 0) {
-                printf("choose index, delimiter 1: %d, %d\n", index, delimiter_type);
                 index++;
                 Token left_paranthesis = tokens.pGet(&tokens, index);
                 if (is_single_character(left_paranthesis.value) != 1) {
-                    printf("1\n");
                     return -1;
                 }
                 if (is_left_paranthesis(left_paranthesis.value[0]) != 1 || left_paranthesis.isOk != 1) {
-                    printf("2\n");
                     return -1;
                 }
                 tokens.p_update_type(&tokens, index, 5);
                 left_paranthesis.type = 5;
 
                 int expr_start_index_1 = index + 1;
-                printf("startindex: %d\n", expr_start_index_1);
                 int expr_end_index_1 = get_expression(expr_start_index_1, 15); // COMMA DELIMITER
-                printf("endindex: %d\n", expr_end_index_1);
                 if (expr_end_index_1 == -1) {
-                    printf("3\n");
                     return -1;
                 }
-                printf("out of get_expression\n");
                 if (expression(&tokens, expr_start_index_1, expr_end_index_1, 19) != 1) {
-                    printf("4\n");
                     return -1;
                 }
-                printf("choose index, delimiter 2: %d, %d\n", index, delimiter_type);
-
                 
                 index = expr_end_index_1 + 1;
                 Token comma_1 = tokens.pGet(&tokens, index);
                 if (is_single_character(comma_1.value) != 1) {
-                    printf("5\n");
                     return -1;
                 }
                 if (is_comma(comma_1.value[0]) != 1 || comma_1.isOk != 1) {
-                    printf("6\n");
                     return -1;
                 }
                 tokens.p_update_type(&tokens, index, 15);
@@ -435,25 +424,18 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 int expr_start_index_2 = index + 1;
                 int expr_end_index_2 = get_expression(expr_start_index_2, 15); // COMMA DELIMITER
                 if (expr_end_index_2 == -1) {
-                    printf("7\n");
                     return -1;
                 }
                 if (expression(&tokens, expr_start_index_2, expr_end_index_2, 19) != 1) {
-                    printf("8\n");
                     return -1;
                 }
-
-                printf("choose index, delimiter 3: %d, %d\n", index, delimiter_type);
-
 
                 index = expr_end_index_2 + 1;
                 Token comma_2 = tokens.pGet(&tokens, index);
                 if (is_single_character(comma_2.value) != 1) {
-                    printf("9\n");
                     return -1;
                 }
                 if (is_comma(comma_2.value[0]) != 1 || comma_2.isOk != 1) {
-                    printf("10\n");
                     return -1;
                 }
                 tokens.p_update_type(&tokens, index, 15);
@@ -462,25 +444,18 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 int expr_start_index_3 = index + 1;
                 int expr_end_index_3 = get_expression(expr_start_index_3, 15); //COMMA DELIMITER
                 if (expr_end_index_3 == -1) {
-                    printf("11\n");
                     return -1;
                 }
                 if (expression(&tokens, expr_start_index_3, expr_end_index_3, 19) != 1) {
-                    printf("12\n");
                     return -1;
                 }
-
-                printf("choose index, delimiter 4: %d, %d\n", index, delimiter_type);
-
 
                 index = expr_end_index_3 + 1;
                 Token comma_3 = tokens.pGet(&tokens, index);
                 if (is_single_character(comma_3.value) != 1) {
-                    printf("13\n");
                     return -1;
                 }
                 if (is_comma(comma_3.value[0]) != 1 || comma_3.isOk != 1) {
-                    printf("14\n");
                     return -1;
                 }
                 tokens.p_update_type(&tokens, index, 15);
@@ -489,29 +464,25 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 int expr_start_index_4 = index + 1;
                 int expr_end_index_4 = get_expression(expr_start_index_4, 6);
                 if (expr_end_index_4 == -1) {
-                    printf("15\n");
                     return -1;
                 }
                 if (expression(&tokens, expr_start_index_4, expr_end_index_4, 19) != 1) {
-                    printf("16\n");
                     return -1;
                 }
-
-                printf("choose index, delimiter 5: %d, %d\n", index, delimiter_type);
 
                 index = expr_end_index_4 + 1;
                 Token right_paranthesis = tokens.pGet(&tokens, index);
                 if (is_single_character(right_paranthesis.value) != 1) {
-                    printf("17\n");
                     return -1;
                 }
                 if (is_right_paranthesis(right_paranthesis.value[0]) != 1 || right_paranthesis.isOk != 1) {
-                    printf("18\n");
                     return -1;
                 }
                 tokens.p_update_type(&tokens, index, 6);
                 right_paranthesis.type = 6;
-                printf("choose index, delimiter 6: %d, %d\n", index, delimiter_type);
+
+                tokens.p_update_type(&tokens, keyword_index, 27);
+                token.type = 27;
 
             } else if (strcmp(token.value, "sqrt") == 0) {
                 index++;
@@ -545,6 +516,9 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 tokens.p_update_type(&tokens, index, 6);
                 right_paranthesis.type = 6;
 
+                tokens.p_update_type(&tokens, keyword_index, 27);
+                token.type = 27;
+
             } else if (strcmp(token.value, "tr") == 0) {
                 index++;
                 Token left_paranthesis = tokens.pGet(&tokens, index);
@@ -562,10 +536,16 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 if (expr_end_index == -1) {
                     return -1;
                 }
-                if (expression(&tokens, index, expr_end_index, 19) != 1 && expression(&tokens, index, expr_end_index, 20) != 1 && expression(&tokens, index, expr_end_index, 21) != 1) {
-                    return -1;
+                Token result = expression_type(&tokens, index, expr_end_index);
+
+                if (result.type == 19) {
+
+                } else if (result.type == 20) {
+                    
+                } else if (result.type == 21) {
+
                 }
-                
+
                 index = expr_end_index + 1;
                 Token right_paranthesis = tokens.pGet(&tokens, index);
                 if (is_single_character(right_paranthesis.value) != 1) {
@@ -1974,16 +1954,13 @@ int expression(Vector *tokens, int start_index, int end_index, int expected_type
     if (expr.isOk == 0){
         return 0;
     } else {
-        if (expr.type == expected_type){
+        if (expr.type == expected_type) {
             return 1;
-        }
-        else{
+        } else {
             return 0;
         }
     }
 }
-
-
 
 /*
 returns the pseudo-token needed for the expression function
@@ -1998,43 +1975,11 @@ Token infix_to_postfix(Vector *subtokens, int start, int end) {
     int i = start;
     int flag = 1;
     int leftbrace_num = 0;
-    //int leftbrace_flag = 0;
     int inside_function = 0;
     int function_paranthesis = 0;
+
     while(i <= end) {
         Token next_token = subtokens->pGet(subtokens, i);
-        /*
-        if (next_token.type == 3) {
-            if (strcmp(next_token.value, "sqrt") == 0) {
-                int paranthesis_count = 0;
-                //next_token.type = 19;
-                //tokens.p_update_type(&tokens, i, 19);
-
-                while(1) {
-                    i++;
-                    Token next_function_token = subtokens->pGet(subtokens, i);
-
-                    if (next_function_token.type == 5) {
-                        paranthesis_count++;
-                    }
-                    if (next_function_token.type == 6) {
-                        if (paranthesis_count == 0) {
-                            i++;
-                            break;
-                        }
-                        paranthesis_count--;
-                    }
-                }
-            } else if (strcmp(next_token.value, "choose") == 0) {
-
-            } else if (strcmp(next_token.value, "tr") == 0) {
-
-            }
-        }
-        */
-
-
-
         if (next_token.type == 7) {
             leftbrace_num++;
             i++;
@@ -2043,6 +1988,7 @@ Token infix_to_postfix(Vector *subtokens, int start, int end) {
         if (next_token.type == 8) {
             leftbrace_num--;
             i++;
+            continue;
         }
         if (leftbrace_num > 0) {
             i++;
@@ -2068,33 +2014,13 @@ Token infix_to_postfix(Vector *subtokens, int start, int end) {
                 }
             }
         }
-        if (next_token.type == 3) {
+        if (next_token.type == 3 || next_token.type == 27 || next_token.type == 28) {
             inside_function = 1;
             i++;
             continue;
         }
 
-        /*
-        if (leftbrace_flag == 1) {
-            if (next_token.type != 7 || next_token.type != 8) {
-                i++;
-                continue;
-            }
-        }
-        if (next_token.type == 7) {
-            if (leftbrace_flag == 0){
-                leftbrace_flag = 1;
-            }
-            leftbrace_num++;
-            continue;
-        }
-        if (next_token.type == 8) {
-            leftbrace_num--;
-            continue;
-        }
-        */
-
-        if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21) { // if the next token is an operand
+        if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21 || next_token.type == 25 || next_token.type == 26 || next_token.type == 27 || next_token.type == 28 ) { // if the next token is an operand
             postfix_vector.pAdd(&postfix_vector, next_token);
         } else if (next_token.type == 5) { // if the next token is a left paranthesis
             postfix_stack.pPush(&postfix_stack,next_token);
@@ -2141,7 +2067,6 @@ Token infix_to_postfix(Vector *subtokens, int start, int end) {
         i++;
     }
     
-    
     if (postfix_stack.pIsEmpty(&postfix_stack) == 0) {      // if the postfix_stack is not empty
         while (postfix_stack.pIsEmpty(&postfix_stack) != 1) {
             if (postfix_stack.pPeek(&postfix_stack).type != 5) {        // if the top of the stack is not a left paranthesis
@@ -2180,7 +2105,7 @@ Token evaluate_postfix(Vector *postfix) {
 
     while(i < postfix->pSize(postfix)){
         Token next_token = postfix->pGet(postfix, i);
-        if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21) { // if the next token is an operand
+        if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21 || next_token.type == 25 || next_token.type == 26 || next_token.type == 27 || next_token.type == 28 ) { // if the next token is an operand
             evaluation_stack.pPush(&evaluation_stack,next_token);
         } else if (next_token.type == 12 || next_token.type == 13 || next_token.type == 14) { // if the next token is an operator
             if (evaluation_stack.pSize(&evaluation_stack) >= 2) {
@@ -2209,7 +2134,6 @@ Token evaluate_postfix(Vector *postfix) {
         i++;
     }
 
-
     if (evaluation_stack.pSize(&evaluation_stack) != 1) {
         error(105);
         last_result.isOk = 0;
@@ -2235,127 +2159,141 @@ Token type_check(Token op1, Token op2, Token operator) {
    Token result_token;
 
    if (operator.type == 12) { // if the operator is *
-       if (op1.type == 18) { // if op1 is scalar
-            if (op2.type == 18) { // if op2 is scalar
+       if (op1.type == 19 || op1.type == 25 || op1.type == 26 || op1.type == 27) { // if op1 is scalar
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
                 // the resulting token is a scalar
-                result_token.type = 18;
-                result_token.isOk = 1;
-                return result_token;
-            } else if (op2.type == 19) { // if op2 is vector
                 result_token.type = 19;
                 result_token.isOk = 1;
                 return result_token;
-            } else if (op2.type == 20) { // if op2 is matrix
+            } else if (op2.type == 20) { // if op2 is vector
                 result_token.type = 20;
                 result_token.isOk = 1;
+                result_token.vector = op2.vector;
+                return result_token;
+            } else if (op2.type == 21 || op2.type == 28) { // if op2 is matrix
+                result_token.type = 21;
+                result_token.isOk = 1;
+                result_token.matrix_i = op2.matrix_i;
+                result_token.matrix_j = op2.matrix_j; 
                 return result_token;
             }
-        } else if (op1.type == 19) { // if op1 is vector
-            if (op2.type == 18) { // if op2 is scalar
-                if (op1.vector == 1) {
-                    result_token.type = 18;
-                    result_token.isOk = 1;
-                    return result_token;
-                } else {
-                    result_token.isOk = 0;
-                    return result_token;
-                }
-           } else if (op2.type == 19) { // if op2 is vector
+        } else if (op1.type == 20) { // if op1 is vector
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
+                result_token.type = 20;
+                result_token.isOk = 1;
+                result_token.vector = op1.vector;
+                return result_token;
+           } else if (op2.type == 20) { // if op2 is vector
                 if (op2.vector == 1) {
-                    result_token.type = 19;
-                    result_token.isOk = 1;
-                    return result_token;
-                } else {
-                    result_token.isOk = 0;
-                    return result_token;
-                }
-            } else if (op2.type == 20) { // if op2 is matrix
-                if(op2.matrix_i == 1) {
                     result_token.type = 20;
                     result_token.isOk = 1;
+                    result_token.vector = op1.vector;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            } else if (op2.type == 21 || op2.type == 28) { // if op2 is matrix
+                if(op2.matrix_i == 1) {
+                    result_token.type = 21;
+                    result_token.isOk = 1;
+                    result_token.matrix_i = op1.vector;
+                    result_token.matrix_j = op2.matrix_j;
                     return result_token;
                 } else {
                     result_token.isOk = 0;
                     return result_token;
                 }
             }
-        } else if (op1.type == 20) { // if op1 is a matrix
-            if (op2.type == 18) { // if op2 is scalar
-                if (op1.matrix_i == 1 && op1.matrix_j == 1) {
-                    result_token.type = 18;
-                    result_token.isOk = 1;
-                    return result_token;
-                }
-            } else if (op2.type == 19){ // if op2 is vector
+        } else if (op1.type == 21 || op1.type == 28) { // if op1 is a matrix
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
+                result_token.type = 21;
+                result_token.isOk = 1;
+                result_token.matrix_i = op1.matrix_i;
+                result_token.matrix_j = op1.matrix_j;
+                return result_token;
+            } else if (op2.type == 20){ // if op2 is vector
                 if (op1.matrix_j == op2.vector) {
-                    result_token.type = 19;
+                    result_token.type = 20;
                     result_token.isOk = 1;
+                    result_token.vector  = op1.matrix_i;
                     return result_token;
                 } else {
                     result_token.isOk = 0;
                     return result_token;
                 }
-            } else if (op2.type == 20) { // if op2 is matrix
+            } else if (op2.type == 21 || op2.type == 28) { // if op2 is matrix
                 if (op1.matrix_j == op2.matrix_i) {
-                    result_token.type = 20;
-                    result_token.isOk =1;
+                    result_token.type = 21;
+                    result_token.isOk = 1;
+                    result_token.matrix_i = op1.matrix_i;
+                    result_token.matrix_j = op2.matrix_j;
+                    return result_token;
+                }
+                else {
+                    result_token.isOk = 0;
                     return result_token;
                 }
             }
         }
    } if (operator.type == 13 || operator.type == 14) { // if the operator is + or - 
-       if (op1.type == 18) { // if op1 is scalar
-            if (op2.type == 18) { // if op2 is scalar
-                result_token.type = 18;
+       if (op1.type == 19 || op1.type == 25 || op1.type == 26 || op1.type == 27) { // if op1 is scalar
+            if (op2.type == 19) { // if op2 is scalar
+                result_token.type = 19;
                 result_token.isOk = 1;
                 return result_token;
-           } else if (op2.type == 19) { // if op2 is vector
+           } else if (op2.type == 20) { // if op2 is vector
                 result_token.isOk = 0;
                 return result_token;
-           } else if (op2.type == 20) { // if op2 is matrix
+           } else if (op2.type == 21 || op2.type == 28) { // if op2 is matrix
                 result_token.isOk = 0;
                 return result_token;
            }
-       } else if (op1.type == 19) {  // if op1 is vector
-            if (op2.type == 18) { // if op2 is scalar
+       } else if (op1.type == 20) {  // if op1 is vector
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
                 result_token.isOk = 0;
                 return result_token;
-            } else if (op2.type == 19) { // if op2 is vector
+            } else if (op2.type == 20) { // if op2 is vector
                 if (op1.vector == op2.vector) {
-                    result_token.type = 19;
-                    result_token.isOk = 1;
-                    return result_token;
-                } else {
-                    result_token.isOk = 0;
-                    return result_token;
-                }
-           } else if (op2.type == 20) { // if op2 is matrix
-                if (op1.vector == op2.matrix_i && op2.matrix_j == 1) {
-                    result_token.type = 19;
-                    result_token.isOk  = 1;
-                    return result_token;
-                } else {
-                    result_token.isOk = 0;
-                    return result_token;
-                }
-           }
-        } else if (op1.type == 20) { // if op1 is a matrix
-            if (op2.type == 18) { // if op2 is scalar
-                result_token.isOk = 0;
-                return result_token;
-            } else if (op2.type == 19) { // if op2 is vector
-                if (op1.matrix_i == op2.vector && op1.matrix_j == 1) {
-                    result_token.type = 19;
-                    result_token.isOk = 1;
-                    return result_token;
-                } else {
-                    result_token.isOk = 0;
-                    return result_token;
-                }
-            } else if (op2.type == 20) { // if op3 is matrix
-                if (op1.matrix_i == op2.matrix_i && op1.matrix_j == op2.matrix_j) {
                     result_token.type = 20;
                     result_token.isOk = 1;
+                    result_token.vector = op1.vector;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           } else if (op2.type == 21 || op2.type == 28) { // if op2 is matrix
+                if (op1.vector == op2.matrix_i && op2.matrix_j == 1) {
+                    result_token.type = 20;
+                    result_token.isOk  = 1;
+                    result_token.vector = op1.vector;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+           }
+        } else if (op1.type == 21 || op1.type == 28) { // if op1 is a matrix
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
+                result_token.isOk = 0;
+                return result_token;
+            } else if (op2.type == 20) { // if op2 is vector
+                if (op1.matrix_i == op2.vector && op1.matrix_j == 1) {
+                    result_token.type = 20;
+                    result_token.isOk = 1;
+                    result_token.vector = op2.vector;
+                    return result_token;
+                } else {
+                    result_token.isOk = 0;
+                    return result_token;
+                }
+            } else if (op2.type == 21) { // if op3 is matrix
+                if (op1.matrix_i == op2.matrix_i && op1.matrix_j == op2.matrix_j) {
+                    result_token.type = 21;
+                    result_token.isOk = 1;
+                    result_token.matrix_i = op1.matrix_i;
+                    result_token.matrix_j = op1.matrix_j;
                     return result_token;
                 } else {
                     result_token.isOk = 0;

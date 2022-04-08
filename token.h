@@ -38,4 +38,11 @@ typedef struct Token Token;
     22 -> for variable
     23 -> print function keyword(print, printsep)
     24 -> in keyword
+    25 -> indexed matrix
+    26 -> indexed vector
+    27 -> scalar function keyword //choose sqrt tr
+    28 -> matrix function keyword //tr
+
+    Token  expression_type(Vector *tokens, int start_index, int end_index);
+    int expression(Vector *tokens, int start_index, int end_index, int expected_type);
 */

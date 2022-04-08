@@ -15,9 +15,9 @@ void create_matrix(Matrix *m, int i, int j)
     m->matrix_i = i;
     m->matrix_j = j;
     m->arr = (float **)malloc(i * sizeof(float *));
-    for (int i = 0; i < i; i++)
+    for (int a = 0; a < i; a++)
     {
-        m->arr[i] = (float *)malloc(j * sizeof(float));
+        m->arr[a] = (float *)malloc(j * sizeof(float));
     }
     for (int k; k < i; k++)
     {
@@ -85,6 +85,22 @@ Matrix transpose(Matrix *m)
         }
     }
     return transpose;
+}
+
+float get_vector_elem(Matrix *m, int i) {
+    return m->arr[i-1][0];
+}
+
+float get_matrix_elem(Matrix *m, int i, int j) {
+    return m->arr[i-1][j-1];
+}
+
+void print_matrix(Matrix *m){
+    for (int i = 0; i < m->matrix_i; i++) { 
+        for (int j = 0; j < m->matrix_j; j++) {
+            printf("%f\n", m->arr[i][j]);
+        }
+    }
 }
 
 float choose(float exp1, float exp2, float exp3, float exp4){
