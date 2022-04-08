@@ -24,3 +24,5 @@ void assign_type(Token *variable, int index);
 void output_generator(FILE *out);
 void tokens_status();
 Token expression_type(Vector *tokens, int start_index, int end_index);
+void initialize_for_loop_variable(char name[]);
+void remove_for_variables();

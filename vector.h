@@ -24,6 +24,7 @@ struct Vector{
     void (*p_free)(Vector *);
     void (*p_update_vector)(Vector *, int index, int vector_size);
     void (*p_update_matrix)(Vector *, int index, int matrix_i, int matrix_j);
+    void (*p_update_isok) (Vector *, int index, int isOk);
 };
 
 /*
@@ -100,6 +101,12 @@ void update_matrix_i_j(Vector *vector, int index, int matrix_i, int matrix_j) {
     }
 }
 
+void update_isok(Vector *vector, int index, int isOk) {
+    if (index < vector->attributes.currentSize){
+        vector->attributes.array[index].isOk = isOk;
+    }
+}
+
 void freeVector(Vector *vector){
     free(vector->attributes.array);
 }
@@ -128,6 +135,7 @@ void CreateVector(Vector *vector) {
     vector->p_update_type = updateType;
     vector->p_update_vector = update_vector;
     vector->p_update_matrix = update_matrix_i_j;
+    vector->p_update_isok = update_isok;
     vector->p_free = freeVector;
     vector->attributes.currentSize = 0;
     vector->attributes.capacity = DEFAULT_CAPACITY;

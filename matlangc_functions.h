@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 typedef struct Matrix Matrix;
 
@@ -113,4 +114,29 @@ float choose(float exp1, float exp2, float exp3, float exp4){
     else if(exp1 < 0){
         return exp4;
     }
+}
+
+/*
+    @returns 1 if num is an integer equivalent
+    0 if it's not 
+*/
+int is_integer(float num) {
+    double e = 0.000001;
+    double rounded = round(num);
+    double diff = fabs(rounded - (double) num);
+    if (diff <= e) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+/*
+    Must be used with is_integer.
+    @returns the integer equivalent of the float num. 
+*/
+int get_integer(float num) {
+    double rounded = round(num);
+    int rounded_int = (int) rounded;
+    return rounded_int;
 }
