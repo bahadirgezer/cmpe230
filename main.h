@@ -22,3 +22,4 @@ Token infix_to_postfix(Vector *subtokens, int start, int end);
 int parse_vector_matrix_initialization(int start_index, Token *expected_type);
 void assign_type(Token *variable, int index);
 void output_generator(FILE *out);
+void tokens_status();
