@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 typedef struct Matrix Matrix;
 
@@ -16,10 +17,10 @@ void create_matrix(Matrix *m, int i, int j)
 {
     m->matrix_i = i;
     m->matrix_j = j;
-    m->arr = (float **)malloc(i * sizeof(float *));
+    m->arr = (float **)calloc(i, sizeof(float *));
     for (int a = 0; a < i; a++)
     {
-        m->arr[a] = (float *)malloc(j * sizeof(float));
+        m->arr[a] = (float *)calloc(j, sizeof(float));
     }
     for (int k; k < i; k++)
     {
@@ -36,6 +37,13 @@ void assign_matrix(Matrix m1, Matrix m2) {
             m1.arr[i][j] = m2.arr[i][j];
         }
     }
+}
+
+void assign_matrix_index(Matrix m, int i, int j, float val) {
+    m.arr[i][j] = val;
+}
+void assign_vector_index(Matrix m, int i, float val) {
+    m.arr[i][0] = val;
 }
 
 Matrix multiply(Matrix m1, Matrix m2)
@@ -136,4 +144,5 @@ float choose(float exp1, float exp2, float exp3, float exp4){
     else if(exp1 < 0){
         return exp4;
     }
+    return 0;
 }

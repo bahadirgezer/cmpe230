@@ -882,7 +882,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                     if (expr_end_index == -1) {
                         return -1;
                     }
-                    if (expression(&tokens, index, expr_end_index, 19) != 1) {
+                    if (expression(&tokens, index, expr_end_index, 19) != 1 && expression(&tokens, index, expr_end_index, 25) != 1 && expression(&tokens, index, expr_end_index, 26) != 1 && expression(&tokens, index, expr_end_index, 27) != 1) {
                         return -1;
                     }   
                     
@@ -916,7 +916,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                     if (expr_end_index_1 == -1) {
                         return -1;
                     }
-                    if (expression(&tokens, index, expr_end_index_1, 19) != 1) {
+                    if (expression(&tokens, index, expr_end_index_1, 19) != 1 && expression(&tokens, index, expr_end_index_1, 25) != 1 && expression(&tokens, index, expr_end_index_1, 26) != 1 && expression(&tokens, index, expr_end_index_1, 27) != 1) {
                         return -1;
                     }
                
@@ -963,6 +963,9 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
             int keyword_index = index;
 
             if (strcmp(token.value, "choose") == 0) {
+                tokens.p_update_type(&tokens, keyword_index, 27);
+                token.type = 27;
+
                 index++;
                 Token left_paranthesis = tokens.pGet(&tokens, index);
                 if (is_single_character(left_paranthesis.value) != 1) {
@@ -979,7 +982,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 if (expr_end_index_1 == -1) {
                     return -1;
                 }
-                if (expression(&tokens, expr_start_index_1, expr_end_index_1, 19) != 1) {
+                if (expression(&tokens, expr_start_index_1, expr_end_index_1, 19) != 1 && expression(&tokens, expr_start_index_1, expr_end_index_1, 25) != 1 && expression(&tokens, expr_start_index_1, expr_end_index_1, 26) != 1 && expression(&tokens, expr_start_index_1, expr_end_index_1, 27) != 1) {
                     return -1;
                 }
                 
@@ -999,7 +1002,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 if (expr_end_index_2 == -1) {
                     return -1;
                 }
-                if (expression(&tokens, expr_start_index_2, expr_end_index_2, 19) != 1) {
+                if (expression(&tokens, expr_start_index_2, expr_end_index_2, 19) != 1 && expression(&tokens, expr_start_index_2, expr_end_index_2, 25) != 1 && expression(&tokens, expr_start_index_2, expr_end_index_2, 26) != 1 && expression(&tokens, expr_start_index_2, expr_end_index_2, 27) != 1) {
                     return -1;
                 }
 
@@ -1019,7 +1022,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 if (expr_end_index_3 == -1) {
                     return -1;
                 }
-                if (expression(&tokens, expr_start_index_3, expr_end_index_3, 19) != 1) {
+                if (expression(&tokens, expr_start_index_3, expr_end_index_3, 19) != 1 && expression(&tokens, expr_start_index_3, expr_end_index_3, 25) != 1 && expression(&tokens, expr_start_index_3, expr_end_index_3, 26) != 1 && expression(&tokens, expr_start_index_3, expr_end_index_3, 27) != 1) {
                     return -1;
                 }
 
@@ -1039,7 +1042,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 if (expr_end_index_4 == -1) {
                     return -1;
                 }
-                if (expression(&tokens, expr_start_index_4, expr_end_index_4, 19) != 1) {
+                if (expression(&tokens, expr_start_index_4, expr_end_index_4, 19) != 1 && expression(&tokens, expr_start_index_4, expr_end_index_4, 25) != 1 && expression(&tokens, expr_start_index_4, expr_end_index_4, 26) != 1 && expression(&tokens, expr_start_index_4, expr_end_index_4, 27) != 1) {
                     return -1;
                 }
 
@@ -1054,10 +1057,10 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 tokens.p_update_type(&tokens, index, 6);
                 right_paranthesis.type = 6;
 
+            } else if (strcmp(token.value, "sqrt") == 0) {
                 tokens.p_update_type(&tokens, keyword_index, 27);
                 token.type = 27;
 
-            } else if (strcmp(token.value, "sqrt") == 0) {
                 index++;
                 Token left_paranthesis = tokens.pGet(&tokens, index);
                 if (is_single_character(left_paranthesis.value) != 1) {
@@ -1072,9 +1075,11 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 index++;
                 int expr_end_index = get_expression(index, 6);
                 if (expr_end_index == -1) {
+                    printf("in1\n");
                     return -1;
                 }
-                if (expression(&tokens, index, expr_end_index, 19) != 1) {
+                if (expression(&tokens, index, expr_end_index, 19) != 1 && expression(&tokens, index, expr_end_index, 25) != 1 && expression(&tokens, index, expr_end_index, 26) != 1 && expression(&tokens, index, expr_end_index, 27) != 1) {
+                    printf("in2\n");
                     return -1;
                 }
                 
@@ -1089,8 +1094,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                 tokens.p_update_type(&tokens, index, 6);
                 right_paranthesis.type = 6;
 
-                tokens.p_update_type(&tokens, keyword_index, 27);
-                token.type = 27;
+
 
             } else if (strcmp(token.value, "tr") == 0) {
                 index++;
@@ -1464,7 +1468,7 @@ void parser() {
                 error(38);
                 return;
             }
-            if (expression(&tokens, 4, expr_end_1, 19) != 1) {
+            if (expression(&tokens, 4, expr_end_1, 19) != 1 && expression(&tokens, 4, expr_end_1, 25) != 1 && expression(&tokens, 4, expr_end_1, 26) != 1 && expression(&tokens, 4, expr_end_1, 27) != 1) {
                 error(39);
                 return;
             }
@@ -1485,7 +1489,7 @@ void parser() {
                 error(42);
                 return;
             }
-            if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1) {
+            if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1 && expression(&tokens, expr_end_1 + 2, expr_end_2, 25) != 1 && expression(&tokens, expr_end_1 + 2, expr_end_2, 26) != 1 && expression(&tokens, expr_end_1 + 2, expr_end_2, 27) != 1) {
                 error(43);
                 return;
             }
@@ -1506,7 +1510,7 @@ void parser() {
                 error(46);
                 return;
             }
-            if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1) {
+            if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1 && expression(&tokens, expr_end_2 + 2, expr_end_3, 25) != 1 && expression(&tokens, expr_end_2 + 2, expr_end_3, 26) != 1 && expression(&tokens, expr_end_2 + 2, expr_end_3, 27) != 1) {
                 error(47);
                 return;
             }
@@ -1545,7 +1549,7 @@ void parser() {
                 error(52);
                 return;
             }
-            if (expression(&tokens, 6, expr_end_1, 19) != 1) {
+            if (expression(&tokens, 6, expr_end_1, 19) != 1 && expression(&tokens, 6, expr_end_1, 25) != 1 && expression(&tokens, 6, expr_end_1, 26) != 1 && expression(&tokens, 6, expr_end_1, 27) != 1) {
                 error(53);
                 return;
             }
@@ -1566,7 +1570,7 @@ void parser() {
                 error(56);
                 return;
             }
-            if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1) {
+            if (expression(&tokens, expr_end_1 + 2, expr_end_2, 19) != 1 && expression(&tokens, expr_end_1 + 2, expr_end_2, 25) != 1 && expression(&tokens, expr_end_1 + 2, expr_end_2, 26) != 1 && expression(&tokens, expr_end_1 + 2, expr_end_2, 27) != 1) {
                 error(57);
                 return;
             }
@@ -1587,7 +1591,7 @@ void parser() {
                 error(60);
                 return;
             }
-            if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1) {
+            if (expression(&tokens, expr_end_2 + 2, expr_end_3, 19) != 1 && expression(&tokens, expr_end_2 + 2, expr_end_3, 25) != 1 && expression(&tokens, expr_end_2 + 2, expr_end_3, 26) != 1 && expression(&tokens, expr_end_2 + 2, expr_end_3, 27) != 1) {
                 error(61);
                 return;
             }
@@ -1608,7 +1612,7 @@ void parser() {
                 error(64);
                 return;
             }
-            if (expression(&tokens, expr_end_3 + 2, expr_end_4, 19) != 1) {
+            if (expression(&tokens, expr_end_3 + 2, expr_end_4, 19) != 1 && expression(&tokens, expr_end_3 + 2, expr_end_4, 25) != 1 && expression(&tokens, expr_end_3 + 2, expr_end_4, 26) != 1 && expression(&tokens, expr_end_3 + 2, expr_end_4, 27) != 1) {
                 error(65);
                 return;
             }
@@ -1629,7 +1633,7 @@ void parser() {
                 error(68);
                 return;
             }
-            if (expression(&tokens, expr_end_4 + 2, expr_end_5, 19) != 1) {
+            if (expression(&tokens, expr_end_4 + 2, expr_end_5, 19) != 1 && expression(&tokens, expr_end_4 + 2, expr_end_5, 25) != 1 && expression(&tokens, expr_end_4 + 2, expr_end_5, 26) != 1 && expression(&tokens, expr_end_4 + 2, expr_end_5, 27) != 1) {
                 error(69);
                 return;
             }
@@ -1649,7 +1653,7 @@ void parser() {
                 error(72);
                 return;
             }
-            if (expression(&tokens, expr_end_5 + 2, expr_end_6, 19) != 1) {
+            if (expression(&tokens, expr_end_5 + 2, expr_end_6, 19) != 1 && expression(&tokens, expr_end_5 + 2, expr_end_6, 25) != 1 && expression(&tokens, expr_end_5 + 2, expr_end_6, 26) != 1 && expression(&tokens, expr_end_5 + 2, expr_end_6, 27) != 1) {
                 error(73);
                 return;
             }
@@ -1688,8 +1692,123 @@ void parser() {
     } else if (is_variable(token.value) == 1) { // VARIABLE PARSER (ASSIGNMENT STATEMENT)
         assign_type(&token, 0);
         token = tokens.pGet(&tokens, 0);
+        int variable_index = 0;
 
-        Token equals = tokens.pGet(&tokens, 1);
+        int index = 0;
+        Token left_brace_check = tokens.pGet(&tokens, index + 1);
+        if (is_single_left_brace(left_brace_check.value) == 1) {                
+            if (token.type == 20) {
+                index++;
+                Token left_brace = tokens.pGet(&tokens, index);
+                if (is_single_character(left_brace.value) != 1) {
+                    error(150);
+                    return;
+                }
+                if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                    error(151);
+                    return;
+                }
+                tokens.p_update_type(&tokens, index, 7);
+                left_brace.type = 7;
+
+                index++;
+                int expr_end_index = get_expression(index, 8); // RIGHT BRACE DELIMITER
+                if (expr_end_index == -1) {
+                    error(152);
+                    return;
+                }
+                if (expression(&tokens, index, expr_end_index, 19) != 1 && expression(&tokens, index, expr_end_index, 26) != 1 && expression(&tokens, index, expr_end_index, 25) != 1 && expression(&tokens, index, expr_end_index, 27) != 1) {
+                    error(153);
+                    return;
+                }   
+                
+                Token right_brace = tokens.pGet(&tokens, expr_end_index + 1);
+                if (is_single_character(right_brace.value) != 1) {
+                    error(154);
+                    return;
+                }
+                if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                    error(155);
+                    return;
+                }
+                tokens.p_update_type(&tokens, expr_end_index + 1, 8);
+                right_brace.type = 8;
+
+                index = expr_end_index + 1; //check index // CHECK INDEXXXXX
+                tokens.p_update_type(&tokens, variable_index, 26);
+                token = tokens.pGet(&tokens, variable_index);
+
+            } else if (token.type == 21) {
+                index++;
+                Token left_brace = tokens.pGet(&tokens, index);
+                if (is_single_character(left_brace.value) != 1) {
+                    error(156);
+                    return;
+                }
+                if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                    error(157);
+                    return;
+                }
+                tokens.p_update_type(&tokens, index, 7);
+                left_brace.type = 7;
+
+                index++;
+                int expr_end_index_1 = get_expression(index, 15); //                                                              COMMA COMMA COMMA DELIMITER
+                if (expr_end_index_1 == -1) {
+                    error(158);
+                    return;
+                }
+                //if (expression(&tokens, index, expr_end_index_1, 19) != 1) 
+                if (expression(&tokens, index, expr_end_index_1, 19) != 1 && expression(&tokens, index, expr_end_index_1, 25) != 1 && expression(&tokens, index, expr_end_index_1, 26) != 1 && expression(&tokens, index, expr_end_index_1, 27) != 1) {
+                    error(159);
+                    return;
+                }
+            
+                Token comma = tokens.pGet(&tokens, expr_end_index_1 + 1);
+                if (is_single_character(comma.value) != 1) {
+                    error(160);
+                    return;
+                }
+                if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
+                    error(170);
+                    return;
+                }
+                tokens.p_update_type(&tokens, expr_end_index_1 + 1, 15);                       //CURRENTLY SENDING RIGHT AND LEFT SQUARE BRACES TO EXPRESSION
+                comma.type = 15;
+
+                int expr_end_index_2 = get_expression(expr_end_index_1 + 2, 8); //                                                              COMMA COMMA COMMA DELIMITER
+                if (expr_end_index_2 == -1) {
+                    error(171);
+                    return;
+                }
+                if (expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 19) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 25) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 26) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 27) != 1) {
+                    error(172);
+                    return;
+                }
+                Token right_brace = tokens.pGet(&tokens, expr_end_index_2 + 1);
+                if (is_single_character(right_brace.value) != 1) {
+                    error(173);
+                    return;
+                }
+                if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                    error(174);
+                    return;
+                }
+                tokens.p_update_type(&tokens, expr_end_index_2 + 1, 8);
+                right_brace.type = 8;
+
+                index = expr_end_index_2 + 1; // CHECK INDEX
+                tokens.p_update_type(&tokens, variable_index, 25);
+                token = tokens.pGet(&tokens, variable_index);
+
+
+            } else {
+                error(175);
+                return;
+            }
+        }
+
+        Token equals = tokens.pGet(&tokens, index + 1);
         if (is_single_character(equals.value) != 1) {
             error(79);
             return;
@@ -1698,18 +1817,20 @@ void parser() {
             error(80);
             return;
         }
-        tokens.p_update_type(&tokens, 1, 11);
+        tokens.p_update_type(&tokens, index + 1, 11);
 
+        index = index + 2;
         int ending_index;
-        Token left_curly_brace = tokens.pGet(&tokens, 2);
+
+        Token left_curly_brace = tokens.pGet(&tokens, index);
         if (is_single_left_curly_brace(left_curly_brace.value) == 1) {
-            tokens.p_update_type(&tokens, 2, 9);
+            tokens.p_update_type(&tokens, index, 9);
             if (token.type != 20 && token.type != 21) {
                 error(106);
                 return;
             }
 
-            int right_curly_brace_index = parse_vector_matrix_initialization(3, &token); // should give expected type
+            int right_curly_brace_index = parse_vector_matrix_initialization(index + 1, &token); // should give expected type
             if (right_curly_brace_index == -1) {
                 error(81);
                 return;
@@ -1728,33 +1849,99 @@ void parser() {
             ending_index = right_curly_brace_index + 1;
 
         } else {
-            int expr_end_index = get_expression(2, 18);
+            printf("without left brace without right curly index: %d\n", index);
+            int expr_end_index = get_expression(index, 18);
             if (expr_end_index == -1) {
                 error(124);
                 return;
             }
-            Token result = expression_type(&tokens, 2, expr_end_index); //checks type manually
+            Token result = expression_type(&tokens, index, expr_end_index); //checks type manually
+            printf("result token: %d %d\n", result.type, token.type);
+
+            if (token.type == 19) {
+                if (!(result.type == 19 || result.type == 25 || result.type == 26 || result.type == 27)) {
+                    error(180);
+                    return;
+                }
+            } else if (token.type == 20) {
+                if (!(result.type == 20)) {
+                    if (!(result.type == 21 || result.type == 28)) {
+                        error(181);
+                        return;
+                    }
+                    if (result.matrix_j != 1) {
+                        error(182);
+                        return;
+                    }
+                } else {
+                    if (result.vector != token.vector) {
+                        error(183);
+                        return;
+                    }
+                }
+            } else if (token.type == 21) {
+                if (!(result.type == 21 || result.type == 28)) {
+                    if (result.type == 20) {
+                        if (result.vector != token.matrix_i || token.matrix_j != 1) {
+                            error(186);
+                            return;
+                        }
+                    } else {
+                        error(184); 
+                        return;
+                    }
+                } else {
+                    if (result.matrix_i != token.matrix_i || result.matrix_j != token.matrix_j) {
+                        error(185);
+                        return;
+                    }
+                }
+
+            } else if (token.type == 25 || token.type == 26) {
+                if (!(result.type == 19 || result.type == 25 || result.type == 26 || result.type == 27)) {
+                    error(187);
+                    return;
+                }
+            }
+
+            /*
             if (result.type != token.type) {
-                if (!((result.type == 25 && token.type == 19)||(result.type == 26 && token.type == 19)||(result.type == 27 && token.type == 19)||(result.type == 28 && token.type == 21))) {
-                    error(125);
+                if (token.type == 19 && result.type == 20) {
+                    if (result.vector != 1) {
+                        error(170);
+                        return;
+                    }
+                }
+                else if (token.type == 19 && result.type == 21) {
+                    if (result.matrix_i != 1 || result.matrix_j != 1) {
+                        error(171);
+                        return;
+                    }
+
+                }
+                else if (!((token.type == ) || (result.type == 25 && token.type == 19)||(result.type == 26 && token.type == 19)||(result.type == 27 && token.type == 19)||(result.type == 28 && token.type == 21))) {
+                    error(172);
                     return;
                 }
             }
             if (result.type == 20) {
-                if (result.vector != token.vector) { //type checking is important //must not return vector must return 21
-                    error(127);
+                if ((result.vector != token.vector) && (result.vector != 1)) { //type checking is important //must not return vector must return 21
+                    error(173);
                     return;
                 }
 
-            } else if (result.type == 21) { //vector and indexed vectors check
-                if (result.matrix_i != token.matrix_i || result.matrix_j != token.matrix_j) {
+            } else if (result.type == 21 || result.type == 28) { //vector and indexed vectors check
+                if ((result.matrix_i != token.matrix_i || result.matrix_j != token.matrix_j) && (result.matrix_i != 1 || result.matrix_j != 1)) {
                     error(128);
                     return;
                 }
             }
+            */
+
             ending_index = expr_end_index + 1;
         }
-        
+
+    
         if (is_ok_ending(ending_index) != 1) {
             error(126);
         }
@@ -1805,7 +1992,7 @@ void parser() {
                     error(109);
                     return;
                 }
-                if (expression(&tokens, 4, expr_end_index, 19) != 1 && expression(&tokens, 4, expr_end_index, 20) != 1 && expression(&tokens, 4, expr_end_index, 21) != 1) {
+                if (expression(&tokens, 4, expr_end_index, 19) != 1 && expression(&tokens, 4, expr_end_index, 20) != 1 && expression(&tokens, 4, expr_end_index, 21) != 1 && expression(&tokens, index, expr_end_index, 25) != 1 && expression(&tokens, index, expr_end_index, 26) != 1 && expression(&tokens, index, expr_end_index, 27) != 1 && expression(&tokens, index, expr_end_index, 28) != 1) {
                     error(110);
                     return;
                 }   
@@ -1843,7 +2030,7 @@ void parser() {
                     error(115);
                     return;
                 }
-                if (expression(&tokens, 4, expr_end_index_1, 19) != 1 && expression(&tokens, 4, expr_end_index_1, 20) != 1 && expression(&tokens, 4, expr_end_index_1, 21) != 1) {
+                if (expression(&tokens, 4, expr_end_index_1, 19) != 1 && expression(&tokens, 4, expr_end_index_1, 20) != 1 && expression(&tokens, 4, expr_end_index_1, 21) != 1 && expression(&tokens, index, expr_end_index_1, 25) != 1 && expression(&tokens, index, expr_end_index_1, 26) != 1 && expression(&tokens, index, expr_end_index_1, 27) != 1 && expression(&tokens, index, expr_end_index_1, 28) != 1) {
                     error(116);
                     return;
                 }
@@ -1865,7 +2052,7 @@ void parser() {
                     error(119);
                     return;
                 }
-                if (expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 19) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 20) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 21) != 1) {
+                if (expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 19) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 20) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 21) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 25) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 26) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 27) != 1 && expression(&tokens, expr_end_index_1 + 2, expr_end_index_2, 28) != 1 ) {
                     error(120);
                     return;
                 }
@@ -2191,9 +2378,8 @@ void postfix_status(Vector *postfix_vector) {
 
 
 int main(int argc, char *argv[]) {
-
     file = fopen(argv[1], "r");
-    out = fopen(argv[2],"w");
+    out = fopen("file.c","w");
     in_for_loop = 0;
     num_error = 0;
     extra_curly = 0;
@@ -2201,31 +2387,25 @@ int main(int argc, char *argv[]) {
     CreateVector(&variables);
     CreateVector(&for_variables);
 
-    
     line_number = 1;
     while(fgets(line,256,file) != NULL ) {
-        /*
-        if (num_error > 0) { //breaks when there is an error
-            break;                      // uncomment this part if you want the program to stop running after the first error
-        }
-        */
 
         tokenizer(line);
-        
-        //tokens_status();
-
-        parser();
-
+        parser(); 
         tokens_status();
-        
         output_generator(out);
-
+        tokens_status();
         line_number++;
+
+        if (num_error > 0) { //breaks when there is an error
+            fclose(file);
+            remove("file.c");
+            break;                      // uncomment this part if you want the program to stop running after the first error
+        }
     }
     fprintf(out, "\n}");
     fclose(file);
-}
-
+}  
 /*
 
 */
@@ -2506,7 +2686,7 @@ void output_generator(FILE *out) {
                 // char *var_name; 
                 // var_name = var.value;
                 if (var.type == 19){
-                    fprintf(out,"printf(\"%%d\",%s", var.value);
+                    fprintf(out,"printf(\"%%d\",%s)", var.value);
                 }
                 else if (var.type == 20 || var.type == 21) {
                     fprintf(out, "print_matrix(&%s", var.value);
@@ -2515,17 +2695,22 @@ void output_generator(FILE *out) {
                     // Token expression = expression_type_2(&tokens, i+2, expr_end_index);
                 }
                 else if (var.type == 25) {
-                    fprintf(out, "printf(\"%%d\",");
-                    int expr_end_index = get_expression_output(i+2, 8);
-                    Token expression = expression_type_2(&tokens, i+2, expr_end_index);
-                    // fprintf(out, "%s)", expression.value);
+                    fprintf(out, "printf(\"%%f\\n\",");
+                    int expr_end_index = get_expression_output(i+2, 6);
+                    Token expression_1 = expression_type_2(&tokens, i+2, expr_end_index);
+                    // int expr_end_index_1 = get_expression_output(expr_end_index+2, 16);
+                    // Token expression_2 = expression_type_2(&tokens, expr_end_index+2, expr_end_index_1);
+                    fprintf(out, "%s)", expression_1.value);
+                    printf("expression value : %s\n", expression_1.value);
                     break;
                 }
                 else if (var.type == 26) {
-                    fprintf(out, "printf(\"%%d\",");
-                    int expr_end_index = get_expression_output(i+2, 8);
+                    fprintf(out, "printf(\"%%f\\n\",");
+                    int expr_end_index = get_expression_output(i+2, 6);
                     Token expression = expression_type_2(&tokens, i+2, expr_end_index);
-                    // fprintf(out, "%s)", expression.value);
+                    fprintf(out, "%s)", expression.value);
+                    printf("expression value : %s\n", expression.value);
+                    // printf("===============--%d\n", expr_end_index);
                     break;
                 }
                 i+=2;
@@ -2534,16 +2719,28 @@ void output_generator(FILE *out) {
                 fprintf(out,"%s","printf(\"%s\",\"----------\")");
             }
         }
-        else if (current_token.type == 25) {     // indexed matrix
-            // strcpy(current_variable, current_token.value);
-            // fprintf(out, "get_matrix_elem(%s", current_variable);
-            // i+=2;
-            continue;
+        else if (current_token.type == 25) {     // indexed matrix // A[1,1] = 
+            fprintf(out, "assign_matrix_index(%s," , current_token.value);
+            int expr_end_index = get_expression_output(i+2, 15);
+            Token expression_1 = expression_type_2(&tokens, i+2, expr_end_index);
+            int expr_end_index_1 = get_expression_output(expr_end_index+2, 8);
+            Token expression_2 = expression_type_2(&tokens, expr_end_index+2, expr_end_index_1);
+            fprintf(out, "%s,%s,", expression_1.value, expression_2.value);
+            int expr_end_index_after_equals = get_expression_output(expr_end_index_1+3, 18);
+            Token experssion_toassign = expression_type_2(&tokens, expr_end_index_1+3, expr_end_index_after_equals);
+            fprintf(out, "%s)", experssion_toassign.value);
+            break;
+
         }
         else if (current_token.type == 26) {     // indexed vector
-            // strcpy(current_variable, current_token.value);
-            // fprintf(out, "get_vector_elem(%s", current_variable);
-            continue;
+            fprintf(out, "assign_vector_index(%s," , current_token.value);
+            int expr_end_index = get_expression_output(i+2, 8);
+            Token expression_1 = expression_type_2(&tokens, i+2, expr_end_index);
+            fprintf(out, "%s,", expression_1.value);
+            int expr_end_index_after_equals = get_expression_output(expr_end_index+3, 18);
+            Token experssion_toassign = expression_type_2(&tokens, expr_end_index+3, expr_end_index_after_equals);
+            fprintf(out, "%s)", experssion_toassign.value);
+            break;
         }
         else if (current_token.type == 27) {     
             // if (strcmp(current_token.value, "sqrt") == 0) {
@@ -2576,8 +2773,10 @@ void output_generator(FILE *out) {
     }
     if (flag_for_loop == 1) {
         fprintf(out, "\t");
+
     }
 }
+
 
 // NEEDS AN EXPRESSION FUNCTION WHICH WILL GET THE VECTOR AND THE DESIRED TYPE THAN RETURN 1 OR 0; IF 1 EXPRESSION IS VALID IF 0 EXPRESSION IS INVALID. 
 // OUTPUT BOOLEAN WILL BE AFFECTED FROM BOTH SYNTAX AND EXPECTED OUTPUT
@@ -2653,11 +2852,15 @@ Token infix_to_postfix(Vector *subtokens, int start, int end) {
                     continue;
                 }
             }
+            i++;
+            continue;
         }
         if (next_token.type == 3 || next_token.type == 27 || next_token.type == 28) {
             inside_function = 1;
 
         }
+        printf("token that passed: %s %d\n", next_token.value, next_token.type);
+        postfix_status(&postfix_vector);
 
         if (next_token.type == 19 || next_token.type == 20 || next_token.type == 21 || next_token.type == 25 || next_token.type == 26 || next_token.type == 27 || next_token.type == 28 ) { // if the next token is an operand
             postfix_vector.pAdd(&postfix_vector, next_token);
@@ -2741,6 +2944,10 @@ Token evaluate_postfix(Vector *postfix) {
     Stack evaluation_stack;
     CreateStack(&evaluation_stack);
     Token last_result;
+
+    for (int i = 0; i < postfix->pSize(postfix); i++) {
+        printf("---------%s-----------\n", postfix->pGet(postfix,i).value);
+    }
 
     while(i < postfix->pSize(postfix)){
         Token next_token = postfix->pGet(postfix, i);
@@ -2877,7 +3084,7 @@ Token type_check(Token op1, Token op2, Token operator) {
         }
    } if (operator.type == 13 || operator.type == 14) { // if the operator is + or - 
        if (op1.type == 19 || op1.type == 25 || op1.type == 26 || op1.type == 27) { // if op1 is scalar
-            if (op2.type == 19) { // if op2 is scalar
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
                 result_token.type = 19;
                 result_token.isOk = 1;
                 return result_token;
@@ -2927,7 +3134,7 @@ Token type_check(Token op1, Token op2, Token operator) {
                     result_token.isOk = 0;
                     return result_token;
                 }
-            } else if (op2.type == 21) { // if op3 is matrix
+            } else if (op2.type == 21 || op2.type == 28) { // if op3 is matrix
                 if (op1.matrix_i == op2.matrix_i && op1.matrix_j == op2.matrix_j) {
                     result_token.type = 21;
                     result_token.isOk = 1;
@@ -3063,7 +3270,6 @@ Token infix_to_postfix_2(Vector *subtokens, int start, int end) {
             while (postfix_stack.pPeek(&postfix_stack).type != 5) { // while we don't encounter a right paranthesis
                 if (postfix_stack.pIsEmpty(&postfix_stack)) {
                     flag = 0;
-                    error(101);
                     break;
                 }
                 Token tokenPoped;
@@ -3108,7 +3314,6 @@ Token infix_to_postfix_2(Vector *subtokens, int start, int end) {
                 postfix_vector.pAdd(&postfix_vector,postfix_stack.pPop(&postfix_stack));    // add the top of the stack to the vector
             } else {
                 flag = 0;                                               // if there is a left paranthesis in the stack there is an error --> flag
-                error(102);
                 break;
             }
         }
@@ -3138,9 +3343,9 @@ Token evaluate_postfix_2(Vector *postfix) {
     CreateStack(&evaluation_stack);
     Token last_result;
     
-    for (int i = 0; i < postfix->pSize(postfix); i++) {
-        printf("---------%s-----------\n", postfix->pGet(postfix,i).value);
-    }
+    // for (int i = 0; i < postfix->pSize(postfix); i++) {
+    //     printf("---------%s-----------\n", postfix->pGet(postfix,i).value);
+    // }
 
     while(i < postfix->pSize(postfix)){
         Token next_token = postfix->pGet(postfix, i);
@@ -3154,14 +3359,14 @@ Token evaluate_postfix_2(Vector *postfix) {
                 // printf("Current Check : %s %s", op2.value, op1.value);
                 result = type_check_2(op1,op2,next_token);
                 if (result.isOk == 0) {
-                    error(103);
+                    //error(103);
                     flag = 1;
                     break;
                 } else {
                     evaluation_stack.pPush(&evaluation_stack,result);
                 }
             } else {
-                error(104);
+                //error(104);
                 flag = 1; 
                 break;
             }  
@@ -3177,7 +3382,7 @@ Token evaluate_postfix_2(Vector *postfix) {
     // printf("%s\n", evaluation_stack.attributes.array[0].value);
     // printf("%s\n", evaluation_stack.attributes.array[1].value);
     if (evaluation_stack.pSize(&evaluation_stack) != 1) {
-        error(105);
+        //error(105);
         last_result.isOk = 0;
         evaluation_stack.p_free(&evaluation_stack);
         return last_result;
@@ -3314,7 +3519,7 @@ Token type_check_2(Token op1, Token op2, Token operator) {
         }
    } if (operator.type == 13) { // if the operator is + 
        if (op1.type == 19 || op1.type == 25 || op1.type == 26 || op1.type == 27) { // if op1 is scalar
-            if (op2.type == 19) { // if op2 is scalar
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
                 result_token.type = 19;
                 result_token.isOk = 1;
                 strcat(result_token_val, "(");
@@ -3361,7 +3566,7 @@ Token type_check_2(Token op1, Token op2, Token operator) {
                 strcat(result_token_val, ")");
                 strcpy(result_token.value, result_token_val);
                 return result_token;
-            } else if (op2.type == 21) { // if op3 is matrix
+            } else if (op2.type == 21 || op2.type == 28) { // if op3 is matrix
                 result_token.type = 21;
                 result_token.isOk = 1;
                 result_token.matrix_i = op1.matrix_i;
@@ -3377,7 +3582,7 @@ Token type_check_2(Token op1, Token op2, Token operator) {
         }
     } if (operator.type == 14) { // if the operator is - 
        if (op1.type == 19 || op1.type == 25 || op1.type == 26 || op1.type == 27) { // if op1 is scalar
-            if (op2.type == 19) { // if op2 is scalar
+            if (op2.type == 19 || op2.type == 25 || op2.type == 26 || op2.type == 27) { // if op2 is scalar
                 result_token.type = 19;
                 result_token.isOk = 1;
                 strcat(result_token_val, "(");
@@ -3393,7 +3598,7 @@ Token type_check_2(Token op1, Token op2, Token operator) {
                 result_token.type = 20;
                 result_token.isOk = 1;
                 result_token.vector = op1.vector;
-                strcat(result_token_val, "subraction(");
+                strcat(result_token_val, "subtraction(");
                 strcat(result_token_val, op1.value);
                 strcat(result_token_val, ",");
                 strcat(result_token_val, op2.value);
@@ -3404,7 +3609,7 @@ Token type_check_2(Token op1, Token op2, Token operator) {
                 result_token.type = 20;
                 result_token.isOk  = 1;
                 result_token.vector = op1.vector;
-                strcat(result_token_val, "subraction(");
+                strcat(result_token_val, "subtraction(");
                 strcat(result_token_val, op1.value);
                 strcat(result_token_val, ",");
                 strcat(result_token_val, op2.value);
@@ -3417,19 +3622,19 @@ Token type_check_2(Token op1, Token op2, Token operator) {
                 result_token.type = 20;
                 result_token.isOk = 1;
                 result_token.vector = op2.vector;
-                strcat(result_token_val, "subraction(");
+                strcat(result_token_val, "subtraction(");
                 strcat(result_token_val, op1.value);
                 strcat(result_token_val, ",");
                 strcat(result_token_val, op2.value);
                 strcat(result_token_val, ")");
                 strcpy(result_token.value, result_token_val);
                 return result_token;
-            } else if (op2.type == 21) { // if op3 is matrix
+            } else if (op2.type == 21 || op2.type == 28) { // if op3 is matrix
                 result_token.type = 21;
                 result_token.isOk = 1;
                 result_token.matrix_i = op1.matrix_i;
                 result_token.matrix_j = op1.matrix_j;
-                strcat(result_token_val, "subraction(");
+                strcat(result_token_val, "subtraction(");
                 strcat(result_token_val, op1.value);
                 strcat(result_token_val, ",");
                 strcat(result_token_val, op2.value);
