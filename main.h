@@ -26,3 +26,11 @@ void tokens_status();
 Token expression_type(Vector *tokens, int start_index, int end_index);
 void initialize_for_loop_variable(char name[]);
 void remove_for_variables();
+int get_expression_output(int start_index, int delimiter_type);
+int expression_2(Vector *tokens, int start_index, int end_index, int expected_type);
+Token infix_to_postfix_2(Vector *subtokens, int start, int end);
+Token expression_type_2(Vector *tokens, int start_index, int end_index);
+Token evaluate_postfix_2(Vector *postfix);
+Token type_check_2(Token op1, Token op2, Token operator);
+int get_expression_output(int start_index, int delimiter_type);
+
