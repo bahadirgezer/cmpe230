@@ -175,8 +175,9 @@ void tokenizer(char line[]) { //                                                
  */
 void error(int error_id) {
     num_error++;
-    fprintf(out, "Error on line %d.\n", line_number);
-    //printf("\t\t\t\tError on line %d. Error ID: %d\n", line_number, error_id);
+    //fprintf(out, "Error on line %d.\n", line_number);
+    //printf("Error on line %d.\n", line_number);
+    printf("\t\t\t\tError on line %d. Error ID: %d\n", line_number, error_id);
 }
 
 /*
@@ -184,19 +185,6 @@ void error(int error_id) {
     Returns the index of the last token of the expression.
 */
 
-
-/*
-
-tokens
-assignemtn
-
-= > 
-
-get_expression -> get expression -> expression type -> get
-
-expressinon type ->
-
-*/
 
 /**
  * @brief Get the expression output object 
@@ -680,10 +668,10 @@ int get_expression_output(int start_index, int delimiter_type) { //if delimiter 
     int delimiter_stack_brace = 0;
     int delimiter_stack_paranthesis = 0;
     int tokens_size = tokens.pSize(&tokens); //Vector pointer to int conversion error
-    char expression_string[512] = "";
-    char variable_string[256] = "";
-    // memset(expression_string, '\0', sizeof(expression_string));
-    // memset(variable_string, '\0', sizeof(variable_string));
+    char expression_string[512];
+    char variable_string[256];
+    memset(expression_string, '\0', sizeof(expression_string));
+    memset(variable_string, '\0', sizeof(variable_string));
 
     // if (tokens_size == start_index) {
     //     return -1;
@@ -702,112 +690,115 @@ int get_expression_output(int start_index, int delimiter_type) { //if delimiter 
             //assign_type(&token, index);
             //token = tokens.pGet(&tokens, index);
             int variable_index = index;
-            
-            Token left_brace_check = tokens.pGet(&tokens, index + 1);
-            if (is_single_left_brace(left_brace_check.value) == 1) {
-                if (token.type == 20) {
-                    index++;
-                    //Token left_brace = tokens.pGet(&tokens, index);
-                    // if (is_single_character(left_brace.value) != 1) {
-                    //     return -1;
-                    // }
-                    // if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-                    //     return -1;
-                    // }
-                    //tokens.p_update_type(&tokens, index, 7);
-                    //left_brace.type = 7;
+        
+            if (token.type == 26) {
+                index++;
+                //Token left_brace = tokens.pGet(&tokens, index);
+                // if (is_single_character(left_brace.value) != 1) {
+                //     return -1;
+                // }
+                // if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                //     return -1;
+                // }
+                //tokens.p_update_type(&tokens, index, 7);
+                //left_brace.type = 7;
 
-                    index++;
-                    int expr_end_index = get_expression_output(index, 8); // RIGHT BRACE DELIMITER
-                    // if (expr_end_index == -1) {
-                    //     return -1;
-                    // }
+                index++;
+                int expr_end_index = get_expression_output(index, 8); // RIGHT BRACE DELIMITER
+                // if (expr_end_index == -1) {
+                //     return -1;
+                // }
 
-                    strcat(variable_string, "get_vector_elem(");
-                    strcat(variable_string, token.value);
-                    strcat(variable_string, ", ");
-                    Token expression = expression_type_2(&tokens, index, expr_end_index);
-                    strcat(variable_string, expression.value);
-                    strcat(variable_string, ")");
-
-                    //index = expr_end_index; //check index
-                    //Token right_brace = tokens.pGet(&tokens, expr_end_index + 1);
-                    // if (is_single_character(right_brace.value) != 1) {
-                    //     return -1;
-                    // }
-                    // if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-                    //     return -1;
-                    // }
-                    // tokens.p_update_type(&tokens, expr_end_index + 1, 8);
-                    // right_brace.type = 8;
-                    index = expr_end_index + 1; //check index
-                    //tokens.p_update_type(&tokens, variable_index, 26);
-
-                } else if (token.type == 21) {
-                    index++;
-                    //Token left_brace = tokens.pGet(&tokens, index);
-                    // if (is_single_character(left_brace.value) != 1) {
-                    //     return -1;
-                    // }
-                    // if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
-                    //     return -1;
-                    // }
-                    // tokens.p_update_type(&tokens, index, 7);
-                    // left_brace.type = 7;
-
-                    index++;
-                    int expr_end_index_1 = get_expression_output(index, 15); //                                                              COMMA COMMA COMMA DELIMITER
-                    // if (expr_end_index_1 == -1) {
-                    //     return -1;
-                    // }
-
-                    strcat(variable_string, "get_matrix_elem(");
-                    strcat(variable_string, token.value);
-                    strcat(variable_string, ", ");
-                    Token expression_1 = expression_type_2(&tokens, index, expr_end_index_1);
-                    strcat(variable_string, expression_1.value);
-                    strcat(variable_string, ", ");
-               
-                    // Token comma = tokens.pGet(&tokens, expr_end_index_1 + 1);
-                    // if (is_single_character(comma.value) != 1) {
-                    //     return -1;
-                    // }
-                    // if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
-                    //     return -1;
-                    // }
-                    // tokens.p_update_type(&tokens, expr_end_index_1 + 1, 15);                       //CURRENTLY SENDING RIGHT AND LEFT SQUARE BRACES TO EXPRESSION
-                    // comma.type = 15;
-
-                    int expr_end_index_2 = get_expression_output(expr_end_index_1 + 2, 8); //                                                              COMMA COMMA COMMA DELIMITER
-                    // if (expr_end_index_2 == -1) {
-                    //     return -1;
-                    // }
-
-                    Token expression_2 = expression_type_2(&tokens, expr_end_index_1 + 2, expr_end_index_2);
-                    strcat(variable_string, expression_2.value);
-                    strcat(variable_string, ")");
-
-
-                    // Token right_brace = tokens.pGet(&tokens, expr_end_index_2 + 1);
-                    // if (is_single_character(right_brace.value) != 1) {
-                    //     return -1;
-                    // }
-                    // if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
-                    //     return -1;
-                    // }
-                    // tokens.p_update_type(&tokens, expr_end_index_2 + 1, 8);
-                    // right_brace.type = 8;
-                    index = expr_end_index_2 + 1;
-                    // tokens.p_update_type(&tokens, variable_index, 25);
-
-                }
-            } else {
+                strcat(variable_string, "get_vector_elem(");
                 strcat(variable_string, token.value);
+                strcat(variable_string, ", ");
+                Token expression = expression_type_2(&tokens, index, expr_end_index);
+                strcat(variable_string, expression.value);
+                strcat(variable_string, ")");
+
+                tokens.p_update_value(&tokens, variable_index, variable_string);
+                memset(variable_string, '\0', sizeof(variable_string));
+
+
+                //index = expr_end_index; //check index
+                //Token right_brace = tokens.pGet(&tokens, expr_end_index + 1);
+                // if (is_single_character(right_brace.value) != 1) {
+                //     return -1;
+                // }
+                // if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                //     return -1;
+                // }
+                // tokens.p_update_type(&tokens, expr_end_index + 1, 8);
+                // right_brace.type = 8;
+                index = expr_end_index + 1; //check index
+                //tokens.p_update_type(&tokens, variable_index, 26);
+
+            } else if (token.type == 25) {
+                index++;
+                //Token left_brace = tokens.pGet(&tokens, index);
+                // if (is_single_character(left_brace.value) != 1) {
+                //     return -1;
+                // }
+                // if (is_left_brace(left_brace.value[0]) != 1 || left_brace.isOk != 1) {
+                //     return -1;
+                // }
+                // tokens.p_update_type(&tokens, index, 7);
+                // left_brace.type = 7;
+
+                index++;
+                int expr_end_index_1 = get_expression_output(index, 15); //                                                              COMMA COMMA COMMA DELIMITER
+                // if (expr_end_index_1 == -1) {
+                //     return -1;
+                // }
+
+                strcat(variable_string, "get_matrix_elem(");
+                strcat(variable_string, token.value);
+                strcat(variable_string, ", ");
+                Token expression_1 = expression_type_2(&tokens, index, expr_end_index_1);
+                strcat(variable_string, expression_1.value);
+                strcat(variable_string, ", ");
+
+                printf("variable_string: %s", variable_string);
+                // Token comma = tokens.pGet(&tokens, expr_end_index_1 + 1);
+                // if (is_single_character(comma.value) != 1) {
+                //     return -1;
+                // }
+                // if (is_comma(comma.value[0]) != 1 || comma.isOk != 1) {
+                //     return -1;
+                // }
+                // tokens.p_update_type(&tokens, expr_end_index_1 + 1, 15);                       //CURRENTLY SENDING RIGHT AND LEFT SQUARE BRACES TO EXPRESSION
+                // comma.type = 15;
+
+                int expr_end_index_2 = get_expression_output(expr_end_index_1 + 2, 8); //                                                              COMMA COMMA COMMA DELIMITER
+                // if (expr_end_index_2 == -1) {
+                //     return -1;
+                // }
+
+                Token expression_2 = expression_type_2(&tokens, expr_end_index_1 + 2, expr_end_index_2);
+                strcat(variable_string, expression_2.value);
+                strcat(variable_string, ")");
+                printf("%s\n", variable_string);
+                tokens.p_update_value(&tokens, variable_index, variable_string);
+                memset(variable_string, '\0', sizeof(variable_string));
+
+
+                // Token right_brace = tokens.pGet(&tokens, expr_end_index_2 + 1);
+                // if (is_single_character(right_brace.value) != 1) {
+                //     return -1;
+                // }
+                // if (is_right_brace(right_brace.value[0]) != 1 || right_brace.isOk != 1) {
+                //     return -1;
+                // }
+                // tokens.p_update_type(&tokens, expr_end_index_2 + 1, 8);
+                // right_brace.type = 8;
+                index = expr_end_index_2 + 1;
+                // tokens.p_update_type(&tokens, variable_index, 25);
+
             }
 
             //strcpy(token.value, variable_string);
-            tokens.p_update_value(&tokens, variable_index, variable_string);
-            memset(variable_string, '\0', sizeof(variable_string));
+            //tokens.p_update_value(&tokens, variable_index, variable_string);
+            //memset(variable_string, '\0', sizeof(variable_string));
 
 
         } else if (is_function_keyword(token.value) == 1) {
@@ -955,17 +946,16 @@ int get_expression_output(int start_index, int delimiter_type) { //if delimiter 
                 // }
 
                 Token expression = expression_type_2(&tokens, index, expr_end_index); 
+                printf("expression.value: %s\n", expression.value);
                 Token result = expression_type(&tokens, index, expr_end_index); //checks type manually
-                if (result.type == 19) {
+                if (result.type == 19 || result.type == 27) {
                     strcat(expression_string, expression.value);
 
-                } else if (result.type == 20 || result.type == 21) {
+                } else if (result.type == 20 || result.type == 21 || result.type == 28) {
                     strcat(expression_string, "transpose(");
                     strcat(expression_string, expression.value);
                     strcat(expression_string, ")");
                 }
-
-
 
                 index = expr_end_index + 1;
                 // Token right_paranthesis = tokens.pGet(&tokens, index);
@@ -1117,6 +1107,7 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
         if (token.isOk != 1) {
             return -1;
         }
+        printf("original get_expression token: %s %d\n", token.value, token.type);
         
         if (is_variable(token.value) == 1) {
             assign_type(&token, index);
@@ -1371,14 +1362,15 @@ int get_expression(int start_index, int delimiter_type) { //if delimiter not fou
                     return -1;
                 }
                 Token result = expression_type(&tokens, index, expr_end_index); //checks type manually
-                if (result.type == 19) {
+                printf("result value and type: %s %d\n", result.value, result.type);
+                if (result.type == 19 || result.type == 27) {
                     tokens.p_update_type(&tokens, keyword_index, 27);
 
-                } else if (result.type == 20) {
+                } else if (result.type == 20 || result.type == 28) {
                     tokens.p_update_type(&tokens, keyword_index, 28);
                     tokens.p_update_matrix(&tokens, keyword_index, 1, result.vector);
 
-                } else if (result.type == 21) {
+                } else if (result.type == 21 || result.type == 28) {
                     tokens.p_update_type(&tokens, keyword_index, 28);
                     tokens.p_update_matrix(&tokens, keyword_index, result.matrix_j, result.matrix_j);
                 } else {
@@ -2583,11 +2575,14 @@ void output_generator(FILE *out) {
                 Token exp1;
                 Token exp2;
                 Token exp3;
-                exp1 = tokens.pGet(&tokens, i+4);
-                exp2 = tokens.pGet(&tokens, i+6);
-                exp3 = tokens.pGet(&tokens, i+8);
-                fprintf(out, "for (%s = %s; %s <= %s; %s+=%s)", id.value, exp1.value, id.value, exp2.value, id.value, exp3.value);
-                i+=9;
+                int expr_end_index = get_expression_output(i+4, 16);
+                exp1 = expression_type_2(&tokens, i+4, expr_end_index);
+                int expr_end_index_2 = get_expression_output(expr_end_index+2, 16);
+                exp2 = expression_type_2(&tokens, expr_end_index+2, expr_end_index_2);
+                int expr_end_index_3 = get_expression_output(expr_end_index_2+2, 6);                
+                exp3 = expression_type_2(&tokens, expr_end_index_2+2, expr_end_index_3);
+                fprintf(out, "for (%s = %s; %s <= %s; %s+=%s) {", id.value, exp1.value, id.value, exp2.value, id.value, exp3.value);
+                i = expr_end_index_3 + 2;
             }
             else {
                 extra_curly = 1;
@@ -2598,18 +2593,28 @@ void output_generator(FILE *out) {
                 Token exp1;
                 Token exp2;
                 Token exp3;
-                exp1 = tokens.pGet(&tokens, i+6);
-                exp2 = tokens.pGet(&tokens, i+8);
-                exp3 = tokens.pGet(&tokens, i+10);
+                int expr_end_index = get_expression_output(i+4, 16);
+                exp1 = expression_type_2(&tokens, i+6, expr_end_index);
+                int expr_end_index_2 = get_expression_output(expr_end_index+2, 16);
+                exp2 = expression_type_2(&tokens, expr_end_index+2, expr_end_index_2);
+                int expr_end_index_3 = get_expression_output(expr_end_index_2+2, 15);
+                exp3 = expression_type_2(&tokens, expr_end_index_2+2, expr_end_index_3);
+
+
                 Token exp4;
                 Token exp5;
                 Token exp6;
-                exp4 = tokens.pGet(&tokens, i+12);
-                exp5 = tokens.pGet(&tokens, i+14);
-                exp6 = tokens.pGet(&tokens, i+16);
+
+
+                int expr_end_index_4 = get_expression_output(expr_end_index_3+2, 16);
+                exp4 = expression_type_2(&tokens, expr_end_index_3+2, expr_end_index_4);
+                int expr_end_index_5 = get_expression_output(expr_end_index_4+2, 16);
+                exp5 = expression_type_2(&tokens, expr_end_index_4+2, expr_end_index_5);
+                int expr_end_index_6 = get_expression_output(expr_end_index_5+2, 6);
+                exp6 = expression_type_2(&tokens, expr_end_index_5+2, expr_end_index_6);
                 fprintf(out, "for (%s = %s; %s <= %s; %s+=%s) {\n\t", id1.value, exp1.value, id1.value, exp2.value, id1.value, exp3.value);
-                fprintf(out, "for (%s = %s; %s <= %s; %s+=%s) ", id2.value, exp4.value, id2.value, exp5.value, id2.value, exp6.value);
-                i+=17;
+                fprintf(out, "for (%s = %s; %s <= %s; %s+=%s) {", id2.value, exp4.value, id2.value, exp5.value, id2.value, exp6.value);
+                i = expr_end_index_6+2;
             }
         }
         else if (current_token.type == 5) {     // left paranthesis
@@ -2669,9 +2674,19 @@ void output_generator(FILE *out) {
             flag_is_comment = 1;
         }
         else if (current_token.type == 19) {    // scalar variable
+            Token next_token;
+            next_token = tokens.pGet(&tokens,i+1);
             fprintf(out, "%s", current_token.value);
             if (flag_is_declaration == 1){
                 flag_is_declaration = 0;
+            }
+            if (next_token.type == 11) {
+                fprintf(out," = ");
+                int expr_end_index = get_expression_output(i+2, 18);
+                // printf("in2\n");
+                Token expression = expression_type_2(&tokens, i+2, expr_end_index);
+                fprintf(out, "%s", expression.value);
+                break;
             }
         }
         else if (current_token.type == 20) {     // vector variable
@@ -2687,10 +2702,9 @@ void output_generator(FILE *out) {
             }
             else if (next_token.type == 11) {
                 int expr_end_index = get_expression_output(i+2, 18);
-                printf("in2\n");
+                // printf("in2\n");
                 Token expression = expression_type_2(&tokens, i+2, expr_end_index);
                 tokens_status();
-
                 //Token expression_token = expression_type_2(&tokens, i+2, tokens.pSize(&tokens));
                 fprintf(out, "assign_matrix(%s,", current_variable);
                 fprintf(out, "%s", expression.value); // hope that the value is less than 256 chars
@@ -2707,21 +2721,6 @@ void output_generator(FILE *out) {
                 fprintf(out,"%s%s\ncreate_matrix(&%s,%s,1)", current_variable, ";", current_token.value, size_of_vector);
                 i+=3;
             }
-            // else if (next_token.type == 12) {
-            //     fprintf(out, "multiply(%s,", current_variable);
-            //     paran_count++;
-            //     i++;
-            // }
-            // else if (next_token.type == 13) {
-            //     fprintf(out, "add(%s,", current_variable);
-            //     paran_count++;
-            //     i++;
-            // }
-            // else if (next_token.type == 14) {
-            //     fprintf(out, "subtraction(%s,", current_variable);
-            //     paran_count++;
-            //     i++;
-            // }
             else{
                 fprintf(out, "%s", current_token.value);
             }
@@ -2740,14 +2739,10 @@ void output_generator(FILE *out) {
                 continue;
             }
             else if (next_token.type == 11) {
-                
                 int expr_end_index = get_expression_output(i+2, 18);
-                printf("in2\n");
+                // printf("in2\n");
                 Token expression = expression_type_2(&tokens, i+2, expr_end_index);
                 tokens_status();
-
-                //Token expression_token = expression_type_2(&tokens, i+2, tokens.pSize(&tokens));
-                // printf("%s++++++++++++++++++++++++++\n",expression_token.value);
                 fprintf(out, "assign_matrix(%s,", current_variable);
                 fprintf(out, "%s", expression.value); // hope that the value is less than 256 chars
                 fprintf(out,")");
@@ -2767,39 +2762,37 @@ void output_generator(FILE *out) {
                 fprintf(out,"%s%s\ncreate_matrix(&%s,%s,%s)", current_variable, ";", current_token.value, size_of_i,size_of_j);
                 i+=5;
             }
-            // else if (next_token.type == 12) {
-            //     fprintf(out, "multiply(%s,", current_variable);
-            //     paran_count++;
-            //     i++;
-            // }
-            // else if (next_token.type == 13) {
-            //     fprintf(out, "add(%s,", current_variable);
-            //     paran_count++;
-            //     i++;
-            // }
-            // else if (next_token.type == 14) {
-            //     fprintf(out, "subtraction(%s,", current_variable);
-            //     paran_count++;
-            //     i++;
-            // }
             else {
                 fprintf(out,"%s", current_token.value);
             }
         }
         else if (current_token.type == 23) {     // print function
             if (strcmp(current_token.value, "print") == 0){
-                Token var;
-                var = tokens.pGet(&tokens,i+2);
-                char *var_name; 
-                var_name = var.value;
+                Token var = tokens.pGet(&tokens,i+2);
+                // char *var_name; 
+                // var_name = var.value;
                 if (var.type == 19){
-                    fprintf(out,"printf(\"%%d\",%s)", var_name);
+                    fprintf(out,"printf(\"%%d\",%s)", var.value);
                 }
                 else if (var.type == 20 || var.type == 21) {
-                    fprintf(out, "print_matrix(&%s", var_name);
+                    fprintf(out, "print_matrix(&%s", var.value);
+                    fprintf(out, ")");
+                    // int expr_end_index = get_expression_output(i+2, 18);
+                    // Token expression = expression_type_2(&tokens, i+2, expr_end_index);
                 }
                 else if (var.type == 25) {
-                    fprintf(out, "printf(\"%%d\",get_matrix_elem(%s", var_name);
+                    fprintf(out, "printf(\"%%d\",");
+                    int expr_end_index = get_expression_output(i+2, 8);
+                    Token expression = expression_type_2(&tokens, i+2, expr_end_index);
+                    fprintf(out, "%s)", expression.value);
+                    break;
+                }
+                else if (var.type == 26) {
+                    fprintf(out, "printf(\"%%d\",");
+                    int expr_end_index = get_expression_output(i+2, 8);
+                    Token expression = expression_type_2(&tokens, i+2, expr_end_index);
+                    fprintf(out, "%s)", expression.value);
+                    break;
                 }
                 i+=2;
             }
@@ -2808,27 +2801,27 @@ void output_generator(FILE *out) {
             }
         }
         else if (current_token.type == 25) {     // indexed matrix
-            strcpy(current_variable, current_token.value);
-            fprintf(out, "get_matrix_elem(%s", current_variable);
-            i+=2;
+            // strcpy(current_variable, current_token.value);
+            // fprintf(out, "get_matrix_elem(%s", current_variable);
+            // i+=2;
         }
         else if (current_token.type == 26) {     // indexed vector
-            strcpy(current_variable, current_token.value);
-            fprintf(out, "get_vector_elem(%s", current_variable);
+            // strcpy(current_variable, current_token.value);
+            // fprintf(out, "get_vector_elem(%s", current_variable);
         }
         else if (current_token.type == 27) {     
-            if (strcmp(current_token.value, "sqrt") == 0) {
-                fprintf(out, "%s", "sqrt");
-            }
-            else if (strcmp(current_token.value, "tr") == 0) {
-                fprintf(out, "%s", "transpose");
-            }
-            else if (strcmp(current_token.value, "choose") == 0) {
-                fprintf(out, "%s", "choose");
-            }
+            // if (strcmp(current_token.value, "sqrt") == 0) {
+            //     fprintf(out, "%s", "sqrt");
+            // }
+            // else if (strcmp(current_token.value, "tr") == 0) {
+            //     fprintf(out, "%s", "transpose");
+            // }
+            // else if (strcmp(current_token.value, "choose") == 0) {
+            //     fprintf(out, "%s", "choose");
+            // }
         }
         else if (current_token.type == 28) {     
-            fprintf(out, "%s", "transpose");
+            // fprintf(out, "%s", "transpose");
         }
         
     }

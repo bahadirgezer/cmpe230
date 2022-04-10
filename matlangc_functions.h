@@ -88,7 +88,7 @@ Matrix subtraction(Matrix m1, Matrix m2)
     create_matrix(difference, m1.matrix_i, m1.matrix_j);
     for (int i = 0; i < m1.matrix_i; i++)
     {
-        for (int j = 0; m1.matrix_j; j++)
+        for (int j = 0; j < m1.matrix_j; j++)
         {
             difference->arr[i][j] = m1.arr[i][j] + m2.arr[i][j];
         }
