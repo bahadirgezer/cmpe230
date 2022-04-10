@@ -5,12 +5,17 @@ int main(){
  // # greater than or equal to 4
  Matrix A;
 create_matrix(&A,4,4);
+Matrix b;
+create_matrix(&b,3,1);
 float count;
 float incr;
 float i;
 float j;
+b.arr[0][0] = 1;
+b.arr[1][0] = 2;
+b.arr[2][0] = 3.5;
 A.arr[0][0] = 0;
-A.arr[0][1] = 1;
+A.arr[0][1] = 1.5;
 A.arr[0][2] = 2;
 A.arr[0][3] = 3;
 A.arr[1][0] = 4;
@@ -32,6 +37,12 @@ for (i = 1; i <= 4; i+=1) {
 	count = (count+incr);
 	
 }}
-printf("%f\n",count);
+print_integer(count);
+print_integer(get_vector_elem(b, 1));
+print_integer(get_vector_elem(b, 2));
+print_integer(get_vector_elem(b, 3));
+print_matrix(&A);
+;
+print_integer(get_matrix_elem(A, 1, 2));
 
 }

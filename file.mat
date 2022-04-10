@@ -1,14 +1,22 @@
 # count how many elements are
 # greater than or equal to 4
 matrix   A[4,4]
+vector b[3]
 scalar   count
 scalar   incr
 scalar   i
 scalar   j
-A = {0 1 2 3 4 5 6 7 8 9 1 1 1 2 3 4}
+b = { 1 2 3.5}
+A = {0 1.5 2 3 4 5 6 7 8 9 1 1 1 2 3 4}
 count = 0
 for (i,j in 1:4:1,1:4:1) {
     incr  = choose(A[i,j]-4,1,1,0)
     count = count + incr
 }
 print(count)
+print(b[1])
+print(b[2])
+print(b[3])
+print(A)
+
+print(A[1,2])
