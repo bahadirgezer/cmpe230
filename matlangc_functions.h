@@ -98,7 +98,7 @@ Matrix subtraction(Matrix m1, Matrix m2)
     {
         for (int j = 0; j < m1.matrix_j; j++)
         {
-            difference->arr[i][j] = m1.arr[i][j] + m2.arr[i][j];
+            difference->arr[i][j] = m1.arr[i][j] - m2.arr[i][j];
         }
     }
     return *difference;

@@ -1849,7 +1849,6 @@ void parser() {
             ending_index = right_curly_brace_index + 1;
 
         } else {
-            printf("without left brace without right curly index: %d\n", index);
             int expr_end_index = get_expression(index, 18);
             if (expr_end_index == -1) {
                 error(124);
@@ -2686,7 +2685,7 @@ void output_generator(FILE *out) {
                 // char *var_name; 
                 // var_name = var.value;
                 if (var.type == 19){
-                    fprintf(out,"printf(\"%%d\",%s)", var.value);
+                    fprintf(out,"printf(\"%%f\\n\",%s", var.value);
                 }
                 else if (var.type == 20 || var.type == 21) {
                     fprintf(out, "print_matrix(&%s", var.value);
@@ -2716,7 +2715,8 @@ void output_generator(FILE *out) {
                 i+=2;
             }
             else if (strcmp(current_token.value, "printsep") == 0){
-                fprintf(out,"%s","printf(\"%s\",\"----------\")");
+                fprintf(out,"%s","printf(\"%s\\n\",\"----------\")");
+                i+=2;
             }
         }
         else if (current_token.type == 25) {     // indexed matrix // A[1,1] = 

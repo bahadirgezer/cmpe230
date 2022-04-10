@@ -1,36 +1,37 @@
 #include <stdio.h>
 #include "matlangc_functions.h"
 int main(){
-// # this program computes fibonacci
- // # numbers
- // # variable definitions
- float i;
-float n;
-Matrix x;
-create_matrix(&x,2,1);
-Matrix y;
-create_matrix(&y,2,1);
-Matrix A;
-create_matrix(&A,2,2);
-Matrix B;
-create_matrix(&B,2,2);
-// # statements
- n = 10;
-x.arr[0][0] = 1;
-x.arr[1][0] = 1;
-A.arr[0][0] = 1;
+// # count how many elements are
+ // # greater than or equal to 4
+ Matrix A;
+create_matrix(&A,4,4);
+float count;
+float incr;
+float i;
+float j;
+A.arr[0][0] = 0;
 A.arr[0][1] = 1;
-A.arr[1][0] = 1;
-A.arr[1][1] = 0;
-B.arr[0][0] = 1;
-B.arr[0][1] = 0;
-B.arr[1][0] = 0;
-B.arr[1][1] = 1;
-print_matrix(&x);
-for (i = 1; i <= n; i+=1) {
-	assign_matrix(B,multiply(A,B));
-	assign_matrix(y,multiply(B,x));
-	printf("%f\n",get_vector_elem(y, 1));
-	}
+A.arr[0][2] = 2;
+A.arr[0][3] = 3;
+A.arr[1][0] = 4;
+A.arr[1][1] = 5;
+A.arr[1][2] = 6;
+A.arr[1][3] = 7;
+A.arr[2][0] = 8;
+A.arr[2][1] = 9;
+A.arr[2][2] = 1;
+A.arr[2][3] = 1;
+A.arr[3][0] = 1;
+A.arr[3][1] = 2;
+A.arr[3][2] = 3;
+A.arr[3][3] = 4;
+count = 0;
+for (i = 1; i <= 4; i+=1) {
+	for (j = 1; j <= 4; j+=1) {
+	incr = choose((get_matrix_elem(A, i, j)-4), 1, 1, 0);
+	count = (count+incr);
+	
+}}
+printf("%f\n",count);
 
 }
