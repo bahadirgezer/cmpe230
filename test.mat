@@ -1,20 +1,11 @@
-# this program computes fibonacci
-# numbers
-# variable definitions
-scalar i
-scalar n
-vector x[2]
-vector y[2]
-matrix A[2,2]
-matrix B[2,2]
-# statements
-n = 10 
-x={1 1} 
-A={1 1 1 0} 
-B={ 1 0 0 1  } 
-print(x)
-for(i in 1:n:1) {
-  B = A * B
-  y = B*x
-  print(y[1])
-}
+matrix   A[4,4]
+matrix   T[1,1]
+vector   x[4]
+vector   xy2[4]
+scalar   s
+A = {0 1 2 3 4 5 6 7 8 9 1 1 1 2 3 4 }
+x = {1 1 1 1 }
+xy2 = { 2 1 3 1 }
+T = tr(x) * A * xy2
+s = T[1,1]
+print(s)
