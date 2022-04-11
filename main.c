@@ -165,8 +165,8 @@ void tokenizer(char line[]) { //                                                
 void error(int error_id) {
     num_error++;
     //fprintf(out, "Error on line %d.\n", line_number);
-    //printf("Error on line %d.\n", line_number);
-    printf("\t\t\t\tError on line %d. Error ID: %d\n", line_number, error_id);
+    printf("Error on line %d.\n", line_number);
+    //printf("\t\t\t\tError on line %d. Error ID: %d\n", line_number, error_id);
 }
 
 /*
@@ -1911,6 +1911,7 @@ int main(int argc, char *argv[]) {
     fprintf(out, "\n}");
     fclose(file);
 }  
+
 /*
 
 */
