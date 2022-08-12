@@ -7,7 +7,7 @@
 ### 1. INTRODUCTION
 In this project we used the A86[^1] assembler and D86 debugger to write a program which evaluates a postfix expression of hexadecimal numbers with arithmetic and bitwise operators.
 
-[^1]: [eji.com/a86](eji.com/a86)
+[^1]: [eji.com/a86](https://eji.com/a86/)
 
 ### 2. OVERVIEW
 
