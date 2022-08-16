@@ -1,4 +1,8 @@
-# CMPE230 SYSTEMS PROGRAMMING SPRING 2022 - Can Özturan
+# CMPE230 - SYSTEMS PROGRAMMING
+
+| **Term** | **Instructor** |
+| --- | --- |
+| Spring 2022  | Can Özturan  |
 
 ### [Project 1:](https://github.com/bahadirgezer/cmpe230/tree/master/project1) Transpiler From a Psuedolang Using C
 
